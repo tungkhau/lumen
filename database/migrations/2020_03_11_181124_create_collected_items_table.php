@@ -14,8 +14,8 @@ class CreateCollectedItemsTable extends Migration
     public function up()
     {
         Schema::create('collected_items', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

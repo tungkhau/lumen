@@ -14,8 +14,8 @@ class CreateDemandedItemsTable extends Migration
     public function up()
     {
         Schema::create('demanded_items', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

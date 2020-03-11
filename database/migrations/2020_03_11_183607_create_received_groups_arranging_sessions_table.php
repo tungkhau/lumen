@@ -14,8 +14,8 @@ class CreateReceivedGroupsArrangingSessionsTable extends Migration
     public function up()
     {
         Schema::create('received_groups_arranging_sessions', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+
+
         });
     }
 

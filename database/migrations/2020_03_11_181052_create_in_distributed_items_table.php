@@ -14,8 +14,8 @@ class CreateInDistributedItemsTable extends Migration
     public function up()
     {
         Schema::create('in_distributed_items', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

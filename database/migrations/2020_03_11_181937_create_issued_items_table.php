@@ -14,8 +14,8 @@ class CreateIssuedItemsTable extends Migration
     public function up()
     {
         Schema::create('issued_items', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

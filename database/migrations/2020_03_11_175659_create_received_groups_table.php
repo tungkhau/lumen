@@ -14,8 +14,8 @@ class CreateReceivedGroupsTable extends Migration
     public function up()
     {
         Schema::create('received_groups', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

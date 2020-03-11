@@ -14,8 +14,8 @@ class CreateVerifyingAdjustSessionsTable extends Migration
     public function up()
     {
         Schema::create('verifying_adjust_sessions', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

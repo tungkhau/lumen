@@ -14,8 +14,8 @@ class CreateAdjustingSessionsTable extends Migration
     public function up()
     {
         Schema::create('adjusting_sessions', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

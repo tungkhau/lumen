@@ -14,8 +14,8 @@ class CreateConceptionsTable extends Migration
     public function up()
     {
         Schema::create('conceptions', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

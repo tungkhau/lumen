@@ -14,8 +14,8 @@ class CreateCasesTable extends Migration
     public function up()
     {
         Schema::create('cases', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

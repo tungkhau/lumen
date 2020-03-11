@@ -14,8 +14,8 @@ class CreateClassifyingSessionsTable extends Migration
     public function up()
     {
         Schema::create('classifying_sessions', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

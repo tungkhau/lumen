@@ -15,12 +15,13 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('pk')->primary();
-            $table->char('id',6)->unique();
+            $table->char('id', 6)->unique();
             $table->string('password');
             $table->string('name', 30);
-            $table->boolean('is_active');
-            $table->enum('role', ['admin','merchandiser','manager','staff','inspector','mediator']);
+            $table->boolean('is_active')->default(true);
+            $table->enum('role', ['admin', 'merchandiser', 'manager', 'staff', 'inspector', 'mediator']);
             $table->uuid('workplace_pk');
+
             $table->foreign('workplace_pk')->references('pk')->on('workplaces');
         });
     }

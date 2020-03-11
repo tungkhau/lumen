@@ -14,8 +14,8 @@ class CreateReceivingSessionsTable extends Migration
     public function up()
     {
         Schema::create('receiving_sessions', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

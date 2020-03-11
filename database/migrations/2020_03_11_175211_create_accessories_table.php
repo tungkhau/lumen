@@ -14,8 +14,8 @@ class CreateAccessoriesTable extends Migration
     public function up()
     {
         Schema::create('accessories', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

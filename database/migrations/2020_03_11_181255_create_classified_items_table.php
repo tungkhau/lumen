@@ -14,8 +14,8 @@ class CreateClassifiedItemsTable extends Migration
     public function up()
     {
         Schema::create('classified_items', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

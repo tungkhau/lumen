@@ -14,8 +14,8 @@ class CreateDeliveringSessionsTable extends Migration
     public function up()
     {
         Schema::create('delivering_sessions', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 

@@ -14,8 +14,8 @@ class CreateIssuedGroupsTable extends Migration
     public function up()
     {
         Schema::create('issued_groups', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->uuid('pk')->primary();
+
         });
     }
 
