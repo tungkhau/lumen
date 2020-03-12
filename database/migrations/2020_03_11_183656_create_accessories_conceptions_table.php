@@ -14,6 +14,8 @@ class CreateAccessoriesConceptionsTable extends Migration
     public function up()
     {
         Schema::create('accessories_conceptions', function (Blueprint $table) {
+            $table->uuid('accessory_pk');
+            $table->uuid('conception_pk');
             $table->foreign('accessory_pk')->references('pk')->on('accessories');
             $table->foreign('conception_pk')->references('pk')->on('conceptions');
         });

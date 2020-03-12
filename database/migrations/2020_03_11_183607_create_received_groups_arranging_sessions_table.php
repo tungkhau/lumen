@@ -14,6 +14,8 @@ class CreateReceivedGroupsArrangingSessionsTable extends Migration
     public function up()
     {
         Schema::create('received_groups_arranging_sessions', function (Blueprint $table) {
+            $table->uuid('received_group_pk');
+            $table->uuid('arranging_session_pk');
             $table->foreign('received_group_pk')->references('pk')->on('received_groups');
             $table->foreign('arranging_session_pk')->references('pk')->on('arranging_sessions');
         });
