@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class CreateDemandsTable extends Migration
 {
@@ -14,7 +15,17 @@ class CreateDemandsTable extends Migration
     public function up()
     {
         Schema::create('demands', function (Blueprint $table) {
-            $table->uuid('pk')->primary();
+            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->string('id', 999)->unique(); //TODO Declare exact length;
+            $table->smallInteger('product_quantity');
+            $table->boolean('is_opened')->default(true);
+            $table->uuid('workplace_pk');
+            $table->uuid('conception_pk');
+            $table->uuid('user_pk');
+
+            $table->foreign('workplace_pk')->references('pk')->on('workplaces');
+            $table->foreign('conception_pk')->references('pk')->on('conceptions');
+            $table->foreign('user_pk')->references('pk')->on('users');
 
         });
     }

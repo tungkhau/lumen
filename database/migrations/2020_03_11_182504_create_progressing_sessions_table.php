@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
-class CreateCheckingSessionsTable extends Migration
+class CreateProgressingSessionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,13 +15,12 @@ class CreateCheckingSessionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('checking_sessions', function (Blueprint $table) {
+        Schema::create('progressing_sessions', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(Str::uuid());
-            $table->integer('checked_quantity');
-            $table->integer('unqualified_quantity');
+            $table->enum('kind', ['confirming', 'delivering']);
             $table->dateTime('executed_date')->default(DB::raw('CURRENT_TIMESTAMP'));
-
             $table->uuid('user_pk');
+
             $table->foreign('user_pk')->references('pk')->on('users');
         });
     }
@@ -33,6 +32,6 @@ class CreateCheckingSessionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('checking_sessions');
+        Schema::dropIfExists('progressing_sessions');
     }
 }

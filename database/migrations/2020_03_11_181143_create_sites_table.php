@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class CreateSitesTable extends Migration
 {
@@ -14,8 +15,8 @@ class CreateSitesTable extends Migration
     public function up()
     {
         Schema::create('sites', function (Blueprint $table) {
-            $table->uuid('pk')->primary();
-
+            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->string('name', 15)->unique();
         });
     }
 

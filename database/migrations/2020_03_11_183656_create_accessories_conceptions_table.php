@@ -14,8 +14,8 @@ class CreateAccessoriesConceptionsTable extends Migration
     public function up()
     {
         Schema::create('accessories_conceptions', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->foreign('accessory_pk')->references('pk')->on('accessories');
+            $table->foreign('conception_pk')->references('pk')->on('conceptions');
         });
     }
 

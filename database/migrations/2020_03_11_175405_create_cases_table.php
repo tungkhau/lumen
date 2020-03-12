@@ -16,7 +16,7 @@ class CreateCasesTable extends Migration
     {
         Schema::create('cases', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(Str::uuid());
-            $table->char('id', 10)->unique();
+            $table->char('id', 11)->unique();
             $table->boolean('is_active')->default(true);
             $table->uuid('shelf_pk')->nullable();
 
