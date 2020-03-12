@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class CreateUsersTable extends Migration
 {
@@ -14,7 +15,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->uuid('pk')->primary();
+            $table->uuid('pk')->primary()->default(Str::uuid());
             $table->char('id', 6)->unique();
             $table->string('password');
             $table->string('name', 30);

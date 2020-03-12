@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class CreateWorkplacesTable extends Migration
 {
@@ -14,8 +15,8 @@ class CreateWorkplacesTable extends Migration
     public function up()
     {
         Schema::create('workplaces', function (Blueprint $table) {
-            $table->uuid('pk')->primary();
-            $table->string('name',20)->unique();
+            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->string('name', 20)->unique();
         });
     }
 

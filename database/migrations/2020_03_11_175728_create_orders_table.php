@@ -2,7 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class CreateOrdersTable extends Migration
 {
@@ -14,8 +16,15 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->uuid('pk')->primary();
+            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->string('id', 25)->unique();
+            $table->boolean('is_opened')->default(true);
+            $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->uuid('supplier_pk');
+            $table->uuid('user_pk');
 
+            $table->foreign('supplier_pk')->references('pk')->on('suppliers');
+            $table->foreign('user_pk')->references('pk')->on('users');
         });
     }
 

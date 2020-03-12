@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class CreateTypesTable extends Migration
 {
@@ -14,9 +15,9 @@ class CreateTypesTable extends Migration
     public function up()
     {
         Schema::create('types', function (Blueprint $table) {
-            $table->uuid('pk')->primary();
-            $table->char('id',2)->unique();
-            $table->string('name',12);
+            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->char('id', 2)->unique();
+            $table->string('name', 12)->unique();
             $table->boolean('textile');
         });
     }

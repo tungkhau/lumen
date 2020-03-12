@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => 'sqlsrv',
+    'default' => 'mysql',
 
     /*
     |--------------------------------------------------------------------------
@@ -55,18 +55,16 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),]) : [],
+//            'options' => extension_loaded('pdo_mysql') ? array_filter([PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),]) : [],
         ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', 'DESKTOP-PFABQ9H'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'lumen'),
-            'username' => env('DB_USERNAME', 'jason'),
-            'password' => env('DB_PASSWORD', '15102017'),
+            'host' => 'localhost',
+            'port' => '1434',
+            'database' => 'lumen',
+            'username' => 'jason',
+            'password' => '15102017',
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
