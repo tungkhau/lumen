@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class CreateAccessoriesTable extends Migration
 {
@@ -16,7 +15,7 @@ class CreateAccessoriesTable extends Migration
     public function up()
     {
         Schema::create('accessories', function (Blueprint $table) {
-            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->char('id', 16)->unique();
             $table->string('item', 20);
             $table->string('art', 20)->nullable();

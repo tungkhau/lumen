@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class CreateBlocksTable extends Migration
 {
@@ -15,7 +15,7 @@ class CreateBlocksTable extends Migration
     public function up()
     {
         Schema::create('blocks', function (Blueprint $table) {
-            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->char('id', 1)->unique();
             $table->TinyInteger('col')->nullable();
             $table->TinyInteger('row')->nullable();

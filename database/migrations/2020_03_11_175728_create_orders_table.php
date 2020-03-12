@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class CreateOrdersTable extends Migration
 {
@@ -16,7 +15,7 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->string('id', 25)->unique();
             $table->boolean('is_opened')->default(true);
             $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));

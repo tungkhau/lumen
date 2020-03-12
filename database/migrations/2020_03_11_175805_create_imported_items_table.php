@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class CreateImportedItemsTable extends Migration
 {
@@ -15,7 +15,7 @@ class CreateImportedItemsTable extends Migration
     public function up()
     {
         Schema::create('imported_items', function (Blueprint $table) {
-            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->integer('imported_quantity');
             $table->string('imported_comment', 20)->nullable();
             $table->string('contract_num', 20)->nullable();

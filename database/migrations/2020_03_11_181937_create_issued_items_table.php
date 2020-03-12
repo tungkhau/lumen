@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class CreateIssuedItemsTable extends Migration
 {
@@ -15,7 +15,7 @@ class CreateIssuedItemsTable extends Migration
     public function up()
     {
         Schema::create('issued_items', function (Blueprint $table) {
-            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->enum('kind', ['consumed', 'transferred']);
             $table->integer('issued_quantity');
             $table->uuid('end_item_pk'); // {consumed} demanded_item >< {transferred} out_distributed_item

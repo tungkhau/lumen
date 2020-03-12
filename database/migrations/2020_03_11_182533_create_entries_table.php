@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class CreateEntriesTable extends Migration
 {
@@ -15,7 +15,7 @@ class CreateEntriesTable extends Migration
     public function up()
     {
         Schema::create('entries', function (Blueprint $table) {
-            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->enum('kind', ['imported', 'restored', 'collected']);
             $table->enum('entry_kind', ['storing', 'in', 'out', 'issuing', 'neg_adjusting', 'pos_adjusting', 'discarding', 'returning']);
             $table->integer('quantity');

@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class CreateCollectedItemsTable extends Migration
 {
@@ -15,7 +15,7 @@ class CreateCollectedItemsTable extends Migration
     public function up()
     {
         Schema::create('collected_items', function (Blueprint $table) {
-            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->integer('collected_quantity');
             $table->uuid('collecting_pk');
             $table->uuid('in_distributed_item_pk');

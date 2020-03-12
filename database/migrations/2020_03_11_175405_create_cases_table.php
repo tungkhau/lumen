@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class CreateCasesTable extends Migration
 {
@@ -15,7 +15,7 @@ class CreateCasesTable extends Migration
     public function up()
     {
         Schema::create('cases', function (Blueprint $table) {
-            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->char('id', 11)->unique();
             $table->boolean('is_active')->default(true);
             $table->uuid('shelf_pk')->nullable();

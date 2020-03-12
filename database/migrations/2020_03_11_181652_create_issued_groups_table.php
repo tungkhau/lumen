@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class CreateIssuedGroupsTable extends Migration
 {
@@ -15,7 +15,7 @@ class CreateIssuedGroupsTable extends Migration
     public function up()
     {
         Schema::create('issued_groups', function (Blueprint $table) {
-            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->enum('kind', ['consumed', 'transferred']);
             $table->integer('grouped_quantity');
             $table->uuid('received_item_pk');

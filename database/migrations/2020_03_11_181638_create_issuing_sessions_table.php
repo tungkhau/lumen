@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class CreateIssuingSessionsTable extends Migration
 {
@@ -16,7 +15,7 @@ class CreateIssuingSessionsTable extends Migration
     public function up()
     {
         Schema::create('issuing_sessions', function (Blueprint $table) {
-            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->enum('kind', ['consuming', 'transferring']);
             $table->dateTime('executed_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('container_pk'); // {consuming} demand >< {transferring} out_distribution

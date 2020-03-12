@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class CreateConceptionsTable extends Migration
 {
@@ -16,7 +15,7 @@ class CreateConceptionsTable extends Migration
     public function up()
     {
         Schema::create('conceptions', function (Blueprint $table) {
-            $table->uuid('pk')->primary()->default(Str::uuid());
+            $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->string('id', 12);
             $table->string('name', 20);
             $table->string('comment', 20)->nullable();
