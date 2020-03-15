@@ -16,7 +16,7 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
-            $table->char('id', 3);
+            $table->char('id', 3)->unique();
             $table->string('name', 35);
             $table->string('address', 200)->nullable();
             $table->string('phone', 20)->nullable();

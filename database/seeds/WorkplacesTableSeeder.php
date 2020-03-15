@@ -15,23 +15,23 @@ class WorkplacesTableSeeder extends Seeder
     {
         DB::table('workplaces')->insert([
                 'pk' => (string)Str::uuid(),
-                'name' => 'Warehouse'
+                'name' => 'warehouse'
         ]);
         DB::table('workplaces')->insert([
             'pk' => (string)Str::uuid(),
-            'name' => 'Office'
+            'name' => 'office'
         ]);
         DB::table('workplaces')->insert([
             'pk' => (string)Str::uuid(),
-            'name' => 'Factory 1'
+            'name' => 'factory 1'
         ]);
         DB::table('workplaces')->insert([
             'pk' => (string)Str::uuid(),
-            'name' => 'Factory 2'
+            'name' => 'factory 2'
         ]);
         DB::table('workplaces')->insert([
             'pk' => (string)Str::uuid(),
-            'name' => 'Factory 3'
+            'name' => 'factory 3'
         ]);
     }
 }

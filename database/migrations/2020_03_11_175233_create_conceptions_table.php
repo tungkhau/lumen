@@ -18,9 +18,15 @@ class CreateConceptionsTable extends Migration
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->string('id', 12);
             $table->string('name', 20);
+            $table->year('year');
             $table->string('comment', 20)->nullable();
             $table->boolean('is_active')->default(true);
             $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->uuid('customer_pk');
+
+            $table->foreign('customer_pk')->references('pk')->on('customers');
+
+            $table->unique(['id', 'customer_pk', 'year']);
         });
     }
 

@@ -35,6 +35,7 @@ $app->withEloquent();
 |
 */
 
+
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
@@ -94,6 +95,8 @@ $app->routeMiddleware([
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
+$app->register(App\Providers\RepositoryServiceProvider::class);
+
 
 /*
 |--------------------------------------------------------------------------
