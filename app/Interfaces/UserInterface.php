@@ -6,13 +6,13 @@ interface UserInterface
 {
     public function create($params);
 
-    public function reset_password($user_pk);
+    public function reset_password($key);
 
-    public function deactivate($user_pk);
+    public function deactivate($key);
 
-    public function reactivate($user_pk);
+    public function reactivate($key);
 
-    public function change_workplace($user_pk, $workplace_pk);
+    public function change_workplace($params);
 
 
 }

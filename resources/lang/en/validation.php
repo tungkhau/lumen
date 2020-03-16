@@ -27,9 +27,16 @@ return [
             'regex' => 'Mã nhân viên chỉ có thể chứa kí tự số',
         ],
     ],
+    'exists' => ':attribute vừa chọn không tồn tại.',
     'attributes' => [
+        'user_pk' => 'Nhân viên',
+        'device_pk' => 'Thiết bị',
+        'workplace_pk' => 'Bộ phận',
+        'workplace_name' => 'Tên bộ phận',
         'user_id' => 'Mã nhân viên',
         'user_name' => 'Tên nhân viên',
+        'device_id' => 'Mã thiết bị',
+        'device_name' => 'Tên thiết bị',
         'role' => 'Quyền hạn'
     ],
 
@@ -70,7 +77,6 @@ return [
     'distinct' => 'The :attribute field has a duplicate value.',
     'email' => 'The :attribute must be a valid email address.',
     'ends_with' => 'The :attribute must end with one of the following: :values',
-    'exists' => 'The selected :attribute is invalid.',
     'file' => 'The :attribute must be a file.',
     'filled' => 'The :attribute field is required.',
     'gt' => [

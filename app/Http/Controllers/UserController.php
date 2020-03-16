@@ -6,7 +6,6 @@ use App\Interfaces\UserInterface;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use stdClass;
 
 class UserController extends Controller
 {
@@ -37,10 +36,8 @@ class UserController extends Controller
         }
 
         //Check preconditions, return conflict errors(409)
-        $workplace_name = app('db')->table('workplaces')->where('pk', $valid_request['workplace_pk'])->value('name');
-        $role = $valid_request['role'];
-        if ($role == 'mediator' && $workplace_name == 'office' || 'warehouse')
-            return response()->json(['conflict' => 'Thao tác không được phép'], 409);
+//        $workplace_name = app('db')->table('workplaces')->where('pk', $valid_request['workplace_pk'])->value('name');
+//        $role = $valid_request['role'];
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {
@@ -51,88 +48,111 @@ class UserController extends Controller
         return response()->json(['success' => 'Tạo Nhân viên thành công'], 201);
     }
 
-
-    function reset_passord(Request $request)
+    public function reset_password(Request $request)
     {
-        //Catch errors from validations & preconditions
+        //Validate request, catch invalid errors(400)
         try {
-            $this->validate($request, [
-                'user_pk' => 'required | uuid | exist: users, pk'
+            $valid_request = $this->validate($request, [
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
-            //TODO catch error
-        }
-        $user_pk = $request->user_pk;
-        //Catch errors from post-conditions
-        try {
-            $this->user->reset_password($user_pk);
-        } catch (Exception $error) {
-            //TODO catch error
+            $error_messages = $e->errors();
+            $error_message = (string)array_shift($error_messages)[0];
+            return response()->json(['invalid' => $error_message], 400);
         }
 
-    }
-
-    public
-    function reactivate(Request $request)
-    {
-        //Catch errors from validations & preconditions
+        //Execute method, return success message(200) or catch unexpected errors(500)
         try {
-            $this->validate($request, [
-                'user_pk' => 'required | uuid | exist: users, pk'
-            ]);
-        } catch (ValidationException $e) {
-            //TODO catch error
-        }
-
-        $user_pk = $request->user_pk;
-        //Catch errors from post-conditions
-        try {
-            $this->user->reactivate($user_pk);
-        } catch (Exception $error) {
-            //TODO catch error
-        }
-    }
-
-    public
-    function deactivate(Request $request)
-    {
-        //Catch errors from validations & preconditions
-        try {
-            $this->validate($request, [
-                'user_pk' => 'required | uuid | exist: users, pk'
-            ]);
-        } catch (ValidationException $e) {
-            //TODO catch error
-        }
-        $user_pk = $request->user_pk;
-        //Catch errors from post-conditions
-        try {
-            $this->user->deactivate($user_pk);
-        } catch (Exception $error) {
-            //TODO catch error
-        }
-    }
-
-    public
-    function change_workplace(Request $request)
-    {
-        try {
-            $this->validate($request, [
-                'user_pk' => 'required | uuid | exist: users, pk',
-                'workplace_pk' => 'required | uuid | exist: workplaces, pk'
-            ]);
-        } catch (ValidationException $e) {
-            //TODO catch error
-        }
-        $params = new stdClass();
-        $params->user_pk = $request->user_pk;
-        $params->workplace_pk = $request->workplace_pk;
-        //Catch errors from post-conditions
-        try {
-            $this->user->change_workplace($params);
+            $this->user->reset_password($valid_request['user_pk']);
         } catch (Exception $e) {
-            $this->exceptions->report($e);
+            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
         }
+        return response()->json(['success' => 'Reset Mật khẩu nhân viên thành công'], 200);
+    }
+
+    public function reactivate(Request $request)
+    {
+        //Validate request, catch invalid errors(400)
+        try {
+            $valid_request = $this->validate($request, [
+                'user_pk' => 'required|uuid|exists:users,pk'
+            ]);
+        } catch (ValidationException $e) {
+            $error_messages = $e->errors();
+            $error_message = (string)array_shift($error_messages)[0];
+            return response()->json(['invalid' => $error_message], 400);
+        }
+
+        //Check preconditions, return conflict errors(409)
+        $is_active = app('db')->table('users')->where('pk', $valid_request['user_pk'])->value('is_active');
+        if ($is_active == true)
+            return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+
+        //Execute method, return success message(200) or catch unexpected errors(500)
+        try {
+            $this->user->reactivate($valid_request['user_pk']);
+        } catch (Exception $e) {
+            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
+        }
+        return response()->json(['success' => 'Thao tác thành công'], 200);
+    }
+
+    public function deactivate(Request $request)
+    {
+        //Validate request, catch invalid errors(400)
+        try {
+            $valid_request = $this->validate($request, [
+                'user_pk' => 'required|uuid|exists:users,pk'
+            ]);
+        } catch (ValidationException $e) {
+            $error_messages = $e->errors();
+            $error_message = (string)array_shift($error_messages)[0];
+            return response()->json(['invalid' => $error_message], 400);
+        }
+
+        //Check preconditions, return conflict errors(409)
+        $is_active = app('db')->table('users')->where('pk', $valid_request['user_pk'])->value('is_active');
+        if ($is_active == false)
+            return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+
+        //Execute method, return success message(200) or catch unexpected errors(500)
+        try {
+            $this->user->deactivate($valid_request['user_pk']);
+        } catch (Exception $e) {
+            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
+        }
+        return response()->json(['success' => 'Thao tác thành công'], 200);
+    }
+
+    public function change_workplace(Request $request)
+    {
+        //Validate request, catch invalid errors(400)
+        try {
+            $valid_request = $this->validate($request, [
+                'user_pk' => 'required|uuid|exists:users,pk',
+                'workplace_pk' => 'required|uuid|exists:workplaces,pk'
+            ]);
+        } catch (ValidationException $e) {
+            $error_messages = $e->errors();
+            $error_message = (string)array_shift($error_messages)[0];
+            return response()->json(['invalid' => $error_message], 400);
+        }
+
+        //TODO Check preconditions, return conflict errors(409)
+        $workplace_name = app('db')->table('workplaces')->where('pk', $valid_request['workplace_pk'])->value('name');
+        $current_workplace_name = app('db')->table('workplaces')->join('users', 'users.workplace_pk', '=', 'workplaces.pk')->value('workplaces.name');
+        $role = app('db')->table('users')->where('pk', $valid_request['user_pk'])->value('role');
+
+//        if (($role != 'mediator') && ($workplace_name == 'office' || 'warehouse' || $current_workplace_name))
+//            return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+
+        //Execute method, return success message(200) or catch unexpected errors(500)
+        try {
+            $this->user->change_workplace($valid_request);
+        } catch (Exception $e) {
+            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
+        }
+        return response()->json(['success' => 'Thao tác thành công'], 200);
     }
 
 
