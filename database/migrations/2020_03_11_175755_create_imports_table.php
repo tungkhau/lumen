@@ -20,8 +20,12 @@ class CreateImportsTable extends Migration
             $table->boolean('is_opened')->default(true);
             $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('order_pk');
+            $table->uuid('user_pk');
+
 
             $table->foreign('order_pk')->references('pk')->on('orders');
+            $table->foreign('user_pk')->references('pk')->on('users');
+
         });
     }
 

@@ -18,7 +18,7 @@ class CreateCasesTable extends Migration
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->char('id', 11)->unique();
             $table->boolean('is_active')->default(true);
-            $table->uuid('shelf_pk')->nullable();
+            $table->uuid('shelf_pk')->nullable()->default(null);
 
             $table->foreign('shelf_pk')->references('pk')->on('shelves');
         });

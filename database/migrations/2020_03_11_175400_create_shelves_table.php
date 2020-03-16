@@ -17,7 +17,7 @@ class CreateShelvesTable extends Migration
         Schema::create('shelves', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->string('name', 20)->unique();
-            $table->uuid('block_pk')->nullable();
+            $table->uuid('block_pk')->nullable()->default(null);
 
             $table->foreign('block_pk')->references('pk')->on('blocks');
         });

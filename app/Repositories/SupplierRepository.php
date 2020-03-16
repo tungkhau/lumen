@@ -9,26 +9,38 @@ class SupplierRepository implements SupplierInterface
 
     public function create($params)
     {
-        // TODO: Implement create() method.
+        app('db')->table('suppliers')->insert([
+            'name' => $params['supplier_name'],
+            'id' => $params['supplier_id'],
+            'address' => $params['address'],
+            'phone' => $params['phone']
+        ]);
     }
 
     public function edit($params)
     {
-        // TODO: Implement edit() method.
+        app('db')->table('suppliers')->where('pk', $params['supplier_pk'])->update([
+            'address' => $params['address'],
+            'phone' => $params['phone']
+        ]);
     }
 
     public function delete($key)
     {
-        // TODO: Implement delete() method.
+        app('db')->table('suppliers')->where('pk', $key)->delete();
     }
 
     public function deactivate($key)
     {
-        // TODO: Implement deactivate() method.
+        app('db')->table('suppliers')->where('pk', $key)->update([
+            'is_active' => False
+        ]);
     }
 
     public function reactivate($key)
     {
-        // TODO: Implement reactivate() method.
+        app('db')->table('suppliers')->where('pk', $key)->update([
+            'is_active' => True
+        ]);
     }
 }

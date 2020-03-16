@@ -21,6 +21,12 @@ class CreateEntriesTable extends Migration
             $table->integer('quantity');
             $table->uuid('session_pk');
             $table->uuid('received_item_pk');
+            $table->uuid('case_pk');
+
+            $table->foreign('case_pk')->references('pk')->on('cases');
+
+            $table->unique(['kind', 'received_item_pk']);
+            $table->unique(['entry_kind', 'session_pk']);
         });
     }
 

@@ -13,6 +13,7 @@ return [
     |
     */
 
+    'valid_quantity' => ':attribute không hợp lệ',
     'required' => 'Không thể để trống :attribute.',
     'unique' => ':attribute đã tồn tại.',
     'max' => [
@@ -44,7 +45,11 @@ return [
         'address' => 'Địa chỉ',
         'phone' => 'Số điện thoại',
         'customer_pk' => 'Khách hàng',
-        'customer_id' => 'Mã khách hàng'
+        'customer_name' => 'Tên khách hàng',
+        'customer_id' => 'Mã khách hàng',
+        'supplier_pk' => 'Nhà cung cấp',
+        'supplier_name' => 'Tên nhà cung cấp',
+        'supplier_id' => 'Mã nhà cung cấp'
     ],
 
 

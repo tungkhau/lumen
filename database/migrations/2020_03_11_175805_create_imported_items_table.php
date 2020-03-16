@@ -18,10 +18,9 @@ class CreateImportedItemsTable extends Migration
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->integer('imported_quantity');
             $table->string('imported_comment', 20)->nullable();
-            $table->string('contract_num', 20)->nullable();
             $table->uuid('import_pk');
             $table->uuid('ordered_item_pk');
-            $table->uuid('classified_item_pk')->nullable();
+            $table->uuid('classified_item_pk')->nullable()->default(null);
 
             $table->foreign('import_pk')->references('pk')->on('imports');
             $table->foreign('ordered_item_pk')->references('pk')->on('ordered_items');
