@@ -18,6 +18,8 @@ class CreateAccessoriesConceptionsTable extends Migration
             $table->uuid('conception_pk');
             $table->foreign('accessory_pk')->references('pk')->on('accessories');
             $table->foreign('conception_pk')->references('pk')->on('conceptions');
+
+            $table->unique(['accessory_pk', 'conception_pk']);
         });
     }
 

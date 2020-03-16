@@ -25,7 +25,7 @@ class CreateAccessoriesTable extends Migration
             $table->string('comment', 20)->nullable();
             $table->boolean('is_active')->default(true);
             $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->string('photo')->default('default');
+            $table->uuid('photo')->nullable();
             $table->uuid('type_pk');
             $table->uuid('unit_pk');
             $table->uuid('customer_pk');

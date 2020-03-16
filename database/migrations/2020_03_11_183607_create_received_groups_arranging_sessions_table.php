@@ -18,6 +18,8 @@ class CreateReceivedGroupsArrangingSessionsTable extends Migration
             $table->uuid('arranging_session_pk');
             $table->foreign('received_group_pk')->references('pk')->on('received_groups');
             $table->foreign('arranging_session_pk')->references('pk')->on('arranging_sessions');
+
+            $table->unique(['received_group_pk', 'arranging_session_pk']);
         });
     }
 

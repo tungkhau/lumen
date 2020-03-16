@@ -53,8 +53,8 @@ class WorkplaceController extends Controller
         }
 
         //Check preconditions, return conflict errors(409)
-        $count = app('db')->table('users')->where('workplace_pk', $valid_request['workplace_pk'])->count();
-        if ($count != 0) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+        $users = app('db')->table('users')->where('workplace_pk', $valid_request['workplace_pk'])->exists();
+        if ($users) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {

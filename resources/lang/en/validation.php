@@ -22,11 +22,14 @@ return [
         'array' => 'The :attribute may not have more than :max items.',
     ],
 
+    'in' => ':attribute không phù hợp.',
+
     'custom' => [
         'user_id' => [
             'regex' => 'Mã nhân viên chỉ có thể chứa kí tự số',
         ],
     ],
+
     'exists' => ':attribute vừa chọn không tồn tại.',
     'attributes' => [
         'user_pk' => 'Nhân viên',
@@ -37,7 +40,11 @@ return [
         'user_name' => 'Tên nhân viên',
         'device_id' => 'Mã thiết bị',
         'device_name' => 'Tên thiết bị',
-        'role' => 'Quyền hạn'
+        'role' => 'Quyền hạn',
+        'address' => 'Địa chỉ',
+        'phone' => 'Số điện thoại',
+        'customer_pk' => 'Khách hàng',
+        'customer_id' => 'Mã khách hàng'
     ],
 
 
@@ -92,7 +99,6 @@ return [
         'array' => 'The :attribute must have :value items or more.',
     ],
     'image' => 'The :attribute must be an image.',
-    'in' => 'The selected :attribute is invalid.',
     'in_array' => 'The :attribute field does not exist in :other.',
     'integer' => 'The :attribute must be an integer.',
     'ip' => 'The :attribute must be a valid IP address.',
