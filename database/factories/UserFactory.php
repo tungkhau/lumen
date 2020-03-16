@@ -19,11 +19,11 @@ use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'id' => $faker->numberBetween(10000,999999),
+        'id' => $faker->numberBetween(10000, 999999),
         'name' => $faker->name,
-        'password' => $faker->password,
+        'password' => app('hash')->make('1'),
         'is_active' => true,
-        'role' => $faker->randomElement(array('admin','merchandiser','manager','staff','inspector','mediator')),
-        'workplace_pk' =>$faker->uuid
+        'role' => $faker->randomElement(array('admin', 'merchandiser', 'manager', 'staff', 'inspector', 'mediator')),
+        'workplace_pk' => '6a249803-9e81-4233-9b19-e999a74a5b2f'
     ];
 });

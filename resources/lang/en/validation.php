@@ -14,6 +14,7 @@ return [
     */
 
     'required' => 'Không thể để trống :attribute.',
+    'unique' => ':attribute đã tồn tại.',
     'max' => [
         'string' => ':attribute không thể chứa nhiều hơn :max kí tự.',
         'numeric' => 'The :attribute may not be greater than :max.',
@@ -29,7 +30,7 @@ return [
     'attributes' => [
         'user_id' => 'Mã nhân viên',
         'user_name' => 'Tên nhân viên',
-        'user_role' => 'Quyền hạn'
+        'role' => 'Quyền hạn'
     ],
 
 
@@ -133,7 +134,6 @@ return [
     'starts_with' => 'The :attribute must start with one of the following: :values',
     'string' => 'The :attribute must be a string.',
     'timezone' => 'The :attribute must be a valid zone.',
-    'unique' => 'The :attribute has already been taken.',
     'uploaded' => 'The :attribute failed to upload.',
     'url' => 'The :attribute format is invalid.',
     'uuid' => 'The :attribute must be a valid UUID.',

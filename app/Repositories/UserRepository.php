@@ -9,12 +9,12 @@ class UserRepository implements UserInterface
     public function create($params)
     {
         $default_password = app('hash')->make('PDG@123');
-        return app('db')->table('users')->insert([
-            'id' => $params->id,
-            'name' => $params->name,
-            'role' => $params->role,
-            'workplace_pk' => $params->workplace_pk,
-            'password' => $default_password,
+        app('db')->table('users')->insert([
+            'id' => $params['user_id'],
+            'name' => $params['user_name'],
+            'role' => $params['role'],
+            'workplace_pk' => $params['workplace_pk'],
+            'password' => $default_password
         ]);
     }
 
