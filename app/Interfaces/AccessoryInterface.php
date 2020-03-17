@@ -15,6 +15,4 @@ interface AccessoryInterface
     public function upload_photo($params);
 
     public function delete_photo($key);
-
-    public function id($params);
 }
