@@ -16,9 +16,10 @@ class CreateCasesTable extends Migration
     {
         Schema::create('cases', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
-            $table->char('id', 11)->unique();
+            $table->char('id', 12)->unique();
             $table->boolean('is_active')->default(true);
             $table->uuid('shelf_pk')->nullable()->default(null);
+            $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 
             $table->foreign('shelf_pk')->references('pk')->on('shelves');
         });

@@ -176,7 +176,7 @@ class ConceptionController extends Controller
         }
 
         //Check preconditions, return conflict errors(409)
-        $demand_pks = app('db')->table('demands')->where('conception_pk', $valid_request['conception_pk'])->pluck('pk');
+        $demand_pks = app('db')->table('demands')->where('conception_pk', $valid_request['conception_pk'])->pluck('pk')->toArray();
         $failed = False;
         foreach ($demand_pks as $demand_pk) {
             if (app('db')->table('demanded_items')->where('demand_pk', $demand_pk)->where('accessory_pk', $valid_request['accessory_pk'])->exists()) {

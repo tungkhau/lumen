@@ -17,8 +17,8 @@ class CreateBlocksTable extends Migration
         Schema::create('blocks', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->char('id', 1)->unique();
-            $table->TinyInteger('col')->nullable();
-            $table->TinyInteger('row')->nullable();
+            $table->TinyInteger('col')->nullable()->default(Null);
+            $table->TinyInteger('row')->nullable()->default(Null);
             $table->boolean('is_active')->default(false);
         });
     }

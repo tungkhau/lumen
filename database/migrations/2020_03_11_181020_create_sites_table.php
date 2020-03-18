@@ -16,6 +16,7 @@ class CreateSitesTable extends Migration
     {
         Schema::create('sites', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
+            $table->char('id', 2)->unique();
             $table->string('name', 15)->unique();
         });
     }

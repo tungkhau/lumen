@@ -64,7 +64,19 @@ $router->patch('reactivate_conception', 'ConceptionController@reactivate');
 $router->post('link_conception_accessory', 'ConceptionController@link_accessory');
 $router->delete('unlink_conception_accessory', 'ConceptionController@unlink_accessory');
 
-//
+//Group 3
+//Case
+$router->post('create_case', 'CaseController@create');
+$router->patch('disable_case', 'CaseController@disable');
+//Shelf
+$router->post('create_shelf', 'ShelfController@create');
+$router->delete('delete_shelf', 'ShelfController@delete');
+//Block
+$router->patch('open_block', 'BlockController@open');
+$router->patch('close_block', 'BlockController@close');
+
+
+
 //$router->post('','');
 //$router->patch('','');
 //$router->delete('','');

@@ -34,7 +34,7 @@ class UserController extends Controller
             $error_message = (string)array_shift($error_messages)[0];
             return response()->json(['invalid' => $error_message], 400);
         }
-
+        //TODO add precondition
         //Check preconditions, return conflict errors(409)
 //        $workplace_name = app('db')->table('workplaces')->where('pk', $valid_request['workplace_pk'])->value('name');
 //        $role = $valid_request['role'];

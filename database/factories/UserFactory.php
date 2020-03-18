@@ -18,12 +18,13 @@ use Illuminate\Database\Eloquent\Factory;
 */
 
 $factory->define(User::class, function (Faker $faker) {
+    $workplace_pks = app('db')->table('workplaces')->pluck('pk')->toArray();
     return [
         'id' => $faker->numberBetween(10000, 999999),
         'name' => $faker->name,
         'password' => app('hash')->make('1'),
         'is_active' => true,
         'role' => $faker->randomElement(array('admin', 'merchandiser', 'manager', 'staff', 'inspector', 'mediator')),
-        'workplace_pk' => '6a249803-9e81-4233-9b19-e999a74a5b2f'
+        'workplace_pk' => $faker->randomElement($workplace_pks)
     ];
 });

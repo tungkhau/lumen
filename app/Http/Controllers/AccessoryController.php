@@ -58,7 +58,7 @@ class AccessoryController extends Controller
 
     private function id($type_pk, $customer_pk, $item, $supplier_pk)
     {
-        //TODO implement
+        //TODO implement id generate
     }
 
     public function delete(Request $request)
@@ -146,11 +146,11 @@ class AccessoryController extends Controller
 
     public function upload_photo(Request $request)
     {
-        //TODO implement
+        //TODO implement upload photo
     }
 
     public function delete_photo(Request $request)
     {
-        //TODO implement
+        //TODO implement delete photo
     }
 }

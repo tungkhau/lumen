@@ -16,7 +16,7 @@ class CreateOutDistributionsTable extends Migration
     {
         Schema::create('out_distributions', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
-            $table->string('id', 999)->unique(); //TODO Declare exact length;
+            $table->string('id', 14)->unique();
             $table->string('distribution_comment', 20)->nullable();
             $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->boolean('is_opened')->default(true);
