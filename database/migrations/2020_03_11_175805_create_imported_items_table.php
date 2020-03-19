@@ -25,6 +25,8 @@ class CreateImportedItemsTable extends Migration
             $table->foreign('import_pk')->references('pk')->on('imports');
             $table->foreign('ordered_item_pk')->references('pk')->on('ordered_items');
             $table->foreign('classified_item_pk')->references('pk')->on('classified_items');
+
+            $table->unique(['import_pk', 'ordered_item_pk']);
         });
     }
 

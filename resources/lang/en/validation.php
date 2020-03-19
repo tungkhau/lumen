@@ -30,11 +30,11 @@ return [
             'regex' => 'Mã nhân viên chỉ có thể chứa kí tự số',
         ],
     ],
-
-    'exists' => ':attribute vừa chọn không tồn tại.',
+    'exists' => ':attribute vừa chọn không hợp lệ hoặc không tìm thấy.',
     'attributes' => [
         'user_pk' => 'Nhân viên',
         'device_pk' => 'Thiết bị',
+        'block_pk' => 'Dãy kho',
         'workplace_pk' => 'Bộ phận',
         'workplace_name' => 'Tên bộ phận',
         'user_id' => 'Mã nhân viên',
@@ -49,7 +49,8 @@ return [
         'customer_id' => 'Mã khách hàng',
         'supplier_pk' => 'Nhà cung cấp',
         'supplier_name' => 'Tên nhà cung cấp',
-        'supplier_id' => 'Mã nhà cung cấp'
+        'supplier_id' => 'Mã nhà cung cấp',
+        'case_pk' => 'Đơn vị chứa'
     ],
 
 

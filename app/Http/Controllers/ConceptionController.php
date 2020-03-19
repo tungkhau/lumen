@@ -22,7 +22,7 @@ class ConceptionController extends Controller
         //Validate request, catch invalid errors(400)
         try {
             $valid_request = $this->validate($request, [
-                'customer_pk' => 'required|uuid|exists:customers,pk',
+                'customer_pk' => 'required|uuid|exists:customers,pk,is_active,' . True,
                 'id' => 'required|string|regex:/^[0-9]+$/|max:12',
                 'year' => 'required|digits:4|integer|between:2015,' . (date('Y') + 1),
                 'conception_name' => 'required|string|max:20',
@@ -35,13 +35,12 @@ class ConceptionController extends Controller
         }
 
         //Check preconditions, return conflict errors(409)
-        $is_active = app('db')->table('customers')->where('pk', $valid_request['customer_pk'])->value('is_active');
-        $is_existed = app('db')->table('conceptions')
+        $is_duplicated = app('db')->table('conceptions')
             ->where('customer_pk', $valid_request['customer_pk'])
             ->where('id', $valid_request['id'])
             ->where('year', $valid_request['year'])->exists();
-
-        if (!$is_active || $is_existed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+        $failed = $is_duplicated;
+        if ($failed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {
@@ -84,17 +83,13 @@ class ConceptionController extends Controller
         //Validate request, catch invalid errors(400)
         try {
             $valid_request = $this->validate($request, [
-                'conception_pk' => 'required|uuid|exists:conceptions,pk'
+                'conception_pk' => 'required|uuid|exists:conceptions,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
             $error_message = (string)array_shift($error_messages)[0];
             return response()->json(['invalid' => $error_message], 400);
         }
-
-        //Check preconditions, return conflict errors(409)
-        $is_active = app('db')->table('conceptions')->where('pk', $valid_request['conception_pk'])->value('is_active');
-        if ($is_active == False) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {
@@ -110,17 +105,13 @@ class ConceptionController extends Controller
         //Validate request, catch invalid errors(400)
         try {
             $valid_request = $this->validate($request, [
-                'conception_pk' => 'required|uuid|exists:conceptions,pk'
+                'conception_pk' => 'required|uuid|exists:conceptions,pk,is_active,' . False
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
             $error_message = (string)array_shift($error_messages)[0];
             return response()->json(['invalid' => $error_message], 400);
         }
-
-        //Check preconditions, return conflict errors(409)
-        $is_active = app('db')->table('conceptions')->where('pk', $valid_request['conception_pk'])->value('is_active');
-        if ($is_active == True) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {
@@ -136,8 +127,8 @@ class ConceptionController extends Controller
         //Validate request, catch invalid errors(400)
         try {
             $valid_request = $this->validate($request, [
-                'accessory_pk' => 'required|uuid|exists:accessories,pk',
-                'conception_pk' => 'required|uuid|exists:conceptions,pk'
+                'accessory_pk' => 'required|uuid|exists:accessories,pk,is_active,' . True,
+                'conception_pk' => 'required|uuid|exists:conceptions,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -146,11 +137,11 @@ class ConceptionController extends Controller
         }
 
         //Check preconditions, return conflict errors(409)
-        $accessory = app('db')->table('accessories')->where('pk', $valid_request['accessory_pk'])->select('customer_pk', 'is_active')->get();
-        $conception = app('db')->table('conceptions')->where('pk', $valid_request['conception_pk'])->select('customer_pk', 'is_active')->get();
-        $equal = ($accessory->customer_pk == $conception->customer_pk) ? True : False;
-        $is_active = $accessory->is_active && $conception->is_active;
-        if (!($equal && $is_active)) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+        $accessory_customer = app('db')->table('accessories')->where('pk', $valid_request['accessory_pk'])->value('customer_pk');
+        $conception_customer = app('db')->table('conceptions')->where('pk', $valid_request['conception_pk'])->value('customer_pk');
+        $equal = ($accessory_customer == $conception_customer) ? True : False;
+        $failed = !$equal;
+        if ($failed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {

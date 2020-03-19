@@ -19,8 +19,9 @@ class CreateRestorationsTable extends Migration
             $table->char('id', 11)->unique();
             $table->string('restoration_comment', 20)->nullable();
             $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->boolean('is_confirmed')->default(False);
             $table->uuid('user_pk');
-            $table->uuid('receiving_session_pk')->nullable();
+            $table->uuid('receiving_session_pk')->nullable()->default(Null);
 
             $table->foreign('receiving_session_pk')->references('pk')->on('receiving_sessions');
             $table->foreign('user_pk')->references('pk')->on('users');

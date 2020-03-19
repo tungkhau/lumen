@@ -36,7 +36,8 @@ class CreateAccessoriesTable extends Migration
             $table->foreign('customer_pk')->references('pk')->on('customers');
             $table->foreign('supplier_pk')->references('pk')->on('suppliers');
 
-            $table->unique(['item', 'customer_pk', 'supplier_pk']);
+            $table->unique(['customer_pk', 'item', 'supplier_pk']);
+            $table->unique(['customer_pk', 'type_pk', 'supplier_pk']);
         });
     }
 

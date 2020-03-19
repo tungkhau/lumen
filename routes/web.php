@@ -11,6 +11,9 @@
 |
 */
 
+//$router->get('/', function () use ($router) {
+//    return $router->app->version();
+//});
 
 $router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use ($router) {
     $router->get('/a', function () use ($router) {
@@ -75,11 +78,33 @@ $router->delete('delete_shelf', 'ShelfController@delete');
 $router->patch('open_block', 'BlockController@open');
 $router->patch('close_block', 'BlockController@close');
 
+//Group 4
+//Order
+$router->post('create_order', 'OrderController@create');
+$router->post('edit_order', 'OrderController@edit');
+$router->delete('delete_order', 'OrderController@delete');
+$router->patch('turn_off_order', 'OrderController@turn_off');
+$router->patch('turn_on_order', 'OrderController@turn_on');
+//Import
+$router->post('create_import', 'ImportController@create');
+$router->post('edit_import', 'ImportController@edit');
+$router->delete('delete_import', 'ImportController@delete');
+$router->patch('turn_off_import', 'ImportController@turn_off');
+$router->patch('turn_on_import', 'ImportController@turn_on');
+$router->post('receive_import', 'ImportController@receive');
+$router->post('edit_imported_receiving', 'ImportController@edit_receiving');
+$router->delete('delete_imported_receiving', 'ImportController@delete_receiving');
+//Restoration
+$router->post('register_restoration', 'RestorationController@register');
+$router->delete('delete_restoration', 'RestorationController@delete');
+$router->patch('confirm_restoration', 'RestorationController@confirm');
+$router->delete('cancel_restoration', 'RestorationController@cancel');
+$router->post('receive_restoration', 'RestorationController@receive');
 
 
-//$router->post('','');
-//$router->patch('','');
-//$router->delete('','');
+$router->post('', '');
+$router->patch('', '');
+$router->delete('', '');
 
 ////Group 9
 //$router->post('/login_desktop', 'AuthController@login_desktop');

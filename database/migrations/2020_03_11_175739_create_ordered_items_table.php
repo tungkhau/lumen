@@ -23,6 +23,8 @@ class CreateOrderedItemsTable extends Migration
 
             $table->foreign('order_pk')->references('pk')->on('orders');
             $table->foreign('accessory_pk')->references('pk')->on('accessories');
+
+            $table->unique(['order_pk', 'accessory_pk']);
         });
     }
 

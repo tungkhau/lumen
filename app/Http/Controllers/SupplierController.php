@@ -98,17 +98,13 @@ class SupplierController extends Controller
         //Validate request, catch invalid errors(400)
         try {
             $valid_request = $this->validate($request, [
-                'supplier_pk' => 'required|uuid|exists:suppliers,pk',
+                'supplier_pk' => 'required|uuid|exists:suppliers,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
             $error_message = (string)array_shift($error_messages)[0];
             return response()->json(['invalid' => $error_message], 400);
         }
-
-        //Check preconditions, return conflict errors(409)
-        $is_active = app('db')->table('suppliers')->where('pk', $valid_request['supplier_pk'])->value('is_active');
-        if ($is_active == False) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {
@@ -124,17 +120,13 @@ class SupplierController extends Controller
         //Validate request, catch invalid errors(400)
         try {
             $valid_request = $this->validate($request, [
-                'supplier_pk' => 'required|uuid|exists:suppliers,pk',
+                'supplier_pk' => 'required|uuid|exists:suppliers,pk,is_active,' . False
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
             $error_message = (string)array_shift($error_messages)[0];
             return response()->json(['invalid' => $error_message], 400);
         }
-
-        //Check preconditions, return conflict errors(409)
-        $is_active = app('db')->table('suppliers')->where('pk', $valid_request['supplier_pk'])->value('is_active');
-        if ($is_active == True) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {

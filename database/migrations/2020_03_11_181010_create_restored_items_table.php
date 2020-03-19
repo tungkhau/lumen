@@ -22,6 +22,8 @@ class CreateRestoredItemsTable extends Migration
 
             $table->foreign('restoration_pk')->references('pk')->on('restorations');
             $table->foreign('accessory_pk')->references('pk')->on('accessories');
+
+            $table->unique(['restoration_pk', 'accessory_pk']);
         });
     }
 

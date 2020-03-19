@@ -22,7 +22,7 @@ class BlockController extends Controller
         //Validate request, catch invalid errors(400)
         try {
             $valid_request = $this->validate($request, [
-                'block_pk' => 'required|uuid|exists:blocks,pk',
+                'block_pk' => 'required|uuid|exists:blocks,pk,is_active,' . False,
                 'row' => 'required|integer|max:15|gt:0',
                 'col' => 'required|integer|max:50|gt:0'
             ]);
@@ -34,11 +34,10 @@ class BlockController extends Controller
 
         //Check preconditions, return conflict errors(409)
         $block = app('db')->table('blocks')->where('pk', $valid_request['block_pk'])->first();
-        $is_active = $block->is_active;
         $row = $block->row;
         $col = $block->col;
 
-        $failed = $is_active || $row || $col;
+        $failed = $row || $col;
         if ($failed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
 
         //Execute method, return success message(200) or catch unexpected errors(500)
@@ -55,7 +54,7 @@ class BlockController extends Controller
         //Validate request, catch invalid errors(400)
         try {
             $valid_request = $this->validate($request, [
-                'block_pk' => 'required|uuid|exists:blocks,pk',
+                'block_pk' => 'required|uuid|exists:blocks,pk,is_active,' . True,
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -65,13 +64,12 @@ class BlockController extends Controller
 
         //Check preconditions, return conflict errors(409)
         $block = app('db')->table('blocks')->where('pk', $valid_request['block_pk'])->first();
-        $is_active = $block->is_active;
         $row = $block->row ? False : True;
         $col = $block->col ? False : True;
         $shelf_pks = app('db')->table('shelves')->where('block_pk', $valid_request['block_pk'])->pluck('pk')->toArray();
         $cases = app('db')->table('cases')->whereIn('shelf_pk', $shelf_pks)->exists();
 
-        $failed = !$is_active || $row || $col || $cases;
+        $failed = $row || $col || $cases;
         if ($failed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
 
         //Execute method, return success message(200) or catch unexpected errors(500)
