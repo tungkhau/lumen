@@ -102,9 +102,9 @@ $router->delete('cancel_restoration', 'RestorationController@cancel');
 $router->post('receive_restoration', 'RestorationController@receive');
 
 
-$router->post('', '');
-$router->patch('', '');
-$router->delete('', '');
+//$router->post('', '');
+//$router->patch('', '');
+//$router->delete('', '');
 
 ////Group 9
 //$router->post('/login_desktop', 'AuthController@login_desktop');

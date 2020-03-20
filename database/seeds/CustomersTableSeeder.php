@@ -15,15 +15,15 @@ class CustomersTableSeeder extends Seeder
     {
         DB::table('customers')->insert([
             'id' => 'DCL',
-            'name' => 'Công ty TNHH Decathlon Việt Nam',
+            'name' => 'CTY TNHH Decathlon VN',
             'address' => '26 Ung Văn Khiêm, Phường 25, Bình Thạnh, Hồ Chí Minh',
             'phone' => '028 3840 5336',
         ]);
         DB::table('customers')->insert([
             'id' => 'AST',
-            'name' => 'Công ty TNHH Assistant',
+            'name' => 'CTY TNHH Assistant',
             'address' => '23/3/1 Ấp Mới 1, Tân Xuân, Hóc Môn, Hồ Chí Minh',
-            'phone' => '0946008197',
+            'phone' => '094 600 8197',
         ]);
     }
 }

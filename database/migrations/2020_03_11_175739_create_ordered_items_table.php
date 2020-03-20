@@ -17,7 +17,7 @@ class CreateOrderedItemsTable extends Migration
         Schema::create('ordered_items', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->integer('ordered_quantity');
-            $table->string('ordered_comment', 20)->nullable();
+            $table->string('comment', 20)->nullable();
             $table->uuid('order_pk');
             $table->uuid('accessory_pk');
 

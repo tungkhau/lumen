@@ -17,8 +17,7 @@ class CreateTypesTable extends Migration
         Schema::create('types', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->char('id', 2)->unique();
-            $table->string('name', 12)->unique();
-            $table->boolean('textile');
+            $table->string('name', 20)->unique();
         });
     }
 

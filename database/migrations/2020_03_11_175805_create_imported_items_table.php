@@ -17,7 +17,7 @@ class CreateImportedItemsTable extends Migration
         Schema::create('imported_items', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->integer('imported_quantity');
-            $table->string('imported_comment', 20)->nullable();
+            $table->string('comment', 20)->nullable();
             $table->uuid('import_pk');
             $table->uuid('ordered_item_pk');
             $table->uuid('classified_item_pk')->nullable()->default(null);

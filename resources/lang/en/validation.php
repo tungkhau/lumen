@@ -13,7 +13,6 @@ return [
     |
     */
 
-    'valid_quantity' => ':attribute không hợp lệ',
     'required' => 'Không thể để trống :attribute.',
     'unique' => ':attribute đã tồn tại.',
     'max' => [
@@ -24,6 +23,15 @@ return [
     ],
 
     'in' => ':attribute không phù hợp.',
+    'integer' => ':attribute phải là số nguyên.',
+
+    'between' => [
+        'numeric' => ':attribute phải có giá trị từ :min đến :max.',
+        'file' => 'The :attribute must be between :min and :max kilobytes.',
+        'string' => 'The :attribute must be between :min and :max characters.',
+        'array' => 'The :attribute must have between :min and :max items.',
+    ],
+
 
     'custom' => [
         'user_id' => [
@@ -32,6 +40,7 @@ return [
     ],
     'exists' => ':attribute vừa chọn không hợp lệ hoặc không tìm thấy.',
     'attributes' => [
+        'ordered_items.*.ordered_quantity' => 'Số lượng đặt hàng',
         'user_pk' => 'Nhân viên',
         'device_pk' => 'Thiết bị',
         'block_pk' => 'Dãy kho',
@@ -72,12 +81,7 @@ return [
     'array' => 'The :attribute must be an array.',
     'before' => 'The :attribute must be a date before :date.',
     'before_or_equal' => 'The :attribute must be a date before or equal to :date.',
-    'between' => [
-        'numeric' => 'The :attribute must be between :min and :max.',
-        'file' => 'The :attribute must be between :min and :max kilobytes.',
-        'string' => 'The :attribute must be between :min and :max characters.',
-        'array' => 'The :attribute must have between :min and :max items.',
-    ],
+
     'boolean' => 'The :attribute field must be true or false.',
     'confirmed' => 'The :attribute confirmation does not match.',
     'date' => 'The :attribute is not a valid date.',
@@ -106,7 +110,6 @@ return [
     ],
     'image' => 'The :attribute must be an image.',
     'in_array' => 'The :attribute field does not exist in :other.',
-    'integer' => 'The :attribute must be an integer.',
     'ip' => 'The :attribute must be a valid IP address.',
     'ipv4' => 'The :attribute must be a valid IPv4 address.',
     'ipv6' => 'The :attribute must be a valid IPv6 address.',

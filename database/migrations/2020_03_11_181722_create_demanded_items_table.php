@@ -17,7 +17,7 @@ class CreateDemandedItemsTable extends Migration
         Schema::create('demanded_items', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->integer('demanded_quantity');
-            $table->string('demanded_comment', 20)->nullable();
+            $table->string('comment', 20)->nullable();
             $table->uuid('demand_pk');
             $table->uuid('accessory_pk');
 

@@ -11,6 +11,7 @@ use App\Interfaces\DeviceInterface;
 use App\Interfaces\ImportInterface;
 use App\Interfaces\OrderInterface;
 use App\Interfaces\RestorationInterface;
+use App\Interfaces\ShelfInterface;
 use App\Interfaces\SupplierInterface;
 use App\Interfaces\UserInterface;
 use App\Interfaces\WorkplaceInterface;
@@ -46,7 +47,7 @@ class RepositoryServiceProvider extends ServiceProvider
 
         //Group 3
         $this->app->bind(CaseInterface::class, CaseRepository::class);
-        $this->app->bind(SupplierInterface::class, ShelfRepository::class);
+        $this->app->bind(ShelfInterface::class, ShelfRepository::class);
         $this->app->bind(BlockInterface::class, BlockRepository::class);
 
         //Group 4

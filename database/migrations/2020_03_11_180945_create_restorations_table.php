@@ -17,7 +17,7 @@ class CreateRestorationsTable extends Migration
         Schema::create('restorations', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->char('id', 11)->unique();
-            $table->string('restoration_comment', 20)->nullable();
+            $table->string('comment', 20)->nullable();
             $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->boolean('is_confirmed')->default(False);
             $table->uuid('user_pk');

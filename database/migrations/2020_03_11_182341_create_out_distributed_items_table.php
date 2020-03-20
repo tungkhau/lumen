@@ -17,7 +17,7 @@ class CreateOutDistributedItemsTable extends Migration
         Schema::create('out_distributed_items', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->integer('distributed_quantity');
-            $table->string('distributed_comment', 20)->nullable();
+            $table->string('comment', 20)->nullable();
             $table->uuid('out_distribution_pk');
             $table->uuid('accessory_pk');
 
