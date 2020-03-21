@@ -101,6 +101,21 @@ $router->patch('confirm_restoration', 'RestorationController@confirm');
 $router->delete('cancel_restoration', 'RestorationController@cancel');
 $router->post('receive_restoration', 'RestorationController@receive');
 
+//Group 5
+//Grouped Item
+$router->post('count', 'GroupedItemController@count');
+$router->patch('edit_counting', 'GroupedItemController@edit_counting');
+$router->delete('delete_counting', 'GroupedItemController@delete_counting');
+$router->post('check', 'GroupedItemController@check');
+$router->patch('edit_checking', 'GroupedItemController@edit_checking');
+$router->delete('delete_checking', 'GroupedItemController@delete_checking');
+$router->post('arrange', 'GroupedItemController@arrange');
+//Import
+$router->post('classify', 'ImportController@classify');
+$router->patch('reclassify', 'ImportController@reclassify');
+$router->delete('delete_classification', 'ImportController@delete_classification');
+$router->post('sendback', 'ImportController@sendback');
+
 
 //$router->post('', '');
 //$router->patch('', '');

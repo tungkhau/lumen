@@ -34,8 +34,7 @@ class UserController extends Controller
             $error_message = (string)array_shift($error_messages)[0];
             return response()->json(['invalid' => $error_message], 400);
         }
-        //TODO add precondition
-        //Check preconditions, return conflict errors(409)
+        //Check preconditions, return conflict errors(409) TODO implement preconditions
 //        $workplace_name = app('db')->table('workplaces')->where('pk', $valid_request['workplace_pk'])->value('name');
 //        $role = $valid_request['role'];
 
@@ -129,13 +128,13 @@ class UserController extends Controller
             return response()->json(['invalid' => $error_message], 400);
         }
 
-        //TODO Check preconditions, return conflict errors(409)
-        $workplace_name = app('db')->table('workplaces')->where('pk', $valid_request['workplace_pk'])->value('name');
-        $current_workplace_name = app('db')->table('workplaces')->join('users', 'users.workplace_pk', '=', 'workplaces.pk')->value('workplaces.name');
-        $role = app('db')->table('users')->where('pk', $valid_request['user_pk'])->value('role');
-
+        //Check preconditions, return conflict errors(409)  TODO implement preconditions
+//        $workplace_name = app('db')->table('workplaces')->where('pk', $valid_request['workplace_pk'])->value('name');
+//        $current_workplace_name = app('db')->table('workplaces')->join('users', 'users.workplace_pk', '=', 'workplaces.pk')->value('workplaces.name');
+//        $role = app('db')->table('users')->where('pk', $valid_request['user_pk'])->value('role');
+//
 //        if (($role != 'mediator') && ($workplace_name == 'office' || 'warehouse' || $current_workplace_name))
-//            return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+//         return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {

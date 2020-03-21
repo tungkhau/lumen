@@ -20,4 +20,12 @@ interface ImportInterface
 
     public function delete_receiving($key);
 
+    public function classify($params);
+
+    public function reclassify($params);
+
+    public function delete_classification($key);
+
+    public function sendback($params);
+
 }

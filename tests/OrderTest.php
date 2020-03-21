@@ -1,14 +1,8 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseTransactions;
-
 class OrderTest extends TestCase
 {
-    use DatabaseTransactions;
 
-    /**
-     * @test
-     */
     public function create()
     {
         $params = [

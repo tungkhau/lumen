@@ -28,11 +28,6 @@ class CaseController extends Controller
         return response()->json(['success' => 'Tạo đơn vị chứa thành công'], 201);
     }
 
-    private function id()
-    {
-        return $this->case->id();
-    }
-
     public function disable(Request $request)
     {
         //Validate request, catch invalid errors(400)
@@ -69,5 +64,17 @@ class CaseController extends Controller
             return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
         }
         return response()->json(['success' => 'Xóa đơn vị chứa thành công'], 200);
+    }
+
+    private function id()
+    {
+        $date = (string)date('dmy');
+        $date_string = "%" . $date . "%";
+        $latest_case = app('db')->table('cases')->where('id', 'like', $date_string)->latest()->first();
+        if ($latest_case) {
+            $key = substr($latest_case->id, -2, 2);
+            $key++;
+        } else $key = "AA";
+        return (string)env('DEFAULT_SITE') . "-" . $date . "-" . $key;
     }
 }

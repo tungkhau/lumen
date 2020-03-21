@@ -17,7 +17,7 @@ class CreateClassifiedItemsTable extends Migration
         Schema::create('classified_items', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->enum('quality_state', ['passed', 'failed', 'pending']);
-            $table->uuid('sendbacking_session_pk');
+            $table->uuid('sendbacking_session_pk')->unique()->nullable()->default(Null);
 
             $table->foreign('sendbacking_session_pk')->references('pk')->on('sendbacking_sessions');
         });

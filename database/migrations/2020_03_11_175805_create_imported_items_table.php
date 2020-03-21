@@ -20,7 +20,7 @@ class CreateImportedItemsTable extends Migration
             $table->string('comment', 20)->nullable();
             $table->uuid('import_pk');
             $table->uuid('ordered_item_pk');
-            $table->uuid('classified_item_pk')->nullable()->default(null);
+            $table->uuid('classified_item_pk')->nullable()->unique()->default(null);
 
             $table->foreign('import_pk')->references('pk')->on('imports');
             $table->foreign('ordered_item_pk')->references('pk')->on('ordered_items');

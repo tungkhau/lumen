@@ -8,6 +8,4 @@ interface CaseInterface
 
     public function disable($key);
 
-    public function id();
-
 }
