@@ -18,7 +18,7 @@ class CreateDiscardingSessionsTable extends Migration
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->dateTime('executed_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('user_pk');
-            $table->uuid('verifying_session_pk')->nullable();
+            $table->uuid('verifying_session_pk')->nullable()->default(Null);
 
             $table->foreign('user_pk')->references('pk')->on('users');
             $table->foreign('verifying_session_pk')->references('pk')->on('verifying_sessions');

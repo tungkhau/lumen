@@ -13,6 +13,8 @@ return [
     |
     */
 
+    'available_quantity' => 'Số lượng nhập không phù hợp',
+    'adjusted_quantity' => 'Số lượng nhập không phù hợp',
     'required' => 'Không thể để trống :attribute.',
     'unique' => ':attribute đã tồn tại.',
     'max' => [

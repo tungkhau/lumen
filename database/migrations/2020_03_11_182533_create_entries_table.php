@@ -21,6 +21,7 @@ class CreateEntriesTable extends Migration
             $table->integer('quantity');
             $table->uuid('session_pk');
             $table->boolean('is_pending')->default(false);
+            $table->boolean('result')->default('True');
             $table->uuid('received_item_pk');
             $table->uuid('case_pk');
 

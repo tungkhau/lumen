@@ -19,9 +19,11 @@ class CreateReplacingSessionsTable extends Migration
             $table->dateTime('executed_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('start_shelf_pk');
             $table->uuid('end_shelf_pk');
+            $table->uuid('case_pk');
             $table->uuid('user_pk');
 
             $table->foreign('user_pk')->references('pk')->on('users');
+            $table->foreign('case_pk')->references('pk')->on('cases');
             $table->foreign('start_shelf_pk')->references('pk')->on('shelves');
             $table->foreign('end_shelf_pk')->references('pk')->on('shelves');
         });

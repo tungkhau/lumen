@@ -11,17 +11,17 @@
 |
 */
 
-//$router->get('/', function () use ($router) {
-//    return $router->app->version();
+
+//$router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use ($router) {
+//    $router->get('/a', function () use ($router) {
+//        echo phpinfo();
+//    });
 //});
 
-$router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use ($router) {
-    $router->get('/a', function () use ($router) {
-        echo phpinfo();
-    });
-});
-
 //Group 0
+$router->get('/', function () use ($router) {
+    return $router->app->version();
+});
 $router->post('login', 'AuthController@login');
 $router->post('logout', 'AuthController@logout');
 
@@ -102,19 +102,33 @@ $router->delete('cancel_restoration', 'RestorationController@cancel');
 $router->post('receive_restoration', 'RestorationController@receive');
 
 //Group 5
-//Grouped Item
-$router->post('count', 'GroupedItemController@count');
-$router->patch('edit_counting', 'GroupedItemController@edit_counting');
-$router->delete('delete_counting', 'GroupedItemController@delete_counting');
-$router->post('check', 'GroupedItemController@check');
-$router->patch('edit_checking', 'GroupedItemController@edit_checking');
-$router->delete('delete_checking', 'GroupedItemController@delete_checking');
-$router->post('arrange', 'GroupedItemController@arrange');
+//Received Group
+$router->post('count', 'ReceivedGroupController@count');
+$router->patch('edit_counting', 'ReceivedGroupController@edit_counting');
+$router->delete('delete_counting', 'ReceivedGroupController@delete_counting');
+$router->post('check', 'ReceivedGroupController@check');
+$router->patch('edit_checking', 'ReceivedGroupController@edit_checking');
+$router->delete('delete_checking', 'ReceivedGroupController@delete_checking');
+$router->post('arrange', 'ReceivedGroupController@arrange');
 //Import
 $router->post('classify', 'ImportController@classify');
 $router->patch('reclassify', 'ImportController@reclassify');
 $router->delete('delete_classification', 'ImportController@delete_classification');
 $router->post('sendback', 'ImportController@sendback');
+
+//Group 6
+//Received Group
+$router->post('store_received_groups', 'ReceivedGroupController@store');
+//Entry
+$router->post('adjust', 'EntryController@ajdust');
+$router->post('discard', 'EntryController@discard');
+$router->post('verify_adjusting', 'EntryController@verify_adjusting');
+$router->post('verify_discarding', 'EntryController@verify_discarding');
+$router->post('move', 'EntryController@move');
+//Case
+$router->post('store_case', 'CaseController@store');
+$router->post('replace', 'CaseController@replace');
+
 
 
 //$router->post('', '');

@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\GroupedItemRepository;
-use App\Rules\UnstoredCase;
+use App\Repositories\ReceivedGroupRepository;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-class GroupedItemController extends Controller
+class ReceivedGroupController extends Controller
 {
 
-    private $grouped_item;
+    private $received_group;
 
-    public function __construct(GroupedItemRepository $grouped_item)
+    public function __construct(ReceivedGroupRepository $received_group)
     {
-        $this->grouped_item = $grouped_item;
+        $this->received_group = $received_group;
     }
 
     public function count(Request $request)
@@ -55,7 +54,7 @@ class GroupedItemController extends Controller
         //Execute method, return success message(200) or catch unexpected errors(500)
         $valid_request['counting_session_pk'] = (string)Str::uuid();
         try {
-            $this->grouped_item->count($valid_request);
+            $this->received_group->count($valid_request);
         } catch (Exception $e) {
             return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
         }
@@ -82,7 +81,7 @@ class GroupedItemController extends Controller
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {
-            $this->grouped_item->edit_counting($valid_request);
+            $this->received_group->edit_counting($valid_request);
         } catch (Exception $e) {
             return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
         }
@@ -108,7 +107,7 @@ class GroupedItemController extends Controller
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {
-            $this->grouped_item->delete_counting($valid_request['counting_session_pk']);
+            $this->received_group->delete_counting($valid_request['counting_session_pk']);
         } catch (Exception $e) {
             return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
         }
@@ -137,7 +136,7 @@ class GroupedItemController extends Controller
         //Execute method, return success message(200) or catch unexpected errors(500)
         $valid_request['checking_session_pk'] = (string)Str::uuid();
         try {
-            $this->grouped_item->check($valid_request);
+            $this->received_group->check($valid_request);
         } catch (Exception $e) {
             return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
         }
@@ -165,7 +164,7 @@ class GroupedItemController extends Controller
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {
-            $this->grouped_item->edit_checking($valid_request);
+            $this->received_group->edit_checking($valid_request);
         } catch (Exception $e) {
             return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
         }
@@ -191,7 +190,7 @@ class GroupedItemController extends Controller
 
         //Execute method, return success message(200) or catch unexpected errors(500)
         try {
-            $this->grouped_item->delete_counting($valid_request['checking_session_pk']);
+            $this->received_group->delete_counting($valid_request['checking_session_pk']);
         } catch (Exception $e) {
             return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
         }
@@ -203,8 +202,8 @@ class GroupedItemController extends Controller
         //Validate request, catch invalid errors(400)
         try {
             $valid_request = $this->validate($request, [
-                'start_case_pk' => ['required', 'uuid', 'exists:cases,pk', new UnstoredCase],
-                'end_case_pk' => ['required', 'uuid', 'exists:cases,pk', 'different:' . $request['start_case_pk'], new UnstoredCase],
+                'start_case_pk' => 'required|uuid|exists:received_groups,case_pk|unstored_case',
+                'end_case_pk' => 'required|uuid|exists:cases,pk|unstored_case|different:' . $request['start_case_pk'],
                 'received_groups.*.received_group_pk' => 'required|uuid|exits:received_groups,pk,case_pk,' . $request['start_case_pk'],
                 'user_pk' => 'required|uuid|exits:users,pk'
             ]);
@@ -220,11 +219,58 @@ class GroupedItemController extends Controller
         //Execute method, return success message(200) or catch unexpected errors(500)
         $valid_request['arranging_session_pk'] = (string)Str::uuid();
         try {
-            $this->grouped_item->arrange($valid_request);
+            $this->received_group->arrange($valid_request);
         } catch (Exception $e) {
             return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
         }
         return response()->json(['success' => 'Sắp xếp cụm phụ liệu thành công'], 200);
+    }
+
+    public function store(Request $request)
+    {
+        //Validate request, catch invalid errors(400)
+        try {
+            $valid_request = $this->validate($request, [
+                'received_groups.*.pk' => 'required|uuid|exits:received_groups,pk',
+                'case_pk' => 'required|uuid|exists:cases,pk|stored_case',
+                'user_pk' => 'required|uuid|exits:users,pk'
+            ]);
+        } catch (ValidationException $e) {
+            $error_messages = $e->errors();
+            $error_message = (string)array_shift($error_messages)[0];
+            return response()->json(['invalid' => $error_message], 400);
+        }
+
+        //Check preconditions, return conflict errors(409)
+        $received_groups = app('db')->table('received_groups')->whereIn('pk', array_values($valid_request['received_groups']))->get()->toArray();
+        $passed = True;
+        foreach ($received_groups as $received_group) {
+            if ($received_group['kind'] == 'imported') {
+                if (app('db')->table('imported_items')->join('classified_items', 'imported_items.classified_item_pk', '=', 'classified_items.pk')->where('imported_items.pk', $received_group['pk'])->value('classified_items.quality_state') == 'passed' ? True : False) {
+                    $passed = False;
+                    break;
+                }
+            }
+        }
+        $failed = !$passed;
+        if ($failed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+
+        //Execute method, return success message(200) or catch unexpected errors(500)
+        $valid_request['storing_session_pk'] = (string)Str::uuid();
+        foreach ($received_groups as $received_group) {
+            $valid_request['entries']['received_item_pk'] = $received_group['received_item_pk'];
+            $valid_request['entries']['kind'] = $received_group['kind'];
+            $valid_request['entries']['quantity'] = $received_group['grouped_quantity'];
+            $valid_request['entries']['entry_kind'] = 'storing';
+            $valid_request['entries']['session_pk'] = $valid_request['storing_session_pk'];
+            $valid_request['entries']['case_pk'] = $valid_request['case_pk'];
+        }
+        try {
+            $this->received_group->store($valid_request);
+        } catch (Exception $e) {
+            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
+        }
+        return response()->json(['success' => 'Lưu kho cụm phụ liệu thành công'], 200);
     }
 
 }
