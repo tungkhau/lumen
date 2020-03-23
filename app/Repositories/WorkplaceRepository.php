@@ -2,18 +2,27 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\WorkplaceInterface;
+use Exception;
 
-class WorkplaceRepository implements WorkplaceInterface
+class WorkplaceRepository
 {
-
-    public function create($key)
+    public function create($params)
     {
-        app('db')->table('workplaces')->insert(['name' => $key]);
+        try {
+            app('db')->table('workplaces')->insert(['name' => $params['workplace_name']]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
-    public function delete($key)
+    public function delete($params)
     {
-        app('db')->table('workplaces')->where('pk', $key)->delete();
+        try {
+            app('db')->table('workplaces')->where('pk', $params['workplace_pk'])->delete();
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 }

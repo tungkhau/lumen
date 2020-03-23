@@ -2,140 +2,105 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\SupplierInterface;
-use Exception;
+use App\Preconditions\SupplierPrecondition;
+use App\Repositories\SupplierRepository;
+use App\Validators\SupplierValidator;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class SupplierController extends Controller
 {
-    private $supplier;
 
-    public function __construct(SupplierInterface $supplier)
+    private $validator;
+    private $precondition;
+    private $repository;
+
+    public function __construct(SupplierValidator $validator, SupplierPrecondition $precondition, SupplierRepository $repository)
     {
-        $this->supplier = $supplier;
+        $this->validator = $validator;
+        $this->precondition = $precondition;
+        $this->repository = $repository;
     }
 
     public function create(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'supplier_name' => 'required|string|max:35',
-                'supplier_id' => 'required|size:3|alpha|unique:suppliers,id',
-                'address' => 'string|nullable|max:200',
-                'phone' => 'string|nullable|max:20'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->create($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->supplier->create($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
-        return response()->json(['success' => 'Thêm nhà cung cấp thành công'], 201);
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->create($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Tạo nhà cung cấp thành công'], 200);
     }
-
 
     public function edit(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'supplier_pk' => 'required|uuid|exists:suppliers,pk',
-                'address' => 'string|nullable|max:200',
-                'phone' => 'string|nullable|max:20'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->supplier->edit($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->edit($request);
+        if ($validation) return $this->invalid_response($validation);
+
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->edit($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Sửa nhà cung cấp thành công'], 200);
     }
 
-
     public function delete(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'supplier_pk' => 'required|uuid|exists:suppliers,pk',
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->delete($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Check preconditions, return conflict errors(409)
-        $accessories = app('db')->table('accessories')->where('pk', $valid_request['supplier_pk'])->exists();
-        if ($accessories) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->delete($request);
+        if ($precondition) return $this->conflict_response();
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->supplier->delete($valid_request['supplier_pk']);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
-        return response()->json(['success' => 'Xóa khách hàng thành công'], 200);
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->delete($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Xóa nhà cung cấp thành công'], 200);
     }
-
 
     public function deactivate(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'supplier_pk' => 'required|uuid|exists:suppliers,pk,is_active,' . True
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->deactivate($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->supplier->deactivate($valid_request['supplier_pk']);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Check preconditions, return conflict errors(409) */
+
+
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->deactivate($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Ẩn nhà cung cấp thành công'], 200);
     }
 
     public function reactivate(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'supplier_pk' => 'required|uuid|exists:suppliers,pk,is_active,' . False
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->reactivate($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->supplier->reactivate($valid_request['supplier_pk']);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->reactivate($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Hiện nhà cung cấp thành công'], 200);
     }
-
-
 }

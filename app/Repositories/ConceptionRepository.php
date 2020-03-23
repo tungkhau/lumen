@@ -2,53 +2,85 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\ConceptionInterface;
+use Exception;
 
-class ConceptionRepository implements ConceptionInterface
+class ConceptionRepository
 {
 
     public function create($params)
     {
-        app('db')->table('conceptions')->insert([
-            'customer_pk' => $params['customer_pk'],
-            'id' => $params['id'],
-            'name' => $params['conception_name'],
-            'year' => $params['year'],
-            'comment' => $params['comment'],
-        ]);
+        try {
+            app('db')->table('conceptions')->insert([
+                'customer_pk' => $params['customer_pk'],
+                'id' => $params['id'],
+                'name' => $params['conception_name'],
+                'year' => $params['year'],
+                'comment' => $params['comment'],
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
-    public function delete($key)
+    public function delete($params)
     {
-        app('db')->table('conceptions')->where('pk', $key)->delete();
+        try {
+            app('db')->table('conceptions')->where('pk', $params['conception_pk'])->delete();
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
-    public function deactivate($key)
+    public function deactivate($params)
     {
-        app('db')->table('conceptions')->where('pk', $key)->update([
-            'is_active' => False
-        ]);
+        try {
+            app('db')->table('conceptions')->where('pk', $params['conception_pk'])->update([
+                'is_active' => False
+            ]);
+
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
-    public function reactivate($key)
+    public function reactivate($params)
     {
-        app('db')->table('conceptions')->where('pk', $key)->update([
-            'is_active' => True
-        ]);
+        try {
+            app('db')->table('conceptions')->where('pk', $params['conception_pk'])->update([
+                'is_active' => True
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
     public function link_accessory($params)
     {
-        app('db')->table('accessories_conceptions')->insert([
-            'accessory_pk' => $params['customer_pk'],
-            'conception_pk' => $params['conception_pk']
-        ]);
+        try {
+            app('db')->table('accessories_conceptions')->insert([
+                'accessory_pk' => $params['customer_pk'],
+                'conception_pk' => $params['conception_pk']
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
     public function unlink_accessory($params)
     {
-        app('db')->table('accessories_conceptions')->where('accessory_pk', $params['accessory_pk'])
-            ->where('conception_pk', $params['conception_pk'])
-            ->delete();
+        try {
+            app('db')->table('accessories_conceptions')
+                ->where('accessory_pk', $params['accessory_pk'])
+                ->where('conception_pk', $params['conception_pk'])
+                ->delete();
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 }

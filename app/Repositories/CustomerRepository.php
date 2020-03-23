@@ -2,45 +2,70 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\CustomerInterface;
+use Exception;
 
-class CustomerRepository implements CustomerInterface
+class CustomerRepository
 {
 
     public function create($params)
     {
-        app('db')->table('customers')->insert([
-            'name' => $params['customer_name'],
-            'id' => $params['customer_id'],
-            'address' => $params['address'],
-            'phone' => $params['phone']
-        ]);
+        try {
+            app('db')->table('customers')->insert([
+                'name' => $params['customer_name'],
+                'id' => $params['customer_id'],
+                'address' => $params['address'],
+                'phone' => $params['phone']
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
     public function edit($params)
     {
-        app('db')->table('customers')->where('pk', $params['customer_pk'])->update([
-            'address' => $params['address'],
-            'phone' => $params['phone']
-        ]);
+        try {
+            app('db')->table('customers')->where('pk', $params['customer_pk'])->update([
+                'address' => $params['address'],
+                'phone' => $params['phone']
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
     public function delete($key)
     {
-        app('db')->table('customers')->where('pk', $key)->delete();
+        try {
+            app('db')->table('customers')->where('pk', $key)->delete();
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
     public function deactivate($key)
     {
-        app('db')->table('customers')->where('pk', $key)->update([
-            'is_active' => False
-        ]);
+        try {
+            app('db')->table('customers')->where('pk', $key)->update([
+                'is_active' => False
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
     public function reactivate($key)
     {
-        app('db')->table('customers')->where('pk', $key)->update([
-            'is_active' => True
-        ]);
+        try {
+            app('db')->table('customers')->where('pk', $key)->update([
+                'is_active' => True
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 }

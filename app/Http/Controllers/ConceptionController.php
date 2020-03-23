@@ -2,188 +2,126 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\ConceptionInterface;
-use Exception;
+use App\Preconditions\ConceptionPrecondition;
+use App\Repositories\ConceptionRepository;
+use App\Validators\ConceptionValidator;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class ConceptionController extends Controller
 {
 
-    private $conception;
+    private $repository;
+    private $validator;
+    private $precondition;
 
-    public function __construct(ConceptionInterface $conception)
+    public function __construct(ConceptionRepository $repository, ConceptionPrecondition $precondition, ConceptionValidator $validator)
     {
-        $this->conception = $conception;
+        $this->repository = $repository;
+        $this->validator = $validator;
+        $this->precondition = $precondition;
     }
 
     public function create(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'customer_pk' => 'required|uuid|exists:customers,pk,is_active,' . True,
-                'id' => 'required|string|regex:/^[0-9]+$/|max:12',
-                'year' => 'required|digits:4|integer|between:2015,' . (date('Y') + 1),
-                'conception_name' => 'required|string|max:20',
-                'comment' => 'string|nullable|max:20'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->create($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Check preconditions, return conflict errors(409)
-        $is_duplicated = app('db')->table('conceptions')
-            ->where('customer_pk', $valid_request['customer_pk'])
-            ->where('id', $valid_request['id'])
-            ->where('year', $valid_request['year'])->exists();
-        $failed = $is_duplicated;
-        if ($failed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->create($request);
+        if ($precondition) return $this->conflict_response();
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->conception->create($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
-        return response()->json(['success' => 'Tạo mã hàng thành công'], 201);
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->create($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Tạo mã hàng thành công'], 200);
     }
 
     public function delete(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'conception_pk' => 'required|uuid|exists:conceptions,pk'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->delete($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Check preconditions, return conflict errors(409)
-        $is_existed = app('db')->table('demands')->where('conception_pk', $valid_request['conception_pk'])->exists()
-            || app('db')->table('accessories_conceptions')->where('conception_pk', $valid_request['conception_pk'])->exists();
-        if ($is_existed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->delete($request);
+        if ($precondition) return $this->conflict_response();
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->conception->delete($valid_request['conception_pk']);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->delete($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Xóa mã hàng thành công'], 200);
     }
 
     public function deactivate(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'conception_pk' => 'required|uuid|exists:conceptions,pk,is_active,' . True
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->deactivate($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->conception->deactivate($valid_request['conception_pk']);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->deactivate($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Ẩn mã hàng thành công'], 200);
     }
 
     public function reactivate(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'conception_pk' => 'required|uuid|exists:conceptions,pk,is_active,' . False
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->reactivate($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->conception->reactivate($valid_request['conception_pk']);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->reactivate($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Hiện mã hàng thành công'], 200);
     }
 
     public function link_accessory(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'accessory_pk' => 'required|uuid|exists:accessories,pk,is_active,' . True,
-                'conception_pk' => 'required|uuid|exists:conceptions,pk,is_active,' . True
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->link_accessory($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Check preconditions, return conflict errors(409)
-        $accessory_customer = app('db')->table('accessories')->where('pk', $valid_request['accessory_pk'])->value('customer_pk');
-        $conception_customer = app('db')->table('conceptions')->where('pk', $valid_request['conception_pk'])->value('customer_pk');
-        $equal = ($accessory_customer == $conception_customer) ? True : False;
-        $failed = !$equal;
-        if ($failed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->link_accessory($request);
+        if ($precondition) return $this->conflict_response();
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->conception->link_accessory($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
-        return response()->json(['success' => 'Liên kết phụ liệu và mã hàng thành công'], 200);
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->link_accessory($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Kết nối mã hàng và phụ liệu thành công'], 200);
     }
 
     public function unlink_accessory(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'accessory_pk' => 'required|uuid|exists:accessories,pk',
-                'conception_pk' => 'required|uuid|exists:conceptions,pk'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->unlink_accessory($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Check preconditions, return conflict errors(409)
-        $demand_pks = app('db')->table('demands')->where('conception_pk', $valid_request['conception_pk'])->pluck('pk')->toArray();
-        $failed = False;
-        foreach ($demand_pks as $demand_pk) {
-            if (app('db')->table('demanded_items')->where('demand_pk', $demand_pk)->where('accessory_pk', $valid_request['accessory_pk'])->exists()) {
-                $failed = True;
-                break;
-            }
-        }
-        if ($failed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->unlink_accessory($request);
+        if ($precondition) return $this->conflict_response();
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->conception->unlink_accessory($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
-        return response()->json(['success' => 'Hủy liên kết phụ liệu và mã hàng thành công'], 200);
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->unlink_accessory($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Hủy kết nối mã hàng và phụ liệu thành công'], 200);
     }
-
 }

@@ -1,46 +1,62 @@
 <?php
 
 namespace App\Repositories;
+use Exception;
 
-use App\Interfaces\AccessoryInterface;
-
-class AccessoryRepository implements AccessoryInterface
+class AccessoryRepository
 {
-
     public function create($params)
     {
-        app('db')->table('accessories')->insert([
-            'id' => $params['id'],
-            'customer_pk' => $params['customer_pk'],
-            'supplier_pk' => $params['supplier_pk'],
-            'type_pk' => $params['type_pk'],
-            'unit_pk' => $params['unit_pk'],
-            'item' => $params['item'],
-            'art' => $params['art'],
-            'color' => $params['color'],
-            'size' => $params['size'],
-            'name' => $params['accessory_name'],
-            'comment' => $params['comment'],
-        ]);
+        try {
+            app('db')->table('accessories')->insert([
+                'id' => $params['id'],
+                'customer_pk' => $params['customer_pk'],
+                'supplier_pk' => $params['supplier_pk'],
+                'type_pk' => $params['type_pk'],
+                'unit_pk' => $params['unit_pk'],
+                'item' => $params['item'],
+                'art' => $params['art'],
+                'color' => $params['color'],
+                'size' => $params['size'],
+                'name' => $params['accessory_name'],
+                'comment' => $params['comment'],
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
-    public function delete($key)
+    public function delete($params)
     {
-        app('db')->table('accessories')->where('pk', $key)->delete();
+        try {
+            app('db')->table('accessories')->where('pk', $params['accessory_pk'])->delete();
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
-    public function deactivate($key)
+    public function deactivate($params)
     {
-        app('db')->table('accessories')->where('pk', $key)->update([
-            'is_active' => False
-        ]);
+        try {
+            app('db')->table('accessories')->where('pk', $params['accessory_pk'])->update([
+                'is_active' => False]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
-    public function reactivate($key)
+    public function reactivate($params)
     {
-        app('db')->table('accessories')->where('pk', $key)->update([
-            'is_active' => True
-        ]);
+        try {
+            app('db')->table('accessories')->where('pk', $params['accessory_pk'])->update([
+                'is_active' => True]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
     public function upload_photo($params)

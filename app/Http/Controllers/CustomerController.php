@@ -2,140 +2,108 @@
 
 namespace App\Http\Controllers;
 
+use App\Preconditions\CustomerPrecondition;
 use App\Repositories\CustomerRepository;
-use Exception;
+use App\Validators\CustomerValidator;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class CustomerController extends Controller
 {
 
-    private $customer;
+    private $repository;
+    private $validator;
+    private $precondition;
 
-    public function __construct(CustomerRepository $customer)
+    public function __construct(CustomerRepository $repository, CustomerValidator $validator, CustomerPrecondition $precondition)
     {
-        $this->customer = $customer;
+        $this->validator = $validator;
+        $this->precondition = $precondition;
+        $this->repository = $repository;
+
     }
 
     public function create(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'customer_name' => 'required|string|max:35',
-                'customer_id' => 'required|size:3|alpha|unique:customers,id',
-                'address' => 'string|nullable|max:200',
-                'phone' => 'string|nullable|max:20'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->create($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->customer->create($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
-        return response()->json(['success' => 'Thêm khách hàng thành công'], 201);
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->create($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Tạo khách hàng thành công'], 200);
     }
 
 
     public function edit(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'customer_pk' => 'required|uuid|exists:customers,pk',
-                'address' => 'string|nullable|max:200',
-                'phone' => 'string|nullable|max:20'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->customer->edit($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->edit($request);
+        if ($validation) return $this->invalid_response($validation);
+
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->edit($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Sửa khách hàng thành công'], 200);
     }
 
 
     public function delete(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'customer_pk' => 'required|uuid|exists:customers,pk',
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->delete($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Check preconditions, return conflict errors(409)
-        $accessories = app('db')->table('accessories')->where('pk', $valid_request['customer_pk'])->exists();
-        $conceptions = app('db')->table('conceptions')->where('pk', $valid_request['customer_pk'])->exists();
-        if ($accessories || $conceptions) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->delete($request);
+        if ($precondition) return $this->conflict_response();
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->customer->delete($valid_request['customer_pk']);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->delete($request['customer_pk']);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Xóa khách hàng thành công'], 200);
     }
 
 
     public function deactivate(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'customer_pk' => 'required|uuid|exists:customers,pk,is_active,' . True
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->deactivate($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->customer->deactivate($valid_request['customer_pk']);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->deactivate($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Ẩn khách hàng thành công'], 200);
     }
 
     public function reactivate(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'customer_pk' => 'required|uuid|exists:customers,pk,is_active,' . False
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->reactivate($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->customer->deactivate($valid_request['customer_pk']);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->reactivate($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Hiện khách hàng thành công'], 200);
     }
 }

@@ -41,7 +41,7 @@ $router->delete('delete_workplace', 'WorkplaceController@delete');
 
 //Group 2
 //Customer
-$router->post('create_customer', 'CustomerController@create');
+$router->post('create_customer', 'CustomerValidator@create');
 $router->patch('edit_customer', 'CustomerController@edit');
 $router->delete('delete_customer', 'CustomerController@delete');
 $router->patch('deactivate_customer', 'CustomerController@deactivate');

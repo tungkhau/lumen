@@ -2,21 +2,30 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\DeviceInterface;
+use Exception;
 
-class DeviceRepository implements DeviceInterface
+class DeviceRepository
 {
-
     public function register($params)
     {
-        app('db')->table('devices')->insert([
-            'id' => $params['device_id'],
-            'name' => $params['device_name']
-        ]);
+        try {
+            app('db')->table('devices')->insert([
+                'id' => $params['device_id'],
+                'name' => $params['device_name']
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
-    public function delete($key)
+    public function delete($params)
     {
-        app('db')->table('devices')->where('pk', $key)->delete();
+        try {
+            app('db')->table('devices')->where('pk', $params['device_pk'])->delete();
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 }

@@ -2,66 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\WorkplaceInterface;
-use Exception;
+use App\Preconditions\WorkplacePrecondition;
+use App\Repositories\WorkplaceRepository;
+use App\Validators\WorkplaceValidator;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class WorkplaceController extends Controller
 {
 
-    private $workplace;
 
-    public function __construct(WorkplaceInterface $workplace)
+    private $validator;
+    private $precondition;
+    private $repository;
+
+    public function __construct(WorkplaceValidator $validator, WorkplacePrecondition $precondition, WorkplaceRepository $repository)
     {
-        $this->workplace = $workplace;
+        $this->validator = $validator;
+        $this->precondition = $precondition;
+        $this->repository = $repository;
     }
 
     public function create(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'workplace_name' => 'required|unique:workplaces,name|max:20|string'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->create($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->workplace->create($valid_request['workplace_name']);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
-        return response()->json(['success' => 'Tạo bộ phận thành công'], 201);
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->create($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Tạo bộ phận thành công'], 200);
     }
 
     public function delete(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'workplace_pk' => 'required|uuid|exists:workplaces,pk'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->delete($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Check preconditions, return conflict errors(409)
-        $users = app('db')->table('users')->where('workplace_pk', $valid_request['workplace_pk'])->exists();
-        if ($users) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->delete($request);
+        if ($precondition) return $this->conflict_response();
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->workplace->delete($valid_request['workplace_pk']);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
-        return response()->json(['success' => 'Xóa bộ phận thành công'], 201);
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->delete($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Xóa bộ phận thành công'], 200);
     }
 }
