@@ -1,11 +1,10 @@
 <?php
-
 namespace App\Validators;
 
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Routing\ProvidesConvenienceMethods;
 
-class
+class ShelfValidator
 {
     use ProvidesConvenienceMethods;
 
@@ -13,7 +12,7 @@ class
     {
         try {
             $this->validate($params, [
-
+                'shelf_name' => 'required|string|max:20'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -22,11 +21,11 @@ class
         return False;
     }
 
-    public function create($params)
+    public function delete($params)
     {
         try {
             $this->validate($params, [
-
+                'shelf_pk' => 'required|uuid|exists:shelves,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

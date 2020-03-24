@@ -2,7 +2,11 @@
 
 namespace App\Preconditions;
 
-class Precondition
+class ShelfPrecondition
 {
-
+    public function delete($params) {
+        $block = app('db')->table('shelves')->where('pk', $params['shelf_pk'])->value('block_pk') ? True : False;
+        $cases = app('db')->table('cases')->where('shelf_pk', $params['shelf_pk'])->exist();
+        return $block || $cases;
+    }
 }

@@ -2,7 +2,10 @@
 
 namespace App\Preconditions;
 
-class Precondition
+class CasePrecondition
 {
-
+    public function disable($params) {
+        //TODO implement preconditions
+        return True;
+    }
 }

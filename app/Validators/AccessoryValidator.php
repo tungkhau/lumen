@@ -75,7 +75,8 @@ class AccessoryValidator
         try {
             $this->validate($params, [
                 'accessory_pk' => 'required|uuid|exists:accessories,pk',
-                'photo' => 'required|image|max:4000'
+                'image' => 'required'
+                //TODO
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

@@ -25,7 +25,7 @@ class CreateAccessoriesTable extends Migration
             $table->string('comment', 20)->nullable();
             $table->boolean('is_active')->default(true);
             $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->uuid('photo')->nullable();
+            $table->string('photo')->nullable()->default(Null);
             $table->uuid('type_pk');
             $table->uuid('unit_pk');
             $table->uuid('customer_pk');
@@ -37,7 +37,6 @@ class CreateAccessoriesTable extends Migration
             $table->foreign('supplier_pk')->references('pk')->on('suppliers');
 
             $table->unique(['customer_pk', 'item', 'supplier_pk']);
-            $table->unique(['customer_pk', 'type_pk', 'supplier_pk']);
         });
     }
 

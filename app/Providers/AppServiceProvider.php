@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\EntryController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,37 +27,19 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Validator::extend('available_quantity', function ($attribute, $value, $parameters, $validator) {
-            $received_item_pk = $parameters[0];
-            $case_pk = $parameters[1];
-            $entries = app('db')->table('entries')->where([['received_item_pk', '=', $received_item_pk], ['case_pk', '=', $case_pk]])->get();
-            $available_quantity = 0;
-            if (count($entries)) {
-                foreach ($entries as $entry) {
-                    $available_quantity += $entry->result ? $entry->quantity : 0;
-                    if ($entry->is_pending) {
-                        return False;
-                    }
-                }
-                return ($value > 0) && ($value <= $available_quantity ? True : False);
-            }
-            return False;
+            $inCased_quantity = EntryController::inCased_quantity($parameters[0], $parameters[1]);
+            if($inCased_quantity) {
+                if($value <= $inCased_quantity) return True;
+                else return False;
+            } else return False;
         });
 
         Validator::extend('adjusted_quantity', function ($attribute, $value, $parameters, $validator) {
-            $received_item_pk = $parameters[0];
-            $case_pk = $parameters[1];
-            $entries = app('db')->table('entries')->where([['received_item_pk', '=', $received_item_pk], ['case_pk', '=', $case_pk]])->get();
-            $available_quantity = 0;
-            if (count($entries)) {
-                foreach ($entries as $entry) {
-                    $available_quantity += $entry->result ? $entry->quantity : 0;
-                    if ($entry->is_pending) {
-                        return False;
-                    }
-                }
-                return ($value >= 0) && ($value == $available_quantity ? False : True) && ($available_quantity > 0) && ($value < 2000000000);
-            }
-            return False;
+            $inCased_quantity = EntryController::inCased_quantity($parameters[0], $parameters[1]);
+            if($inCased_quantity || $value < 0) {
+                if($value != $inCased_quantity) return True;
+                else return False;
+            } else return False;
         });
 
         Validator::extend('unstored_case', function ($attribute, $value, $parameters, $validator) {

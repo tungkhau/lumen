@@ -2,23 +2,34 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\CaseInterface;
+use Exception;
 
-class CaseRepository implements CaseInterface
+class CaseRepository
 {
 
-    public function create($key)
+    public function create($params)
     {
-        app('db')->table('cases')->insert([
-            'id' => $key
-        ]);
+        try {
+            app('db')->table('cases')->insert([
+                'id' => $params['case_id']
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
+
     }
 
-    public function disable($key)
+    public function disable($params)
     {
-        app('db')->table('cases')->where('pk', $key)->update([
-            'is_active' => false
-        ]);
+        try {
+            app('db')->table('cases')->where('pk', $params['case_pk'])->update([
+                'is_active' => false
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
     public function store($params)

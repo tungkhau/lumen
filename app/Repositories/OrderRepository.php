@@ -2,61 +2,81 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\OrderInterface;
-use Illuminate\Support\Str;
+use Exception;
 
-class OrderRepository implements OrderInterface
+class OrderRepository
 {
 
     public function create($params)
     {
-        $params['order_pk'] = (string)Str::uuid();
-        foreach ($params['ordered_items'] as $key => $value) {
-            $params['ordered_items'][$key]['order_pk'] = $params['order_pk'];
+        try {
+            app('db')->transaction(function () use ($params) {
+                app('db')->table('orders')->insert([
+                    'pk' => $params['order_pk'],
+                    'id' => $params['order_id'],
+                    'supplier_pk' => $params['supplier_pk'],
+                    'user_pk' => $params['user_pk']
+                ]);
+                app('db')->table('ordered_items')->insert($params['ordered_items']);
+            });
+        } catch (Exception $e) {
+            return $e;
         }
-        app('db')->transaction(function () use ($params) {
-            app('db')->table('orders')->insert([
-                'pk' => $params['order_pk'],
-                'id' => $params['order_id'],
-                'supplier_pk' => $params['supplier_pk'],
-                'user_pk' => $params['user_pk']
-            ]);
-            app('db')->table('ordered_items')->insert($params['ordered_items']);
-        });
+        return False;
     }
 
     public function edit($params)
     {
-        app('db')->transaction(function () use ($params) {
-            app('db')->table('ordered_items')->where('pk', $params['ordered_item_pk'])->update([
-                'ordered_quantity' => $params['ordered_quantity'],
-                'comment' => $params['comment']
-            ]);
+        try {
+            app('db')->transaction(function () use ($params) {
+                app('db')->table('ordered_items')->where('pk', $params['ordered_item_pk'])->update([
+                    'ordered_quantity' => $params['ordered_quantity'],
+                    'comment' => $params['comment']
+                ]);
+                app('db')->table('orders')->where('pk', $params['order_pk'])->update([
+                    'created_date' => date('Y-m-d H:i:s')
+                ]);
+            });
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
+    }
+
+    public function delete($params)
+    {
+        try {
+            app('db')->transaction(function () use ($params) {
+                app('db')->table('ordered_items')->where('order_pk', $params['order_pk'])->delete();
+                app('db')->table('orders')->where('pk', $params['order_pk'])->delete();
+            });
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
+    }
+
+    public function turn_off($params)
+    {
+        try {
             app('db')->table('orders')->where('pk', $params['order_pk'])->update([
-                'created_date' => date('Y-m-d H:i:s')
+                'is_opened' => False
             ]);
-        });
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
-    public function delete($key)
+    public function turn_on($params)
     {
-        app('db')->transaction(function () use ($key) {
-            app('db')->table('ordered_items')->where('order_pk', $key)->delete();
-            app('db')->table('orders')->where('pk', $key)->delete();
-        });
-    }
-
-    public function turn_off($key)
-    {
-        app('db')->table('orders')->where('pk', $key)->update([
-            'is_opened' => False
-        ]);
-    }
-
-    public function turn_on($key)
-    {
-        app('db')->table('orders')->where('pk', $key)->update([
-            'is_opened' => True
-        ]);
+        try {
+            app('db')->table('orders')->where('pk', $params['order_pk'])->update([
+                'is_opened' => True
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 }

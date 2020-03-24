@@ -18,6 +18,22 @@ class EntryController extends Controller
         $this->entry = $entry;
     }
 
+    public static function inCased_quantity($received_item_pk, $case_pk)
+    {
+        $entries = app('db')->table('entries')->where([['received_item_pk', '=', $received_item_pk], ['case_pk', '=', $case_pk]])->select('quantity','is_pending')->get();
+        $inCased_quantity = 0;
+        if (count($entries)) {
+            foreach ($entries as $entry) {
+                $inCased_quantity += $entry->quantity;
+                if ($entry->is_pending) {
+                    return False;
+                }
+            }
+            return $inCased_quantity;
+        }
+        return 0;
+    }
+
     public function ajdust(Request $request)
     {
         //Validate request, catch invalid errors(400)

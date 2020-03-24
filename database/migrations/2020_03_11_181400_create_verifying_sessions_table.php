@@ -17,6 +17,7 @@ class CreateVerifyingSessionsTable extends Migration
         Schema::create('verifying_sessions', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->enum('kind', ['adjusting', 'discarding']);
+            $table->boolean('result');
             $table->dateTime('executed_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('user_pk');
 

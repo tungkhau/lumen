@@ -2,20 +2,30 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\ShelfInterface;
+use Exception;
 
-class ShelfRepository implements ShelfInterface
+class ShelfRepository
 {
 
     public function create($params)
     {
-        app('db')->table('shelves')->insert([
-            'name' => $params['shelf_name']
-        ]);
+        try {
+            app('db')->table('shelves')->insert([
+                'name' => $params['shelf_name']
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 
-    public function delete($key)
+    public function delete($params)
     {
-        app('db')->table('shelves')->where('pk', $key)->delete();
+        try {
+            app('db')->table('shelves')->where('pk', $params['shelf_pk'])->delete();
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 }

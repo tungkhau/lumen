@@ -17,6 +17,7 @@ class CreateDiscardingSessionsTable extends Migration
         Schema::create('discarding_sessions', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->dateTime('executed_date')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->integer('quantity');
             $table->uuid('user_pk');
             $table->uuid('verifying_session_pk')->nullable()->default(Null);
 

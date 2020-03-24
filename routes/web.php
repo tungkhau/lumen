@@ -20,7 +20,7 @@
 
 //Group 0
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    echo phpinfo();
 });
 $router->post('login', 'AuthController@login');
 $router->post('logout', 'AuthController@logout');
@@ -41,7 +41,7 @@ $router->delete('delete_workplace', 'WorkplaceController@delete');
 
 //Group 2
 //Customer
-$router->post('create_customer', 'CustomerValidator@create');
+$router->post('create_customer', 'CustomerController@create');
 $router->patch('edit_customer', 'CustomerController@edit');
 $router->delete('delete_customer', 'CustomerController@delete');
 $router->patch('deactivate_customer', 'CustomerController@deactivate');
@@ -57,8 +57,8 @@ $router->post('create_accessory', 'AccessoryController@create');
 $router->delete('delete_accessory', 'AccessoryController@delete');
 $router->patch('deactivate_accessory', 'AccessoryController@deactivate');
 $router->patch('reactivate_accessory', 'AccessoryController@reactivate');
-$router->patch('upload_accessory_photo', 'AccessoryController@upload_photo');
-$router->patch('delete_accessory_photo', 'AccessoryController@delete_photo');
+$router->post('upload_accessory_photo', 'AccessoryController@upload_photo');
+$router->post('delete_accessory_photo', 'AccessoryController@delete_photo');
 //Conception
 $router->post('create_conception', 'ConceptionController@create');
 $router->delete('delete_conception', 'ConceptionController@delete');

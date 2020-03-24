@@ -19,8 +19,8 @@ class CustomerTest extends TestCase
             'id' => 'JAS',
             'address' => 'HCM',
             'phone' => '0946008197'];
-        $this->call('POST', '/create_customer', $inputs);
-        $this->seeStatusCode(201);
+        $this->call('POST', 'create_customer', $inputs);
+        $this->seeStatusCode(200);
         $this->seeInDatabase('customers', $data);
     }
 }

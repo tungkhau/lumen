@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Repositories;
+
 use Exception;
+use Illuminate\Support\Facades\Storage;
 
 class AccessoryRepository
 {
@@ -61,11 +63,27 @@ class AccessoryRepository
 
     public function upload_photo($params)
     {
-        // TODO: Implement upload_photo() method.
+        try {
+            Storage::put($params['photo'], file_get_contents($params['image']));
+            app('db')->table('accessories')->where('pk', $params['accessory_pk'])->update([
+                'photo' => $params['photo']]);
+        } catch (Exception $e) {
+            Storage::delete($params['photo']);
+            return $e;
+        }
+        if($params['old_photo']) Storage::delete($params['old_photo']);
+        return False;
     }
 
-    public function delete_photo($key)
+    public function delete_photo($params)
     {
-        // TODO: Implement delete_photo() method.
+        try {
+            app('db')->table('accessories')->where('pk', $params['accessory_pk'])->update([
+                'photo' => Null]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        if($params['old_photo']) Storage::delete($params['old_photo']);
+        return False;
     }
 }

@@ -20,4 +20,8 @@ class AccessoryPrecondition
         $out_distributed_item = app('db')->table('out_distributed_item')->where('accessory_pk', $params['accessory_pk'])->exists();
         return $conceptions || $ordered_items || $in_distributed_items || $demanded_items || $restored_items || $out_distributed_item;
     }
+
+    public function delete_photo($params) {
+       return !app('db')->table('accessories')->where('pk', $params['accessory_pk'])->value('photo');
+    }
 }

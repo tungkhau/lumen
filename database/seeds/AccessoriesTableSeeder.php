@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Faker\Generator as Faker;
 
 class AccessoriesTableSeeder extends Seeder
 {
 
-    public function run()
+    public function run(Faker $faker)
     {
-        factory(App\Models\Accessory::class, 1000)->create();
+
     }
 }

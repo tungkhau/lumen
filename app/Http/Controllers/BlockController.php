@@ -2,82 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\BlockInterface;
-use Exception;
+use App\Preconditions\BlockPrecondition;
+use App\Repositories\BlockRepository;
+use App\Validators\BlockValidator;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class BlockController extends Controller
 {
+    private $repository;
+    private $validator;
+    private $precondition;
 
-    private $block;
-
-    public function __construct(BlockInterface $block)
+    public function __construct(BlockRepository $repository, BlockPrecondition $precondition, BlockValidator $validator)
     {
-        $this->block = $block;
+        $this->repository = $repository;
+        $this->validator = $validator;
+        $this->precondition = $precondition;
     }
 
     public function open(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'block_pk' => 'required|uuid|exists:blocks,pk,is_active,' . False,
-                'row' => 'required|integer|max:15|gt:0',
-                'col' => 'required|integer|max:50|gt:0'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->open($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Check preconditions, return conflict errors(409)
-        $block = app('db')->table('blocks')->where('pk', $valid_request['block_pk'])->first();
-        $row = $block->row;
-        $col = $block->col;
+        /* Check preconditions, return conflict errors(409) */
 
-        $failed = $row || $col;
-        if ($failed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+        /* Map variables */
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->block->open($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->open($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Mở dãy kho thành công'], 200);
     }
 
     public function close(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'block_pk' => 'required|uuid|exists:blocks,pk,is_active,' . True,
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->close($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Check preconditions, return conflict errors(409)
-        $block = app('db')->table('blocks')->where('pk', $valid_request['block_pk'])->first();
-        $row = $block->row ? False : True;
-        $col = $block->col ? False : True;
-        $shelf_pks = app('db')->table('shelves')->where('block_pk', $valid_request['block_pk'])->pluck('pk')->toArray();
-        $cases = app('db')->table('cases')->whereIn('shelf_pk', $shelf_pks)->exists();
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->close($request);
+        if ($precondition) return $this->conflict_response();
 
-        $failed = $row || $col || $cases;
-        if ($failed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
+        /* Map variables */
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        try {
-            $this->block->close($valid_request['block_pk']);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->close($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Đóng dãy kho thành công'], 200);
     }
 }

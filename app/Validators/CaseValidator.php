@@ -5,15 +5,15 @@ namespace App\Validators;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Routing\ProvidesConvenienceMethods;
 
-class
+class CaseValidator
 {
     use ProvidesConvenienceMethods;
 
-    public function create($params)
+    public function disable($params)
     {
         try {
             $this->validate($params, [
-
+                'required|uuid|exists:cases,pk,is_active,'.True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -21,18 +21,4 @@ class
         }
         return False;
     }
-
-    public function create($params)
-    {
-        try {
-            $this->validate($params, [
-
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            return (string)array_shift($error_messages)[0];
-        }
-        return False;
-    }
-
 }
