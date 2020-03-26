@@ -7,12 +7,12 @@ class UserPrecondition
     public function create($params)
     {
         //TODO Implement precondition
-        return True;
+        return False;
     }
 
     public function change_workplace($params)
     {
         //TODO Implement precondition
-        return True;
+        return False;
     }
 }

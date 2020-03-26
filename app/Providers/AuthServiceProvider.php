@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -29,11 +30,15 @@ class AuthServiceProvider extends ServiceProvider
         // the User instance via an API token or any other method necessary.
 
         $this->app['auth']->viaRequest('api', function ($request) {
-            //Tymon guide
-            return app('auth')->setRequest($request)->user();
-//            if ($request->input('token')) {
-//                return User::where('token', $request->input('token'))->first();
-//            }
+            if ($request['api_token']) {
+                $user = app('db')->table('users')->where('api_token', $request['api_token'])->first();
+                if ($user) {
+                    $payload = Crypt::decrypt($user->api_token);
+                    $equal = $payload['pk'] == $user->pk ? True : False;
+                    $notExpired = time() < $payload['exp'] ? True : False;
+                    if ($equal && $notExpired) return $user;
+                }
+            }
         });
     }
 }

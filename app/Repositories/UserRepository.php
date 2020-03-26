@@ -28,7 +28,6 @@ class UserRepository
         try {
             app('db')->table('users')->where('pk', $params['user_pk'])
                 ->update(['password' => app('hash')->make(env('DEFAULT_PASSWORD'))]);
-
         } catch (Exception $e) {
             return $e;
         }

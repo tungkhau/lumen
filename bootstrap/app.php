@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\RoleMiddleware;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
@@ -82,6 +84,7 @@ $app->middleware([
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
+    'role' => RoleMiddleware::class,
 ]);
 
 /*
@@ -98,8 +101,6 @@ $app->routeMiddleware([
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
-$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
-
 
 /*
 |--------------------------------------------------------------------------
