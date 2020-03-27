@@ -2,57 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login']]);
-    }
 
     public function login(Request $request)
     {
+        //Validate request, catch invalid errors(400)
         try {
-            $this->validate($request, [
+            $valid_request = $this->validate($request, [
                 'user_id' => 'required',
-                'password' => 'required',
+                'password' => 'required'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
             $error_message = (string)array_shift($error_messages)[0];
             return response()->json(['invalid' => $error_message], 400);
         }
-        $credentials = array();
-        $credentials['id'] = $request->user_id;
-        $credentials['password'] = $request->password;
-        if (!$token = Auth::attempt($credentials)) {
-            return response()->json(['unauthorized' => 'Mã nhân viên hoặc Mật khẩu không đúng'], 401);
+
+        $user = app('db')->table('users')->where('id', $request['user_id'])->first();
+        if (!$user) return response()->json(['invalid' => 'Mã nhân viên hoặc mật khẩu không đúng'], 400);
+        if (!app('hash')->check($valid_request['password'], $user->password)) return response()->json(['invalid' => 'Mã nhân viên hoặc mật khẩu không đúng'], 400);
+        $payload = [
+            'pk' => $user->pk,
+            'exp' => time() + env('EXPIRATION')
+        ];
+        $api_token = Crypt::encrypt($payload);
+        try {
+            app('db')->table('users')->where('pk', $user->pk)->update(['api_token' => $api_token]);
+        } catch (Exception $e) {
+            return response()->json(['unexpected' => $e->getMessage()], 500);
         }
-        return $this->respondWithToken($token);
-//        return response()->json(['success' => 'Đăng nhập thành công', 'token' => $token , 'expires_in' => Auth::factory()->getTTL() * 60 ], 200);
+        return response()->json([['success' => 'Đăng nhập thành công'], ['api_token' => $api_token]], 200);
     }
 
-    protected function respondWithToken($token)
+    public function login_mobile(Request $request)
     {
-        return response()->json([
-            'token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() * 60
-        ], 200);
+
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::logout();
+        try {
+            app('db')->table('users')->where('api_token', $request['api_token'])->update(['api_token' => Null]);
+        } catch (Exception $e) {
+            return response()->json(['unexpected' => $e->getMessage()], 500);
+        }
         return response()->json(['success' => 'Đăng xuất thành công'], 200);
     }
-
 }

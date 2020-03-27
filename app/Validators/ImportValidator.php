@@ -182,7 +182,7 @@ class ImportValidator
     {
         try {
             $this->validate($params, [
-                'classified_item_pk' => 'required|uuid|exits:classified_items,pk,quality_state,' . 'failed',
+                'failed_item_pk' => 'required|uuid|exits:classified_items,pk,quality_state,' . 'failed',
                 'user_pk' => 'required|uuid|exits:users,pk'
             ]);
         } catch (ValidationException $e) {

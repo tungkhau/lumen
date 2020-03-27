@@ -94,7 +94,7 @@ class ImportRepository
                         'kind' => 'imported',
                         'receiving_session_pk' => $params['receiving_session_pk'],
                         'case_pk' => $params['case_pk']
-                    ]);
+                    ]); //TODO optimize
                 }
                 app('db')->table('cases')->where('pk', $params['case_pk'])->update(['shelf_pk' => Null]);
             });
@@ -116,7 +116,7 @@ class ImportRepository
                 }
                 app('db')->table('receiving_sessions')->where('pk', $params['importing_session_pk'])->update([
                     'created_date' => date('Y-m-d H:i:s')
-                ]);
+                ]); //TODO optimize
             });
         } catch (Exception $e) {
             return $e;
@@ -177,15 +177,15 @@ class ImportRepository
         return False;
     }
 
-    public function delete_classification($key)
+    public function delete_classification($params)
     {
         try {
-            app('db')->transaction(function () use ($key) {
-                app('db')->table('imported_items')->where('classified_item_pk', $key)->update([
+            app('db')->transaction(function () use ($params) {
+                app('db')->table('imported_items')->where('classified_item_pk', $params['classified_item_pk'])->update([
                     'classified_item_pk' => Null
                 ]);
-                app('db')->table('classifying_sessions')->where('classified_item_pk', $key)->delete();
-                app('db')->table('classified_items')->where('pk', $key)->delete();
+                app('db')->table('classifying_sessions')->where('classified_item_pk', $params['classified_item_pk'])->delete();
+                app('db')->table('classified_items')->where('pk', $params['classified_item_pk'])->delete();
             });
         } catch (Exception $e) {
             return $e;

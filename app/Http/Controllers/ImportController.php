@@ -208,7 +208,7 @@ class ImportController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
-        $valid_request['receiving_session_pk'] = (string)Str::uuid();
+        $request['receiving_session_pk'] = (string)Str::uuid();
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->receive($request);
@@ -318,9 +318,9 @@ class ImportController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
-        $imported_item_pk = app('db')->table('imported_items')->where('classified_item_pk', $valid_request['classified_item_pk'])->value('pk');
-        $valid_request['received_group_pks'] = app('db')->table('received_groups')->where('received_item_pk', $imported_item_pk)->pluck('pk')->toArray();
-        $valid_request['sendbacking_session_pk'] = (string)Str::uuid();
+        $imported_item_pk = app('db')->table('imported_items')->where('classified_item_pk', $request['classified_item_pk'])->value('pk');
+        $request['received_group_pks'] = app('db')->table('received_groups')->where('received_item_pk', $imported_item_pk)->pluck('pk')->toArray();
+        $request['sendbacking_session_pk'] = (string)Str::uuid();
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->sendback($request);

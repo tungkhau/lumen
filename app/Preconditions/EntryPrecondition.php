@@ -2,7 +2,7 @@
 
 namespace App\Preconditions;
 
-class Precondition
+class EntryPrecondition
 {
 
 }

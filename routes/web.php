@@ -12,15 +12,18 @@
 */
 
 
-//$router->group(['prefix' => 'api', 'middleware' => 'auth:api'], function () use ($router) {
-//    $router->get('/a', function () use ($router) {
-//        echo phpinfo();
-//    });
-//});
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->group(['middleware' => 'role:manager'], function () use ($router) {
+        $router->get('/a', function () use ($router) {
+            echo phpinfo();
+        });
+    });
+});
 
 //Group 0
 $router->get('/', function () use ($router) {
     echo phpinfo();
+//    return \Illuminate\Support\Str::random(32);
 });
 
 $router->post('login', 'AuthController@login');

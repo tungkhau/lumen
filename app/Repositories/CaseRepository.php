@@ -34,23 +34,48 @@ class CaseRepository
 
     public function store($params)
     {
-        if ($params['count']) {
-            app('db')->transaction(function () use ($params) {
-                app('db')->table('storing_sessions')->insert([
-                    'pk' => $params['storing_session_pk'],
-                    'user_pk' => $params['user_pk']
-                ]);
-                app('db')->table('entries')->insert($params['entries']);
-                app('db')->table('received_groups')->whereIn('pk', $params['received_group_pks'])->update([
-                    'case_pk' => Null
-                ]);
-                app('db')->table('cases')->where('pk', $params['case_pk'])->update([
-                    'shelf_pk' => $params['shelf_pk']
-                ]);
-            });
+        try {
+            if ($params['count']) {
+                app('db')->transaction(function () use ($params) {
+                    app('db')->table('storing_sessions')->insert([
+                        'pk' => $params['storing_session_pk'],
+                        'user_pk' => $params['user_pk']
+                    ]);
+                    app('db')->table('entries')->insert($params['entries']);
+
+                    app('db')->table('received_groups')->whereIn('pk', $params['received_group_pks'])->update([
+                        'case_pk' => Null
+                    ]);
+                    app('db')->table('cases')->where('pk', $params['case_pk'])->update([
+                        'shelf_pk' => $params['shelf_pk']
+                    ]);
+                });
+            }
+            app('db')->table('cases')->where('pk', $params['case_pk'])->update([
+                'shelf_pk' => $params['shelf_pk']
+            ]);
+
+        } catch (Exception $e) {
+            return $e;
         }
-        app('db')->table('cases')->where('pk', $params['case_pk'])->update([
-            'shelf_pk' => $params['shelf_pk']
-        ]);
+        return False;
+    }
+
+    public function replace($params)
+    {
+        try {
+            app('db')->table('replacing_sessions')->insert([
+                'case_pk' => $params['case_pk'],
+                'start_shelf_pk' => $params['start_shelf_pk'],
+                'end_shelf_pk' => $params['end_shelf_pk'],
+                'user_pk' => $params['user_pk']
+            ]);
+            app('db')->table('cases')->where('pk', $params['case_pk'])->update([
+                'shelf_pk' => $params['end_shelf_pk']
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
     }
 }

@@ -5,13 +5,13 @@ use App\Models\User;
 return [
 
     "defaults" => [
-        "guard" => env("AUTH_GUARD", "api"),
+        "guard" => 'api',
         "passwords" => "users",
     ],
 
     "guards" => [
         "api" => [
-            "driver" => "jwt",
+            "driver" => "api",
             "provider" => "users"
         ],
     ],

@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->string('id', 6)->unique();
             $table->string('password');
+            $table->string('api_token', 400)->nullable()->default(Null);
             $table->string('name', 30);
             $table->boolean('is_active')->default(true);
             $table->enum('role', ['admin', 'merchandiser', 'manager', 'staff', 'inspector', 'mediator']);

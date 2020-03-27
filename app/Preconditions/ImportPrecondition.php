@@ -100,27 +100,36 @@ class ImportPrecondition
 
     public function classify($params)
     {
-        //TODO implement preconditions
-        return False;
+        $imported_item = app('db')->table('imported_items')->where('pk', $params['imported_item_pk'])->select('import_pk', 'classified_item_pk')->first();
+        $opened = app('db')->table('imports')->where('pk', $imported_item->import_pk)->value('is_opened');
+        $classified = $imported_item->classified_item ? True : False;
+        return $opened || $classified;
     }
 
     public function reclassify($params)
     {
-        //TODO implement preconditions
+        $classified_item = app('db')->table('classified_items')->where('pk', $params['classified_item_pk'])->first();
+        if ($classified_item->quality_state == 'failed' && $classified_item->sendbacking_session_pk != Null) return True;
+        if ($classified_item->quality_state == 'passed') {
+            $imported_item_pk = app('db')->table('imported_items')->where('classified_item_pk', $classified_item->pk)->value('pk');
+            if (app('db')->table('received_groups')->where('received_item_pk', $imported_item_pk)->where('storing_session_pk', '!=', Null)->exists()) return True;
+        }
         return False;
     }
 
     public function delete_classification($params)
     {
-        //TODO implement preconditions
+        $classified_item = app('db')->table('classified_items')->where('pk', $params['classified_item_pk'])->first();
+        if ($classified_item->quality_state == 'failed' && $classified_item->sendbacking_session_pk != Null) return True;
+        if ($classified_item->quality_state == 'passed') {
+            $imported_item_pk = app('db')->table('imported_items')->where('classified_item_pk', $classified_item->pk)->value('pk');
+            if (app('db')->table('received_groups')->where('received_item_pk', $imported_item_pk)->where('storing_session_pk', '!=', Null)->exists()) return True;
+        }
         return False;
     }
 
     public function sendback($params)
     {
-        //TODO implement preconditions
-        return False;
+        return app('db')->table('classified_items')->where('pk', $params['failed_item_pk'])->value('sendbacking_session_pk') ? True : False;
     }
-
-
 }
