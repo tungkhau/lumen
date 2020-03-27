@@ -6,8 +6,21 @@ class CasePrecondition
 {
     public function disable($params)
     {
-        //TODO implement preconditions
-        return True;
+        $issued_groups = app('db')->table('issued_groups')->where('case_pk', $params['case_pk'])->exists();
+        $received_groups = app('db')->table('received_groups')->where('case_pk', $params['case_pk'])->exists();
+
+        $entries = app('db')->table('entries')->where('case_pk', $params['case_pk'])->pluck('quantity');
+        $inCased_quantity = 0;
+        if (count($entries) > 0) {
+            foreach ($entries as $entry) {
+                if ($entry->quantity == Null) {
+                    break;
+                }
+                $inCased_quantity += $entry->quantity;
+            }
+        }
+        $contained = $inCased_quantity == 0 ? False : True;
+        return $issued_groups || $received_groups || $contained;
     }
 
     public function store($params)

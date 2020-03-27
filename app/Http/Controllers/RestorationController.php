@@ -32,10 +32,10 @@ class RestorationController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
-        $valid_request['id'] = $this->id();
-        $valid_request['restoration_pk'] = (string)Str::uuid();
-        foreach ($valid_request['restored_items'] as $key => $value) {
-            $valid_request['restored_items'][$key]['restoration_pk'] = $valid_request['restoration_pk'];
+        $request['id'] = $this->id();
+        $request['restoration_pk'] = (string)Str::uuid();
+        foreach ($request['restored_items'] as $key => $value) {
+            $request['restored_items'][$key]['restoration_pk'] = $request['restoration_pk'];
         }
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
@@ -119,7 +119,18 @@ class RestorationController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
-        //TODO Map variables
+        $request['receiving_session_pk'] = (string)Str::uuid();
+        $request['received_groups'] = array();
+        $request['case_pks'] = array();
+        foreach ($request['restored_groups'] as $restored_group) {
+            $request['received_groups'][]['received_item_pk'] = $restored_group['restored_item_pk'];
+            $request['received_groups'][]['grouped_quantity'] = $restored_group['grouped_quantity'];
+            $request['received_groups'][]['kind'] = 'restored';
+            $request['received_groups'][]['receiving_session_pk'] = $request['receiving_session_pk'];
+            $request['received_groups'][]['case_pk'] = $restored_group['case_pk'];
+            $request['case_pks'] = array_push($restored_group['case_pk']);
+        }
+        $request['case_pks'] = array_unique($request['case_pks']);
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->receive($request);

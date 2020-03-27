@@ -2,7 +2,6 @@
 
 namespace App\Validators;
 
-use App\Rules\UnstoredCase;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Routing\ProvidesConvenienceMethods;
 
@@ -75,7 +74,7 @@ class RestorationValidator
                 'user_pk' => 'required|uuid|exits:users,pk',
                 'restored_groups.*.restored_item_pk' => 'required|uuid|exists:restored_items,pk',
                 'restored_groups.*.grouped_quantity' => 'required|integer|between:1,2000000000',
-                'restored_groups.*.case_pk' => ['required', 'uuid', 'exists:cases,pk', new UnstoredCase]
+                'restored_groups.*.case_pk' => 'required|uuid|exists:cases,pk|unstored_case'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
