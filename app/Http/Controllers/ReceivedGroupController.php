@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Preconditions\ReceivedGroupPrecondition;
 use App\Repositories\ReceivedGroupRepository;
+use App\Validators\ReceivedGroupValidator;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -11,11 +13,15 @@ use Illuminate\Validation\ValidationException;
 class ReceivedGroupController extends Controller
 {
 
-    private $received_group;
+    private $repository;
+    private $validator;
+    private $precondition;
 
-    public function __construct(ReceivedGroupRepository $received_group)
+    public function __construct(ReceivedGroupPrecondition $precondition, ReceivedGroupRepository $repository, ReceivedGroupValidator $validator)
     {
-        $this->received_group = $received_group;
+        $this->repository = $repository;
+        $this->validator = $validator;
+        $this->precondition = $precondition;
     }
 
     public function count(Request $request)
@@ -228,49 +234,51 @@ class ReceivedGroupController extends Controller
 
     public function store(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'received_groups.*.pk' => 'required|uuid|exits:received_groups,pk',
-                'case_pk' => 'required|uuid|exists:cases,pk|stored_case',
-                'user_pk' => 'required|uuid|exits:users,pk'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->store($request);
+        if ($validation) return $this->invalid_response($validation);
+
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->store($request);
+        if ($precondition) return $this->conflict_response();
+
+        /* Map variables */
+        $request['storing_session_pk'] = (string)Str::uuid();
+        $received_groups = app('db')->table('received_groups')->whereIn('pk', array_values($request['received_groups']))->get()->toArray();
+        foreach ($received_groups as $received_group) {
+            $request['entries']['received_item_pk'] = $received_group['received_item_pk'];
+            $request['entries']['kind'] = $received_group['kind'];
+            $request['entries']['quantity'] = $received_group['grouped_quantity'];
+            $request['entries']['entry_kind'] = 'storing';
+            $request['entries']['session_pk'] = $request['storing_session_pk'];
+            $request['entries']['case_pk'] = $request['case_pk'];
+            $request['entries']['accessory_pk'] = $this::accessory_pk($received_group['pk']);
         }
 
-        //Check preconditions, return conflict errors(409)
-        $received_groups = app('db')->table('received_groups')->whereIn('pk', array_values($valid_request['received_groups']))->get()->toArray();
-        $passed = True;
-        foreach ($received_groups as $received_group) {
-            if ($received_group['kind'] == 'imported') {
-                if (app('db')->table('imported_items')->join('classified_items', 'imported_items.classified_item_pk', '=', 'classified_items.pk')->where('imported_items.pk', $received_group['pk'])->value('classified_items.quality_state') == 'passed' ? True : False) {
-                    $passed = False;
-                    break;
-                }
-            }
-        }
-        $failed = !$passed;
-        if ($failed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
-
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        $valid_request['storing_session_pk'] = (string)Str::uuid();
-        foreach ($received_groups as $received_group) {
-            $valid_request['entries']['received_item_pk'] = $received_group['received_item_pk'];
-            $valid_request['entries']['kind'] = $received_group['kind'];
-            $valid_request['entries']['quantity'] = $received_group['grouped_quantity'];
-            $valid_request['entries']['entry_kind'] = 'storing';
-            $valid_request['entries']['session_pk'] = $valid_request['storing_session_pk'];
-            $valid_request['entries']['case_pk'] = $valid_request['case_pk'];
-        }
-        try {
-            $this->received_group->store($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
-        return response()->json(['success' => 'Lưu kho cụm phụ liệu thành công'], 200);
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->store($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Lưu kho cụm phụ liệu nhập thành công'], 200);
     }
 
+    public static function accessory_pk($received_group_pk)
+    {
+        $received_group = app('db')->table('received_groups')->where('pk', $received_group_pk)->select('received_item_pk', 'kind')->first();
+        switch ($received_group->kind) {
+            case 'restored':
+            {
+                return app('db')->table('restored_items')->where('pk', $received_group->received_item_pk)->value('accessory_pk');
+            }
+            case 'collected':
+            {
+                $in_distributed_item_pk = app('db')->table('collected_items')->where('pk', $received_group->received_item_pk)->value('in_distributed_item_pk');
+                return app('db')->table('in_distributed_items')->where('pk', $in_distributed_item_pk)->value('accessory_pk');
+            }
+            default:
+            {
+                $ordered_item_pk = app('db')->table('imported_items')->where('pk', $received_group->received_item_pk)->value('ordered_item_pk');
+                return app('db')->table('ordered_items')->where('pk', $ordered_item_pk)->value('accessory_pk');
+            }
+        }
+    }
 }

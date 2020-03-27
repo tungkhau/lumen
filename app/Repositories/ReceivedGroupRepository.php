@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use Exception;
+
 class ReceivedGroupRepository
 {
 
@@ -96,15 +98,21 @@ class ReceivedGroupRepository
 
     public function store($params)
     {
-        app('db')->transaction(function () use ($params) {
-            app('db')->table('storing_sessions')->insert([
-                'pk' => $params['storing_session_pk'],
-                'user_pk' => $params['user_pk']
-            ]);
-            app('db')->table('entries')->insert($params['entries']);
-            app('db')->table('received_groups')->whereIn('pk', array_values($params['received_groups']))->update([
-                'case_pk' => Null
-            ]);
-        });
+        try {
+            app('db')->transaction(function () use ($params) {
+                app('db')->table('storing_sessions')->insert([
+                    'pk' => $params['storing_session_pk'],
+                    'user_pk' => $params['user_pk']
+                ]);
+                app('db')->table('entries')->insert($params['entries']);
+                app('db')->table('received_groups')->whereIn('pk', array_values($params['received_groups']))->update([
+                    'case_pk' => Null
+                ]);
+            });
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
+
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Http\Controllers\EntryController;
-use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
@@ -46,13 +45,27 @@ class AppServiceProvider extends ServiceProvider
             $issued_groups = app('db')->table('issued_groups')->where('case_pk', $value)->exists();
             if ($issued_groups) return False;
 
-            $entries = app('db')->table('entries')->where('case_pk', $value)->select('quantity', 'is_pending')->get();
-            $available_quantity = 0;
+            $entries = app('db')->table('entries')->where('case_pk', $value)->pluck('quantity');
+            $inCased_quantity = 0;
+            if (count($entries)) return True;
             foreach ($entries as $entry) {
-                if ($entry->is_pending) return False;
-                $available_quantity += $entry->result ? $entry->quantity : 0;
+                if ($entry->quantity == Null) return False;
+                $inCased_quantity += $entry->quantity;
             }
-            if (!$available_quantity) return False;
+            if ($inCased_quantity) return False;
+            return True;
+        });
+
+        Validator::extend('stored_case', function ($attribute, $value, $parameters, $validator) {
+            $shelf_pk = app('db')->table('cases')->where('pk', $value)->value('shelf_pk');
+            if (!$shelf_pk) return False;
+
+            $issued_groups = app('db')->table('issued_groups')->where('case_pk', $value)->exists();
+            if ($issued_groups) return False;
+
+            $received_groups = app('db')->table('received_groups')->where('case_pk', $value)->exists();
+            if ($received_groups) return False;
+
             return True;
         });
     }

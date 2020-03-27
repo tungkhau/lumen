@@ -2,183 +2,174 @@
 
 namespace App\Http\Controllers;
 
+use App\Preconditions\EntryPrecondition;
 use App\Repositories\EntryRepository;
-use Exception;
+use App\Validators\EntryValidator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 
 class EntryController extends Controller
 {
 
-    private $entry;
+    private $repository;
+    private $validator;
+    private $precondition;
 
-    public function __construct(EntryRepository $entry)
+    public function __construct(EntryRepository $repository, EntryValidator $validator, EntryPrecondition $precondition)
     {
-        $this->entry = $entry;
+        $this->repository = $repository;
+        $this->validator = $validator;
+        $this->precondition = $precondition;
     }
 
     public static function inCased_quantity($received_item_pk, $case_pk)
     {
-        $entries = app('db')->table('entries')->where([['received_item_pk', '=', $received_item_pk], ['case_pk', '=', $case_pk]])->select('quantity','is_pending')->get();
+        $entries = app('db')->table('entries')->where([['received_item_pk', '=', $received_item_pk], ['case_pk', '=', $case_pk]])->pluck('quantity');
         $inCased_quantity = 0;
         if (count($entries)) {
             foreach ($entries as $entry) {
+                if ($entry->quantity == Null) return False;
                 $inCased_quantity += $entry->quantity;
-                if ($entry->is_pending) {
-                    return False;
-                }
             }
             return $inCased_quantity;
         }
         return 0;
     }
 
+    private static function inCased_item($received_item_pk, $case_pk)
+    {
+        $inCased_item = app('db')->table('entries')->where([['received_item_pk', '=', $received_item_pk], ['case_pk', '=', $case_pk]])->distinct('received_item_pk')->first()->toArray();
+        if ($inCased_item) return $inCased_item;
+        return False;
+    }
+
+
     public function ajdust(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'case_pk' => 'required|uuid|exists:entries, case_pk|stored_case',
-                'received_item_pk' => 'required|uuid|exits:entries,received_item_pk',
-                'adjusted_quantity' => 'adjusted_quantity:{$request["received_item_pk"]},{$request["cases_pk"]}',
-                'user_pk' => 'required|uuid|exits:users,pk'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->adjust($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        $valid_request['adjusting_session_pk'] = (string)Str::uuid();
-        $kind = app('db')->table('entries')->where('received_item_pk', $valid_request['received_item_pk'])->distinct('kind')->value('kind');
-        $valid_request['entry']['kind'] = $kind;
-        $valid_request['entry']['received_item_pk'] = $valid_request['received_item_pk'];
-        $valid_request['entry']['entry_kind'] = 'adjusting';
-        $valid_request['entry']['quantity'] = $valid_request['adjusted_quantity'];
-        $valid_request['entry']['session_pk'] = $valid_request['adjusting_session_pk'];
-        $valid_request['entry']['case_pk'] = $valid_request['case_pk'];
-        $valid_request['entry']['is_pending'] = True;
-        $valid_request['entry']['result'] = False;
-        try {
-            $this->entry->adjust($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+        $request['adjusting_session_pk'] = (string)Str::uuid();
+        $request['quantity'] = $request['adjusted_quantity'] - $this->inCased_quantity($request['received_item_pk'], $request['case_pk']);
+        $inCased_item = $this::inCased_item($request['received_item_pk'], $request['case_pk']);
+
+        $request['entry']['kind'] = $inCased_item['kind'];
+        $request['entry']['received_item_pk'] = $request['received_item_pk'];
+        $request['entry']['entry_kind'] = 'adjusting';
+        $request['entry']['quantity'] = Null;
+        $request['entry']['session_pk'] = $request['adjusting_session_pk'];
+        $request['entry']['case_pk'] = $request['case_pk'];
+        $request['entry']['accessory_pk'] = $inCased_item['accessory_pk'];
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->adjust($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Đăng kí hiệu chỉnh thành công'], 200);
     }
 
     public function discard(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'case_pk' => 'required|uuid|exists:entries, case_pk|stored_case',
-                'received_item_pk' => 'required|uuid|exits:entries,received_item_pk',
-                'discarded_quantity' => 'available_quantity:{$request["received_item_pk"]},{$request["cases_pk"]}',
-                'user_pk' => 'required|uuid|exits:users,pk'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->discard($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        $valid_request['discarding_session_pk'] = (string)Str::uuid();
-        $kind = app('db')->table('entries')->where('received_item_pk', $valid_request['received_item_pk'])->distinct('kind')->value('kind');
-        $valid_request['entry']['kind'] = $kind;
-        $valid_request['entry']['received_item_pk'] = $valid_request['received_item_pk'];
-        $valid_request['entry']['entry_kind'] = 'discarding';
-        $valid_request['entry']['quantity'] = $valid_request['discarded_quantity'];
-        $valid_request['entry']['session_pk'] = $valid_request['discarding_session_pk'];
-        $valid_request['entry']['case_pk'] = $valid_request['case_pk'];
-        $valid_request['entry']['is_pending'] = True;
-        $valid_request['entry']['result'] = False;
-        try {
-            $this->entry->discard($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+        $request['discarding_session_pk'] = (string)Str::uuid();
+        $request['quantity'] = -$request['discarded_quantity'];
+
+        $inCased_item = $this::inCased_item($request['received_item_pk'], $request['case_pk']);
+
+        $request['entry']['kind'] = $inCased_item['kind'];
+        $request['entry']['received_item_pk'] = $request['received_item_pk'];
+        $request['entry']['entry_kind'] = 'discarding';
+        $request['entry']['quantity'] = Null;
+        $request['entry']['session_pk'] = $request['discarding_session_pk'];
+        $request['entry']['case_pk'] = $request['case_pk'];
+        $request['entry']['accessory_pk'] = $inCased_item['accessory_pk'];
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->discard($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Đăng kí loại bỏ thành công'], 200);
     }
 
     public function verify_adjusting(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'adjusting_session_pk' => 'required|uuid|exits:adjusting_sessions,pk,verifying_session_pk,' . Null,
-                'result' => 'required|boolean',
-                'user_pk' => 'required|uuid|exits:users,pk'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->verify_adjusting($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        $valid_request['verifying_session_pk'] = (string)Str::uuid();
-        try {
-            $this->entry->verify_adjusting($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
-        return response()->json(['success' => 'Xác thực phiên hiệu chỉnh thành công'], 200);
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+        $request['verifying_session_pk'] = (string)Str::uuid();
+        $request['quantity'] = app('db')->table('adjusting_sessions')->where('pk', $request['adjusting_session_pk'])->value('quantity');
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->verify_adjusting($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Xác thực hiệu chỉnh thành công'], 200);
     }
 
     public function verify_discarding(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'discarding_session_pk' => 'required|uuid|exits:discarding_sessions,pk,verifying_session_pk,' . Null,
-                'result' => 'required|boolean',
-                'user_pk' => 'required|uuid|exits:users,pk'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->verify_discarding($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        $valid_request['verifying_session_pk'] = (string)Str::uuid();
-        try {
-            $this->entry->verify_discarding($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
-        return response()->json(['success' => 'Xác thực phiên loại bỏ thành công'], 200);
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+        $request['verifying_session_pk'] = (string)Str::uuid();
+        $request['quantity'] = app('db')->table('discarding_sessions')->where('pk', $request['discarding_session_pk'])->value('quantity');
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->verify_discarding($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Xác thực loại bỏ thành công'], 200);
     }
 
     public function move(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'start_case_pk' => 'required|uuid|exists:entries, case_pk|stored_case',
-                'inCased_items.*.received_item_pk' => 'required|uuid|exits:entries,received_item_pk',
-                'inCased_items.*.quantity' => 'available_quantity:{$request["inCased_items.*.received_item_pk"]},{$request["start_cases_pk"]}',
-                'end_case_pk' => 'required|uuid|exists:entries, case_pk|stored_case|different:' . $request['start_case_pk'],
-                'user_pk' => 'required|uuid|exits:users,pk'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->move($request);
+        if ($validation) return $this->invalid_response($validation);
+
+        /* Check preconditions, return conflict errors(409) */
+
+        /* Map variables */
+        $request['moving_session_pk'] = (string)Str::uuid();
+        $request['outEntries'] = array();
+        $request['inEntries'] = array();
+        foreach ($request['inCased_items'] as $inCased_item) {
+            $temp = $this::inCased_item($inCased_item['received_item_pk'], $request['start_case_pk']);
+
+            $request['outEntries'][]['kind'] = $temp['kind'];
+            $request['outEntries'][]['received_item_pk'] = $inCased_item['received_item_pk'];
+            $request['outEntries'][]['entry_kind'] = 'out';
+            $request['outEntries'][]['quantity'] = -$inCased_item['quantity'];
+            $request['outEntries'][]['session_pk'] = $request['moving_session_pk'];
+            $request['outEntries'][]['case_pk'] = $request['start_case_pk'];
+            $request['outEntries'][]['accessory_pk'] = $temp['accessory_pk'];
+
+            $request['inEntries'][]['kind'] = $temp['kind'];
+            $request['inEntries'][]['received_item_pk'] = $inCased_item['received_item_pk'];
+            $request['inEntries'][]['entry_kind'] = 'in';
+            $request['inEntries'][]['quantity'] = $inCased_item['quantity'];
+            $request['inEntries'][]['session_pk'] = $request['moving_session_pk'];
+            $request['inEntries'][]['case_pk'] = $request['end_case_pk'];
+            $request['inEntries'][]['accessory_pk'] = $temp['accessory_pk'];
         }
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        $valid_request['moving_session_pk'] = (string)Str::uuid();
-        try {
-            $this->entry->move($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->move($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Chuyển phụ liệu tồn thành công'], 200);
     }
-
 }

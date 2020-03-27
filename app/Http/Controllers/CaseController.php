@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Preconditions\CasePrecondition;
 use App\Repositories\CaseRepository;
 use App\Validators\CaseValidator;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 
 class CaseController extends Controller
 {
@@ -59,57 +57,58 @@ class CaseController extends Controller
 
     public function store(Request $request)
     {
-        //Validate request, catch invalid errors(400)
-        try {
-            $valid_request = $this->validate($request, [
-                'case_pk' => 'required|uuid|exists:cases,pk|unstored_case',
-                'shelf_pk' => 'required|uuid|exits:shelves,pk',
-                'user_pk' => 'required|uuid|exits:users,pk'
-            ]);
-        } catch (ValidationException $e) {
-            $error_messages = $e->errors();
-            $error_message = (string)array_shift($error_messages)[0];
-            return response()->json(['invalid' => $error_message], 400);
-        }
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->store($request);
+        if ($validation) return $this->invalid_response($validation);
 
-        //Check preconditions, return conflict errors(409)
-        $received_groups = app('db')->table('received_groups')->where('case_pk', $valid_request['case_pk'])->get();
-        $valid_request['count'] = count($received_groups);
-        $passed = True;
-        if ($valid_request['count']) {
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->store($request);
+        if ($precondition) return $this->conflict_response();
+
+        /* Map variables */
+        $received_groups = app('db')->table('received_groups')->where('case_pk', $request['case_pk'])->get();
+        $request['count'] = count($received_groups);
+        if ($request['count']) {
+            $request['storing_session_pk'] = (string)Str::uuid();
+            $request['received_group_pks'] = array();
+            $request['entries'][] = array();
             foreach ($received_groups as $received_group) {
-                if ($received_group->kind == 'imported') {
-                    if (app('db')->table('imported_items')->join('classified_items', 'imported_items.classified_item_pk', '=', 'classified_items.pk')->where('imported_items.pk', $received_group->pk)->value('classified_items.quality_state') == 'passed' ? True : False) {
-                        $passed = False;
-                        break;
-                    }
-                }
+                $request['entries'][]['kind'] = $received_group->kind;
+                $request['entries'][]['received_item_pk'] = $received_group->received_item_pk;
+                $request['entries'][]['entry_kind'] = 'storing';
+                $request['entries'][]['quantity'] = $received_group->grouped_quantity;
+                $request['entries'][]['session_pk'] = $request['storing_session_pk'];
+                $request['entries'][]['case_pk'] = $request['case_pk'];
+                $request['entries'][]['accessory_pk'] = ReceivedGroupController::accessory_pk($received_group->pk);
+
+                array_push($request['received_group_pks'], $received_group->pk);
             }
         }
-        $failed = !$passed;
-        if ($failed) return response()->json(['conflict' => 'Không thể thực hiện thao tác này'], 409);
 
-        //Execute method, return success message(200) or catch unexpected errors(500)
-        if ($valid_request['count']) {
-            $valid_request['storing_session_pk'] = (string)Str::uuid();
-            $valid_request['received_group_pks'] = array();
-            foreach ($received_groups as $received_group) {
-                $valid_request['entries']['kind'] = $received_group->kind;
-                $valid_request['entries']['received_item_pk'] = $received_group->received_item_pk;
-                $valid_request['entries']['entry_kind'] = 'storing';
-                $valid_request['entries']['quantity'] = $received_group->grouped_quantity;
-                $valid_request['entries']['session_pk'] = $valid_request['storing_session_pk'];
-                $valid_request['entries']['case_pk'] = $valid_request['case_pk'];
-
-                array_push($valid_request['received_group_pks'], $received_group->pk);
-            }
-        }
-        try {
-            $this->case->store($valid_request);
-        } catch (Exception $e) {
-            return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
-        }
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->store($request);
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Lưu kho đơn vị chứa thành công'], 200);
+    }
+
+    public function replace(Request $request)
+    {
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->replace($request);
+        if ($validation) return $this->invalid_response($validation);
+
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->replace($request);
+        if ($precondition) return $this->conflict_response();
+
+
+        /* Map variables */
+        $request['start_shelf_pk'] = app('db')->table('cases')->where('pk', $request['case_pk'])->value('shelf_pk');
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->replace($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Di chuyển đơn vị chứa thành công'], 200);
     }
 
     private function id()

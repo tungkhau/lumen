@@ -16,12 +16,11 @@ class CreateEntriesTable extends Migration
     {
         Schema::create('entries', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
-            $table->enum('kind', ['imported', 'restored', 'collected']);
-            $table->enum('entry_kind', ['storing', 'in', 'out', 'issuing', 'neg_adjusting', 'pos_adjusting', 'discarding', 'returning']);
-            $table->integer('quantity');
-            $table->uuid('session_pk');
-            $table->boolean('is_pending')->default(false);
             $table->uuid('received_item_pk');
+            $table->enum('kind', ['imported', 'restored', 'collected']);
+            $table->enum('entry_kind', ['storing', 'in', 'out', 'issuing', 'adjusting', 'discarding', 'returning']);
+            $table->integer('quantity')->nullable();
+            $table->uuid('session_pk');
             $table->uuid('case_pk');
             $table->uuid('accessory_pk');
 
