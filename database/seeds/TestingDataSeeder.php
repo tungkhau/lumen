@@ -23,7 +23,7 @@ class TestingDataSeeder extends Seeder
             'pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
             'is_active' => True,
             'id' => '123456',
-            'password' => '1',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
             'name' => 'TEST',
             'role' => 'Mediator',
             'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
@@ -32,7 +32,7 @@ class TestingDataSeeder extends Seeder
             'pk' => '59a67242-6dd8-11ea-bc55-0242ac130003',
             'is_active' => False,
             'id' => '234567',
-            'password' => '1',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
             'name' => 'TEST',
             'role' => 'Mediator',
             'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
@@ -154,5 +154,10 @@ class TestingDataSeeder extends Seeder
             'customer_pk' => '59a6758a-6dd8-11ea-bc55-0242ac130003',
             'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
         ]);
+//        app('db')->table('orders')->insert([
+//            'pk' => '7387cc20-70c5-11ea-bc55-0242ac130003',
+//            'name' => 'test',
+//            'block_pk' => '59a68750-6dd8-11ea-bc55-0242ac130003'
+//        ]);
     }
 }

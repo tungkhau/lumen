@@ -35,4 +35,8 @@ class OrderTest extends TestCase
         $this->assertEquals(200, $response->status());
         $this->seeInDatabase('orders', $order);
     }
+//    public function testEdit ()
+//    {
+//        $inputs = ['order_pk' => ]
+//    }
 }

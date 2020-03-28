@@ -13,18 +13,24 @@
 
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
-    $router->group(['middleware' => 'role:manager'], function () use ($router) {
-        $router->get('/a', function () use ($router) {
-            echo phpinfo();
-        });
+
+    $router->get('/', function () use ($router) {
+        echo phpinfo();
     });
+    $router->group(['middleware' => 'role:manager'], function () use ($router) {
+
+    });
+    $router->group(['middleware' => 'role:staff'], function () use ($router) {
+
+    });
+
 });
 
 //Group 0
-$router->get('/', function () use ($router) {
-    echo phpinfo();
+//$router->get('/', function () use ($router) {
+//    echo phpinfo();
 //    return \Illuminate\Support\Str::random(32);
-});
+//});
 
 $router->post('login', 'AuthController@login');
 $router->post('logout', 'AuthController@logout');
