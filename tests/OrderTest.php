@@ -48,4 +48,17 @@ class OrderTest extends TestCase
         $this->assertEquals(200, $response->status());
         $this->seeInDatabase('orders', $order);
     }
+    public function testEdit ()
+    {
+        $inputs = ['order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
+            'ordered_item_pk' => '72773612-70df-11ea-bc55-0242ac130003',
+            'ordered_quantity' => 500,
+            'comment' => 'bla',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+        $data = ['ordered_quantity' => 500,
+            'comment' => 'bla'];
+        $this->call('POST','edit_order',$inputs);
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('ordered_items',$data);
+    }
 }

@@ -154,10 +154,97 @@ class TestingDataSeeder extends Seeder
             'customer_pk' => '59a6758a-6dd8-11ea-bc55-0242ac130003',
             'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
         ]);
-//        app('db')->table('orders')->insert([
-//            'pk' => '7387cc20-70c5-11ea-bc55-0242ac130003',
-//            'name' => 'test',
-//            'block_pk' => '59a68750-6dd8-11ea-bc55-0242ac130003'
-//        ]);
+
+        //make for G4
+
+        app('db')->table('accessories')->insert([
+            'pk' => '72773130-70df-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'ABCACVASDEQDFQER',
+            'item' => '1235',
+            'name' => 'ACC 1',
+            'type_pk' => '59a679fe-6dd8-11ea-bc55-0242ac130003',
+            'unit_pk' => '59a67ad0-6dd8-11ea-bc55-0242ac130003',
+            'customer_pk' => '59a6758a-6dd8-11ea-bc55-0242ac130003',
+            'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
+        ]);
+        app('db')->table('accessories')->insert([
+            'pk' => '72773234-70df-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'ABCACVASDEQDFQE1',
+            'item' => '1236',
+            'name' => 'ACC 2',
+            'type_pk' => '59a679fe-6dd8-11ea-bc55-0242ac130003',
+            'unit_pk' => '59a67ad0-6dd8-11ea-bc55-0242ac130003',
+            'customer_pk' => '59a6758a-6dd8-11ea-bc55-0242ac130003',
+            'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
+        ]);
+        app('db')->table('accessories')->insert([
+            'pk' => '727733e2-70df-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'ABCACVASDEQDFQE3',
+            'item' => '1237',
+            'name' => 'ACC 3',
+            'type_pk' => '59a679fe-6dd8-11ea-bc55-0242ac130003',
+            'unit_pk' => '59a67ad0-6dd8-11ea-bc55-0242ac130003',
+            'customer_pk' => '59a6758a-6dd8-11ea-bc55-0242ac130003',
+            'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
+        ]);
+        app( 'db')->table('orders')->insert([
+            'pk' => '727734be-70df-11ea-bc55-0242ac130003',
+            'id' => 'ORDER 1 open',
+            'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('ordered_items')->insert([
+            'pk' => '72773612-70df-11ea-bc55-0242ac130003',
+            'ordered_quantity' => 1111,
+            'comment' => 'od item 1-1',
+            'order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
+            'accessory_pk' => '72773130-70df-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('ordered_items')->insert([
+            'pk' => '727736da-70df-11ea-bc55-0242ac130003',
+            'ordered_quantity' => 2221,
+            'comment' => 'od item 2-1',
+            'order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
+            'accessory_pk' => '72773234-70df-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('ordered_items')->insert([
+            'pk' => '72773842-70df-11ea-bc55-0242ac130003',
+            'ordered_quantity' => 3331,
+            'comment' => 'od item 3-1',
+            'order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
+            'accessory_pk' => '727733e2-70df-11ea-bc55-0242ac130003'
+        ]);
+
+        app( 'db')->table('orders')->insert([
+            'pk' => '72773900-70df-11ea-bc55-0242ac130003',
+            'id' => 'ORDER 2 close',
+            'is_opened' => false,
+            'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('ordered_items')->insert([
+            'pk' => '727739be-70df-11ea-bc55-0242ac130003',
+            'ordered_quantity' => 1112,
+            'comment' => 'od item 1-2',
+            'order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
+            'accessory_pk' => '72773130-70df-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('ordered_items')->insert([
+            'pk' => '72773b12-70df-11ea-bc55-0242ac130003',
+            'ordered_quantity' => 2222,
+            'comment' => 'od item 2-2',
+            'order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
+            'accessory_pk' => '72773234-70df-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('ordered_items')->insert([
+            'pk' => '72773bda-70df-11ea-bc55-0242ac130003',
+            'ordered_quantity' => 3332,
+            'comment' => 'od item 3-2',
+            'order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
+            'accessory_pk' => '727733e2-70df-11ea-bc55-0242ac130003'
+        ]);
     }
 }
