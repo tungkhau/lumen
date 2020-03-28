@@ -35,7 +35,7 @@ class OrderPrecondition
     {
         $imports = app('db')->table('imports')->where('order_pk', $params['order_pk'])->exists();
         $owner = app('db')->table('orders')->where('pk', $params['order_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
-        return !$imports || !$owner;
+        return !($imports || $owner);
     }
 
     public function turn_on($params)

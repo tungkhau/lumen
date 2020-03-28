@@ -61,4 +61,33 @@ class OrderTest extends TestCase
         $this->seeStatusCode(200);
         $this->seeInDatabase('ordered_items',$data);
     }
+    public function testDelete ()
+    {
+        $temp = app('db')->table('ordered_items')->where('order_pk', '727734be-70df-11ea-bc55-0242ac130003')->pluck('pk')->toArray();
+        $ordered_item_pks = array();
+        foreach ($temp as $item) {
+            $ordered_item_pks[] = [
+                'pk' => $item
+            ];
+        }
+        $inputs = ['order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+        $data   = ['pk' => '727734be-70df-11ea-bc55-0242ac130003'];
+        $this->call('DELETE','delete_order',$inputs);
+        $this->seeStatusCode(200);
+        $this->notSeeInDatabase('orders',$data);
+        foreach ($ordered_item_pks as $ordered_item_pk) {
+            $this->notSeeInDatabase('ordered_items', $ordered_item_pk);
+        }
+    }
+    public function testTurnOff ()
+    {
+        $inputs = ['order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+        $data = ['pk' => '727734be-70df-11ea-bc55-0242ac130003',
+            'is_opened' => False ];
+        $this->call('PATCH','turn_off_order',$inputs);
+        $this->seeStatusCode(200);
+        $this->SeeInDatabase('orders',$data);
+    }
 }
