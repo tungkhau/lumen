@@ -35,12 +35,15 @@ class OrderController extends Controller
         /* Map variables */
         $request['order_pk'] = (string)Str::uuid();
         $temp = array();
-        for ($i = 0; $i < count($request['ordered_items']); $i++) {
-            $temp[$i]['accessory_pk'] = $request['ordered_items'][$i]['accessory_pk'];
-            $temp[$i]['comment'] = $request['ordered_items'][$i]['comment'];
-            $temp[$i]['ordered_quantity'] = $request['ordered_items'][$i]['ordered_quantity'];
-            $temp[$i]['order_pk'] = $request['order_pk'];
+        foreach ($request['ordered_items'] as $ordered_item) {
+            $temp[] = [
+                'accessory_pk' => $ordered_item['accessory_pk'],
+                'comment' => $ordered_item['comment'],
+                'ordered_quantity' => $ordered_item['ordered_quantity'],
+                'order_pk' => $request['order_pk']
+            ];
         }
+
         $request['ordered_items'] = $temp;
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */

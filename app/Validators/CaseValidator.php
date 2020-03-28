@@ -13,7 +13,7 @@ class CaseValidator
     {
         try {
             $this->validate($params, [
-                'required|uuid|exists:cases,pk,is_active,' . True
+                'case_pk' => 'required|uuid|exists:cases,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

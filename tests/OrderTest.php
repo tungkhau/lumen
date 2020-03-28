@@ -31,7 +31,6 @@ class OrderTest extends TestCase
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ];
         $response = $this->call('POST', 'create_order', $inputs);
-
         $this->seeJsonEquals(['success' => 'Tạo đơn đặt thành công']);
         $this->assertEquals(200, $response->status());
         $this->seeInDatabase('orders', $order);

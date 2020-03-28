@@ -30,15 +30,15 @@ class BlockController extends Controller
 
         /* Map variables */
         $block_id = app('db')->table('blocks')->where('pk', $request['block_pk'])->value('id');
-        $request['shelves'] = array();
+        $temp = array();
         for ($col = 1; $col < $request['col']; $col++) {
             for ($row = 1; $row < $request['row']; $row++)
-                $request['shelves'][] = [
+                $temp[] = [
                     'name' => $block_id . "-" . $row . "-" . $col,
                     'block_pk' => $request['block_pk']
                 ];
         }
-
+        $request['shelves'] = $temp;
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->open($request);
         if ($unexpected) return $this->unexpected_response();

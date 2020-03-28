@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Preconditions\ShelfPrecondition;
-use App\Repositories\SupplierRepository;
+use App\Repositories\ShelfRepository;
 use App\Validators\ShelfValidator;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class ShelfController extends Controller
 {
@@ -15,7 +13,7 @@ class ShelfController extends Controller
     private $validator;
     private $precondition;
 
-    public function __construct(SupplierRepository $repository, ShelfPrecondition $precondition, ShelfValidator $validator)
+    public function __construct(ShelfRepository $repository, ShelfPrecondition $precondition, ShelfValidator $validator)
     {
         $this->repository = $repository;
         $this->validator = $validator;
