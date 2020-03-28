@@ -14,7 +14,7 @@ class CaseTest extends TestCase
         $this->SeeInDatabase('cases', $data);
     }
 
-    public function testDisableCase()
+    public function testDisable()
     {
         $inputs = ['case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003'];
         $data = ['pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',

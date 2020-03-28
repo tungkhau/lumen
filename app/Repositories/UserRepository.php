@@ -38,7 +38,7 @@ class UserRepository
     {
         try {
             app('db')->table('users')->where('pk', $params['user_pk'])
-                ->update(['is_active' => false]);
+                ->update(['is_active' => False]);
         } catch (Exception $e) {
             return $e;
         }

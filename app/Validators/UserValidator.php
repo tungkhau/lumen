@@ -42,7 +42,7 @@ class UserValidator
     {
         try {
             $this->validate($params, [
-                'user_pk' => 'required|uuid|exists:users,pk,is_active' . False
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . False
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -55,7 +55,7 @@ class UserValidator
     {
         try {
             $this->validate($params, [
-                'user_pk' => 'required|uuid|exists:users,pk,is_active' . True
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
