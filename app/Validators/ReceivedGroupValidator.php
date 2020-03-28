@@ -13,9 +13,9 @@ class ReceivedGroupValidator
     {
         try {
             $this->validate($params, [
-                'received_group_pk' => 'required|uuid|exits:received_groups,pk',
+                'received_group_pk' => 'required|uuid|exists:received_groups,pk',
                 'counted_quantity' => 'required|integer|between:1,2000000000',
-                'user_pk' => 'required|uuid|exits:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -28,9 +28,9 @@ class ReceivedGroupValidator
     {
         try {
             $this->validate($params, [
-                'counting_session_pk' => 'required|uuid|exits:counting_sessions,pk',
+                'counting_session_pk' => 'required|uuid|exists:counting_sessions,pk',
                 'counted_quantity' => 'required|integer|between:1,2000000000',
-                'user_pk' => 'required|uuid|exits:users,pk',
+                'user_pk' => 'required|uuid|exists:users,pk',
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -43,8 +43,8 @@ class ReceivedGroupValidator
     {
         try {
             $this->validate($params, [
-                'counting_session_pk' => 'required|uuid|exits:counting_sessions,pk',
-                'user_pk' => 'required|uuid|exits:users,pk',
+                'counting_session_pk' => 'required|uuid|exists:counting_sessions,pk',
+                'user_pk' => 'required|uuid|exists:users,pk',
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -57,10 +57,10 @@ class ReceivedGroupValidator
     {
         try {
             $this->validate($params, [
-                'imported_group_pk' => 'required|uuid|exits:received_groups,pk,kind,' . 'imported',
+                'imported_group_pk' => 'required|uuid|exists:received_groups,pk,kind,' . 'imported',
                 'checked_quantity' => 'integer|checked_quantity:' . $params['imported_group_pk'],
                 'unqualified_quantity' => 'required|integer|gte:0|lte:' . $params['checked_quantity'],
-                'user_pk' => 'required|uuid|exits:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -73,10 +73,10 @@ class ReceivedGroupValidator
     {
         try {
             $this->validate($params, [
-                'checking_session_pk' => 'required|uuid|exits:checking_sessions,pk',
+                'checking_session_pk' => 'required|uuid|exists:checking_sessions,pk',
                 'checked_quantity' => 'integer|checked_quantity:' . $params['imported_group_pk'],
                 'unqualified_quantity' => 'required|integer|gte:0|lte:' . $params['checked_quantity'],
-                'user_pk' => 'required|uuid|exits:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -89,8 +89,8 @@ class ReceivedGroupValidator
     {
         try {
             $this->validate($params, [
-                'checking_session_pk' => 'required|uuid|exits:checking_sessions,pk',
-                'user_pk' => 'required|uuid|exits:users,pk'
+                'checking_session_pk' => 'required|uuid|exists:checking_sessions,pk',
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -105,8 +105,8 @@ class ReceivedGroupValidator
             $this->validate($params, [
                 'start_case_pk' => 'required|uuid|exists:received_groups,case_pk|unstored_case',
                 'end_case_pk' => 'required|uuid|exists:cases,pk|unstored_case|different:' . $params['start_case_pk'],
-                'received_groups.*.received_group_pk' => 'required|uuid|exits:received_groups,pk,case_pk,' . $params['start_case_pk'],
-                'user_pk' => 'required|uuid|exits:users,pk'
+                'received_groups.*.received_group_pk' => 'required|uuid|exists:received_groups,pk,case_pk,' . $params['start_case_pk'],
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -119,9 +119,9 @@ class ReceivedGroupValidator
     {
         try {
             $this->validate($params, [
-                'received_groups.*.pk' => 'required|uuid|exits:received_groups,pk',
+                'received_groups.*.pk' => 'required|uuid|exists:received_groups,pk',
                 'case_pk' => 'required|uuid|exists:cases,pk|stored_case',
-                'user_pk' => 'required|uuid|exits:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

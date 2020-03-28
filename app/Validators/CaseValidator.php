@@ -27,8 +27,8 @@ class CaseValidator
         try {
             $this->validate($params, [
                 'case_pk' => 'required|uuid|exists:cases,pk|unstored_case',
-                'shelf_pk' => 'required|uuid|exits:shelves,pk',
-                'user_pk' => 'required|uuid|exits:users,pk'
+                'shelf_pk' => 'required|uuid|exists:shelves,pk',
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -42,8 +42,8 @@ class CaseValidator
         try {
             $this->validate($params, [
                 'case_pk' => 'required|uuid|exists:cases,pk|stored_case',
-                'end_shelf_pk' => 'required|uuid|exits:shelves,pk',
-                'user_pk' => 'required|uuid|exits:users,pk'
+                'end_shelf_pk' => 'required|uuid|exists:shelves,pk',
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

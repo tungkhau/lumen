@@ -31,12 +31,21 @@ class OrderTest extends TestCase
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ];
         $response = $this->call('POST', 'create_order', $inputs);
+        $order_pk = app('db')->table('orders')->where('id', 'OFTEST')->value('pk');
+        $ordered_items = array();
+        foreach ($inputs['ordered_items'] as $input) {
+            $ordered_items[] = [
+                'ordered_quantity' => $input['ordered_quantity'],
+                'comment' => $input['comment'],
+                'order_pk' => $order_pk,
+                'accessory_pk' => $input['accessory_pk']
+            ];
+        }
+        foreach ($ordered_items as $ordered_item) {
+            $this->seeInDatabase('ordered_items', $ordered_item);
+        }
         $this->seeJsonEquals(['success' => 'Tạo đơn đặt thành công']);
         $this->assertEquals(200, $response->status());
         $this->seeInDatabase('orders', $order);
     }
-//    public function testEdit ()
-//    {
-//        $inputs = ['order_pk' => ]
-//    }
 }

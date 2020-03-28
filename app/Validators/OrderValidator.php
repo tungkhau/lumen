@@ -31,7 +31,7 @@ class OrderValidator
     {
         try {
             $this->validate($params, [
-                'order_pk' => 'required|uuid|exits:orders,pk',
+                'order_pk' => 'required|uuid|exists:orders,pk',
                 'ordered_item_pk' => 'required|uuid|exists:ordered_items,pk',
                 'ordered_quantity' => 'required|integer|between:1,2000000000',
                 'comment' => 'nullable|string|max:20',
@@ -48,8 +48,8 @@ class OrderValidator
     {
         try {
             $this->validate($params, [
-                'order_pk' => 'required|uuid|exits:orders,pk',
-                'user_pk' => 'required|uuid|exits:users,pk'
+                'order_pk' => 'required|uuid|exists:orders,pk',
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -62,8 +62,8 @@ class OrderValidator
     {
         try {
             $this->validate($params, [
-                'required|uuid|exits:orders,pk,is_opened,' . True,
-                'user_pk' => 'required|uuid|exits:users,pk'
+                'required|uuid|exists:orders,pk,is_opened,' . True,
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -76,8 +76,8 @@ class OrderValidator
     {
         try {
             $this->validate($params, [
-                'required|uuid|exits:orders,pk,is_opened,' . False,
-                'user_pk' => 'required|uuid|exits:users,pk'
+                'required|uuid|exists:orders,pk,is_opened,' . False,
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

@@ -57,6 +57,24 @@ class AppServiceProvider extends ServiceProvider
             return True;
         });
 
+        Validator::extend('empty_case', function ($attribute, $value, $parameters, $validator) {
+            $issued_groups = app('db')->table('issued_groups')->where('case_pk', $value)->exists();
+            if ($issued_groups) return False;
+
+            $received_groups = app('db')->table('received_groups')->where('case_pk', $value)->exists();
+            if ($received_groups) return False;
+
+            $entries = app('db')->table('entries')->where('case_pk', $value)->pluck('quantity');
+            $inCased_quantity = 0;
+            if (count($entries) == 0) return True;
+            foreach ($entries as $entry) {
+                if ($entry->quantity == Null) return False;
+                $inCased_quantity += $entry->quantity;
+            }
+            if ($inCased_quantity != 0) return False;
+            return True;
+        });
+
         Validator::extend('stored_case', function ($attribute, $value, $parameters, $validator) {
             $shelf_pk = app('db')->table('cases')->where('pk', $value)->value('shelf_pk');
             if (!$shelf_pk) return False;
