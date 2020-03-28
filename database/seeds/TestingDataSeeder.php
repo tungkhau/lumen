@@ -15,6 +15,10 @@ class TestingDataSeeder extends Seeder
             'pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003',
             'name' => 'Office',
         ]);
+        app('db')->table('workplaces')->insert([
+            'pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003',
+            'name' => 'Warehouse',
+        ]);
         app('db')->table('users')->insert([
             'pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
             'is_active' => True,

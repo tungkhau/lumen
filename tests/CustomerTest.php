@@ -52,7 +52,7 @@ class CustomerTest extends TestCase
         $this->seeStatusCode(200);
         $this->seeInDatabase('customers', $data);
     }
-    public function testReactive()
+    public function testReactivate()
     {
         $inputs  = ['customer_pk' => '59a6765c-6dd8-11ea-bc55-0242ac130003'];
         $data = ['pk' => '59a6765c-6dd8-11ea-bc55-0242ac130003',
