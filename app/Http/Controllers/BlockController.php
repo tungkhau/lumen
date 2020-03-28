@@ -29,6 +29,15 @@ class BlockController extends Controller
         /* Check preconditions, return conflict errors(409) */
 
         /* Map variables */
+        $block_id = app('db')->table('blocks')->where('pk', $request['block_pk'])->value('id');
+        $request['shelves'] = array();
+        for ($col = 1; $col < $request['col']; $col++) {
+            for ($row = 1; $row < $request['row']; $row++)
+                $request['shelves'][] = [
+                    'name' => $block_id . "-" . $row . "-" . $col,
+                    'block_pk' => $request['block_pk']
+                ];
+        }
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->open($request);

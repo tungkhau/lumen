@@ -9,21 +9,13 @@ class BlockRepository
     public function open($params)
     {
         try {
-            $block_id = app('db')->table('blocks')->where('pk', $params['block_pk'])->value('id');
-            for ($col = 1; $col < $params['col']; $col++) {
-                for ($row = 1; $row < $params['row']; $row++)
-                    $shelves[] = [
-                        'name' => $block_id . "-" . $row . "-" . $col,
-                        'block_pk' => $params['block_pk']
-                    ];
-            }
-            app('db')->transaction(function () use ($params, $shelves) {
+            app('db')->transaction(function () use ($params) {
                 app('db')->table('blocks')->where('pk', $params['block_pk'])->update([
                     'col' => $params['col'],
                     'row' => $params['row'],
                     'is_active' => True
                 ]);
-                app('db')->table('shelves')->insert($shelves);
+                app('db')->table('shelves')->insert($params['shelves']);
             });
         } catch (Exception $e) {
             return $e;

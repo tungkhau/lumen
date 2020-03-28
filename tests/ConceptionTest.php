@@ -45,8 +45,8 @@ class ConceptionTest extends TestCase
     }
     public function testDeleteConception()
     {
-        $inputs = ['conception_pk' => '59a67d0a-6dd8-11ea-bc55-0242ac130003'];
-        $data  = ['pk' => '59a67d0a-6dd8-11ea-bc55-0242ac130003'];
+        $inputs = ['conception_pk' => '59a67f08-6dd8-11ea-bc55-0242ac130003'];
+        $data  = ['pk' => '59a67f08-6dd8-11ea-bc55-0242ac130003'];
         $this->call('DELETE','delete_conception',$inputs);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('conceptions',$data);

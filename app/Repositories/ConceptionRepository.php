@@ -62,7 +62,7 @@ class ConceptionRepository
     {
         try {
             app('db')->table('accessories_conceptions')->insert([
-                'accessory_pk' => $params['customer_pk'],
+                'accessory_pk' => $params['accessory_pk'],
                 'conception_pk' => $params['conception_pk']
             ]);
         } catch (Exception $e) {

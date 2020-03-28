@@ -47,40 +47,43 @@ class OrderValidator
     public function delete($params)
     {
         try {
-            $this->validate($params,[
+            $this->validate($params, [
                 'order_pk' => 'required|uuid|exits:orders,pk',
                 'user_pk' => 'required|uuid|exits:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
             return (string)array_shift($error_messages)[0];
-        } return False;
+        }
+        return False;
     }
 
     public function turn_off($params)
     {
         try {
-            $this->validate($params,[
+            $this->validate($params, [
                 'required|uuid|exits:orders,pk,is_opened,' . True,
                 'user_pk' => 'required|uuid|exits:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
             return (string)array_shift($error_messages)[0];
-        } return False;
+        }
+        return False;
     }
 
     public function turn_on($params)
     {
         try {
-            $this->validate($params,[
+            $this->validate($params, [
                 'required|uuid|exits:orders,pk,is_opened,' . False,
                 'user_pk' => 'required|uuid|exits:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
             return (string)array_shift($error_messages)[0];
-        } return False;
+        }
+        return False;
     }
 
 }
