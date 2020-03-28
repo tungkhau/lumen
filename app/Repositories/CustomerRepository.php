@@ -35,20 +35,20 @@ class CustomerRepository
         return False;
     }
 
-    public function delete($key)
+    public function delete($params)
     {
         try {
-            app('db')->table('customers')->where('pk', $key)->delete();
+            app('db')->table('customers')->where('pk',  $params['customer_pk'])->delete();
         } catch (Exception $e) {
             return $e;
         }
         return False;
     }
 
-    public function deactivate($key)
+    public function deactivate($params)
     {
         try {
-            app('db')->table('customers')->where('pk', $key)->update([
+            app('db')->table('customers')->where('pk', $params['customer_pk'])->update([
                 'is_active' => False
             ]);
         } catch (Exception $e) {
@@ -57,10 +57,10 @@ class CustomerRepository
         return False;
     }
 
-    public function reactivate($key)
+    public function reactivate($params)
     {
         try {
-            app('db')->table('customers')->where('pk', $key)->update([
+            app('db')->table('customers')->where('pk', $params['customer_pk'])->update([
                 'is_active' => True
             ]);
         } catch (Exception $e) {

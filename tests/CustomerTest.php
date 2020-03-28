@@ -29,9 +29,37 @@ class CustomerTest extends TestCase
         $data = ['pk' => '59a6758a-6dd8-11ea-bc55-0242ac130003',
             'address' => 'HCM',
             'phone' => '0369764668'];
-        $this->call('PATCH','edit_customer', $inputs);
+        $this->call('PATCH', 'edit_customer', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('customers', $data);
+    }
+
+    public function testDelete()
+    {
+        $inputs = ['customer_pk' => '59a6765c-6dd8-11ea-bc55-0242ac130003'];
+        $data = ['pk' => '59a6765c-6dd8-11ea-bc55-0242ac130003'];
+        $this->call('DELETE', 'delete_customer', $inputs);
+        $this->seeStatusCode(200);
+        $this->notSeeInDatabase('customers', $data);
+    }
+
+    public function testDeactivate()
+    {
+        $inputs = ['customer_pk' => '59a6758a-6dd8-11ea-bc55-0242ac130003'];
+        $data = ['pk' => '59a6758a-6dd8-11ea-bc55-0242ac130003',
+            'is_active' => False];
+        $this->call('PATCH', 'deactivate_customer', $inputs);
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('customers', $data);
+    }
+    public function testReactive()
+    {
+        $inputs  = ['customer_pk' => '59a6765c-6dd8-11ea-bc55-0242ac130003'];
+        $data = ['pk' => '59a6765c-6dd8-11ea-bc55-0242ac130003',
+            'is_active' => True ];
+        $this->call('PATCH','reactivate_customer',$inputs);
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('customers',$data);
     }
 }
 
