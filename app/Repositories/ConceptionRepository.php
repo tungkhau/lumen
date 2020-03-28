@@ -12,7 +12,7 @@ class ConceptionRepository
         try {
             app('db')->table('conceptions')->insert([
                 'customer_pk' => $params['customer_pk'],
-                'id' => $params['id'],
+                'id' => $params['conception_id'],
                 'name' => $params['conception_name'],
                 'year' => $params['year'],
                 'comment' => $params['comment'],

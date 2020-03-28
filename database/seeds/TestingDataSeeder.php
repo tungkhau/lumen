@@ -138,5 +138,17 @@ class TestingDataSeeder extends Seeder
             'name' => 'test',
             'block_pk' => '59a68750-6dd8-11ea-bc55-0242ac130003'
         ]);
+
+        app('db')->table('accessories')->insert([
+            'pk' => '2884ffbe-70a1-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'ABCACVASDEQDFQEJ',
+            'item' => '12345',
+            'name' => 'TESTA',
+            'type_pk' => '59a679fe-6dd8-11ea-bc55-0242ac130003',
+            'unit_pk' => '59a67ad0-6dd8-11ea-bc55-0242ac130003',
+            'customer_pk' => '59a6758a-6dd8-11ea-bc55-0242ac130003',
+            'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
+        ]);
     }
 }

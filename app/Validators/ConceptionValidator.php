@@ -14,7 +14,7 @@ class ConceptionValidator
         try {
             $this->validate($params, [
                 'customer_pk' => 'required|uuid|exists:customers,pk,is_active,' . True,
-                'id' => 'required|string|regex:/^[0-9]+$/|max:12',
+                'conception_id' => 'required|string|regex:/^[0-9]+$/|max:12',
                 'year' => 'required|digits:4|integer|between:2015,' . (date('Y') + 1),
                 'conception_name' => 'required|string|max:20',
                 'comment' => 'string|nullable|max:20'
