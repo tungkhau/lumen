@@ -60,7 +60,7 @@ class ConceptionTest extends TestCase
         $this->seeStatusCode(200);
         $this->seeInDatabase('conceptions',$data);
     }
-    public function testReactivateComception()
+    public function testReactivateConception()
     {
         $inputs = ['conception_pk' => '59a67f08-6dd8-11ea-bc55-0242ac130003'];
         $data = ['pk' => '59a67f08-6dd8-11ea-bc55-0242ac130003',
