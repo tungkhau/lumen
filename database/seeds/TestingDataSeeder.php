@@ -350,6 +350,15 @@ class TestingDataSeeder extends Seeder
             'role' => 'Merchandiser',
             'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
         ]);
+        app('db')->table('users')->insert([
+            'pk' => 'cec3ab2a-7194-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => '100002',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
+            'name' => 'user manager',
+            'role' => 'Manager',
+            'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'
+        ]);
 
     }
 }
