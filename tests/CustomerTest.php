@@ -8,17 +8,17 @@ class CustomerTest extends TestCase
 
     public function testCreate()
     {
-        $inputs = ['supplier_name' => 'Jason',
-            'supplier_id' => 'JAS',
+        $inputs = ['customer_name' => 'Jason',
+            'customer_id' => 'JAS',
             'address' => 'HCM',
             'phone' => '0946008197'];
         $data = ['name' => 'Jason',
             'id' => 'JAS',
             'address' => 'HCM',
             'phone' => '0946008197'];
-        $this->call('POST', 'create_supplier', $inputs);
+        $this->call('POST', 'create_customer', $inputs);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('suppliers', $data);
+        $this->seeInDatabase('customers', $data);
     }
 
     public function testEdit()

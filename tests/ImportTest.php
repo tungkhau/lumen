@@ -6,7 +6,48 @@ class ImportTest extends TestCase
 {
     use DatabaseTransactions;
 
-    //TODO test create import
+    //TODO fix bug test case
+    public function testCreate()
+    {
+        $inputs = [
+            'order_pk' => 'a7d6665c-71a7-11ea-bc55-0242ac130003',
+            'imported_items' => [
+                [
+                    'ordered_item_pk' => '7043b34c-71a8-11ea-bc55-0242ac130003',
+                    'imported_quantity' => 200,
+                    'comment' => '1-4'
+                ],
+                [
+                    'ordered_item_pk' => '24b29244-71a9-11ea-bc55-0242ac130003',
+                    'imported_quantity' => 200,
+                    'comment' => '2-4'
+                ]
+            ],
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
+            ];
+
+        $import = [
+            'id' => '666666#1',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
+            'order_pk' => 'a7d6665c-71a7-11ea-bc55-0242ac130003'
+        ];
+        $this->call('POST', 'create_import', $inputs);
+        $import_pk = app('db')->table('imports')->where('id', '666666#1')->value('pk');
+        $imported_items = array();
+        foreach ($inputs['imported_items'] as $input) {
+            $imported_items[] = [
+                'imported_quantity' => $input['imported_quantity'],
+                'comment' => $input['comment'],
+                'import_pk' => $import_pk,
+                'ordered_item_pk' => $input['ordered_item_pk']
+            ];
+        }
+        foreach ($imported_items as $imported_item) {
+            $this->seeInDatabase('imported_items', $imported_item);
+        }
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('imports', $import);
+    }
 
     public function testEdit()
     {
@@ -63,7 +104,26 @@ class ImportTest extends TestCase
         $this->seeStatusCode(200);
         $this->seeInDatabase('imports', $data);
     }
+    public function testReceive ()
+    {
+        $inputs = ['import_pk' => '72773c8e-70df-11ea-bc55-0242ac130003',
+            'imported_groups' => [
+                [
+                    'imported_item_pk' => '72773d4c-70df-11ea-bc55-0242ac130003',
+                    'grouped_quantity' => 200
+                ],
+                [
+                    'imported_item_pk' => '72773ed2-70df-11ea-bc55-0242ac130003',
+                    'grouped_quantity' => 500
+                ]
+            ],
+            'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ];
+        $this->call('POST','receive_import',$inputs);
+        $receiving_session = ['kind' => 'importing'];
+    }
 
-    //TODO Receive imported grouped items
+
     //TODO Edit imported receiving
 }

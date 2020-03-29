@@ -208,6 +208,28 @@ class TestingDataSeeder extends Seeder
             'order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
             'accessory_pk' => '72773130-70df-11ea-bc55-0242ac130003'
         ]);
+
+        app('db')->table('orders')->insert([
+            'pk' => 'a7d6665c-71a7-11ea-bc55-0242ac130003',
+            'id' => '666666',
+            'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('ordered_items')->insert([
+            'pk' => '7043b34c-71a8-11ea-bc55-0242ac130003',
+            'ordered_quantity' => 4444,
+            'comment' => 'od item 1 - 4',
+            'order_pk' => 'a7d6665c-71a7-11ea-bc55-0242ac130003',
+            'accessory_pk' => '72773130-70df-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('ordered_items')->insert([
+            'pk' => '24b29244-71a9-11ea-bc55-0242ac130003',
+            'ordered_quantity' => 2444,
+            'comment' => 'od item 2 - 4',
+            'order_pk' => 'a7d6665c-71a7-11ea-bc55-0242ac130003',
+            'accessory_pk' => '72773234-70df-11ea-bc55-0242ac130003'
+        ]);
+
         app('db')->table('ordered_items')->insert([
             'pk' => '727736da-70df-11ea-bc55-0242ac130003',
             'ordered_quantity' => 2221,
