@@ -337,5 +337,19 @@ class TestingDataSeeder extends Seeder
             'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',
             'receiving_session_pk' => '727745c6-70df-11ea-bc55-0242ac130003'
         ]);
+        app('db')->table('workplaces')->insert([
+            'pk' => 'c00516d6-7195-11ea-bc55-0242ac130003',
+            'name' => 'Factory 1',
+        ]);
+        app('db')->table('users')->insert([
+            'pk' => 'cec3a882-7194-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => '100001',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
+            'name' => 'User merchandiser',
+            'role' => 'Merchandiser',
+            'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
+        ]);
+
     }
 }
