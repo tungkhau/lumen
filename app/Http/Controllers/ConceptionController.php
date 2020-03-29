@@ -50,6 +50,7 @@ class ConceptionController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
+        $request['conception_id'] = app('db')->table('conceptions')->where('pk', $request['conception_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->delete($request);
@@ -66,6 +67,7 @@ class ConceptionController extends Controller
         /* Check preconditions, return conflict errors(409) */
 
         /* Map variables */
+        $request['conception_id'] = app('db')->table('conceptions')->where('pk', $request['conception_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->deactivate($request);
@@ -82,6 +84,7 @@ class ConceptionController extends Controller
         /* Check preconditions, return conflict errors(409) */
 
         /* Map variables */
+        $request['conception_id'] = app('db')->table('conceptions')->where('pk', $request['conception_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->reactivate($request);
@@ -100,6 +103,8 @@ class ConceptionController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
+        $request['conception_id'] = app('db')->table('conceptions')->where('pk', $request['conception_pk'])->value('id');
+        $request['accessory_id'] = app('db')->table('accessories')->where('pk', $request['accessory_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->link_accessory($request);
@@ -118,6 +123,8 @@ class ConceptionController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
+        $request['conception_id'] = app('db')->table('conceptions')->where('pk', $request['conception_pk'])->value('id');
+        $request['accessory_id'] = app('db')->table('accessories')->where('pk', $request['accessory_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->unlink_accessory($request);

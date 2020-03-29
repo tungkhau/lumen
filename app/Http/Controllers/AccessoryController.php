@@ -50,6 +50,7 @@ class AccessoryController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
+        $request['accessory_id'] = app('db')->table('accessories')->where('pk', $request['accessory_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->delete($request);
@@ -66,6 +67,7 @@ class AccessoryController extends Controller
         /* Check preconditions, return conflict errors(409) */
 
         /* Map variables */
+        $request['accessory_id'] = app('db')->table('accessories')->where('pk', $request['accessory_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->deactivate($request);
@@ -82,6 +84,7 @@ class AccessoryController extends Controller
         /* Check preconditions, return conflict errors(409) */
 
         /* Map variables */
+        $request['accessory_id'] = app('db')->table('accessories')->where('pk', $request['accessory_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->reactivate($request);
@@ -100,6 +103,7 @@ class AccessoryController extends Controller
         /* Map variables */
         $request['photo'] = (string)Str::uuid().'.'.$request['image']->getClientOriginalExtension();
         $request['old_photo'] = app('db')->table('accessories')->where('pk', $request['accessory_pk'])->value('photo');
+        $request['accessory_id'] = app('db')->table('accessories')->where('pk', $request['accessory_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->upload_photo($request);
@@ -119,6 +123,7 @@ class AccessoryController extends Controller
 
         /* Map variables */
         $request['old_photo'] = app('db')->table('accessories')->where('pk', $request['accessory_pk'])->value('photo');
+        $request['accessory_id'] = app('db')->table('accessories')->where('pk', $request['accessory_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->delete_photo($request);
