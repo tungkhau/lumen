@@ -14,9 +14,10 @@ class CustomerValidator
         try {
             $this->validate($params, [
                 'customer_name' => 'required|string|max:35',
-                'customer_id' => 'required|size:3| alpha|unique:customers, id',
+                'customer_id' => 'required|size:3| alpha|unique:customers,id',
                 'address' => 'string|nullable|max:200',
                 'phone' => 'string|nullable|max:20',
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -31,7 +32,8 @@ class CustomerValidator
             $this->validate($params, [
                 'customer_pk' => 'required|uuid|exists:customers,pk',
                 'address' => 'string|nullable|max:200',
-                'phone' => 'string|nullable|max:20'
+                'phone' => 'string|nullable|max:20',
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -44,7 +46,8 @@ class CustomerValidator
     {
         try {
             $this->validate($params, [
-                'customer_pk' => 'required|uuid|exists:customers,pk'
+                'customer_pk' => 'required|uuid|exists:customers,pk',
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -57,7 +60,8 @@ class CustomerValidator
     {
         try {
             $this->validate($params, [
-                'customer_pk' => 'required|uuid|exists:customers,pk,is_active,' . True
+                'customer_pk' => 'required|uuid|exists:customers,pk,is_active,' . True,
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -70,7 +74,8 @@ class CustomerValidator
     {
         try {
             $this->validate($params, [
-                'customer_pk' => 'required|uuid|exists:customers,pk,is_active,' . False
+                'customer_pk' => 'required|uuid|exists:customers,pk,is_active,' . False,
+                'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

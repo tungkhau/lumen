@@ -34,7 +34,7 @@ class CustomerController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->create($request);
-        if ($unexpected) return $this->unexpected_response();
+        if ($unexpected) return response($unexpected->getMessage());
         return response()->json(['success' => 'Tạo khách hàng thành công'], 200);
     }
 
@@ -46,6 +46,7 @@ class CustomerController extends Controller
         if ($validation) return $this->invalid_response($validation);
 
         /* Check preconditions, return conflict errors(409) */
+        $request['customer_id'] = app('db')->table('customers')->where('pk', $request['customer_pk'])->value('id');
 
         /* Map variables */
 
@@ -67,6 +68,7 @@ class CustomerController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
+        $request['customer_id'] = app('db')->table('customers')->where('pk', $request['customer_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->delete($request);
@@ -84,6 +86,7 @@ class CustomerController extends Controller
         /* Check preconditions, return conflict errors(409) */
 
         /* Map variables */
+        $request['customer_id'] = app('db')->table('customers')->where('pk', $request['customer_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->deactivate($request);
@@ -98,6 +101,7 @@ class CustomerController extends Controller
         if ($validation) return $this->invalid_response($validation);
 
         /* Check preconditions, return conflict errors(409) */
+        $request['customer_id'] = app('db')->table('customers')->where('pk', $request['customer_pk'])->value('id');
 
         /* Map variables */
 

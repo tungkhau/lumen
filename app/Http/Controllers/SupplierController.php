@@ -44,6 +44,7 @@ class SupplierController extends Controller
         if ($validation) return $this->invalid_response($validation);
 
         /* Check preconditions, return conflict errors(409) */
+        $request['supplier_id'] = app('db')->table('suppliers')->where('pk', $request['supplier_pk'])->value('id');
 
         /* Map variables */
 
@@ -64,6 +65,7 @@ class SupplierController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
+        $request['supplier_id'] = app('db')->table('suppliers')->where('pk', $request['supplier_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->delete($request);
@@ -81,6 +83,7 @@ class SupplierController extends Controller
 
 
         /* Map variables */
+        $request['supplier_id'] = app('db')->table('suppliers')->where('pk', $request['supplier_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->deactivate($request);
@@ -97,6 +100,7 @@ class SupplierController extends Controller
         /* Check preconditions, return conflict errors(409) */
 
         /* Map variables */
+        $request['supplier_id'] = app('db')->table('suppliers')->where('pk', $request['supplier_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->reactivate($request);
