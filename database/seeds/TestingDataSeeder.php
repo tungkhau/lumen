@@ -359,6 +359,42 @@ class TestingDataSeeder extends Seeder
             'role' => 'Manager',
             'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'
         ]);
+        app('db')->table('users')->insert([
+            'pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => '100003',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
+            'name' => 'user mediator',
+            'role' => 'Mediator',
+            'workplace_pk' => 'c00516d6-7195-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('users')->insert([
+            'pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => '100004',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
+            'name' => 'user staff',
+            'role' => 'Staff',
+            'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('users')->insert([
+            'pk' => 'cec3adbe-7194-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => '100005',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
+            'name' => 'user inspector',
+            'role' => 'Inspector',
+            'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('users')->insert([
+            'pk' => 'cec3afc6-7194-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => '100006',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
+            'name' => 'user admin',
+            'role' => 'Admin',
+            'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
+        ]);
 
     }
 }
