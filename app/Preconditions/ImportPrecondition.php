@@ -4,18 +4,6 @@ namespace App\Preconditions;
 
 class ImportPrecondition
 {
-    public function create($params)
-    {
-        $unique = false;
-        $ordered_item_pks = array();
-        foreach ($params['ordered_items'] as $ordered_item) {
-            $ordered_item_pks[] = $ordered_item['ordered_item_pk'];
-        }
-        $ordered_item_order_pks = app('db')->table('ordered_items')->whereIn('pk', $ordered_item_pks)->distinct('order_pk')->pluck('order_pk')->toArray();
-        if (count($ordered_item_order_pks) == 1) if ($ordered_item_order_pks[0] == $params['order_pk']) return $unique = True;
-        return !$unique;
-    }
-
     public function edit($params)
     {
         $imported_item_pks = app('db')->table('imported_items')->where('import_pk', $params['import_pk'])->pluck('pk')->toArray();

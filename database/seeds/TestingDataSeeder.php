@@ -211,7 +211,7 @@ class TestingDataSeeder extends Seeder
 
         app('db')->table('orders')->insert([
             'pk' => 'a7d6665c-71a7-11ea-bc55-0242ac130003',
-            'id' => '666666',
+            'id' => '6666 66',
             'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ]);

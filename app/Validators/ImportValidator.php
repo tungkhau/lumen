@@ -15,7 +15,7 @@ class ImportValidator
             $this->validate($params, [
                 'order_pk' => 'required|uuid|exists:orders,pk,is_opened,' . True,
                 'user_pk' => 'required|uuid|exists:users,pk',
-                'imported_items.*.ordered_item_pk' => 'required|uuid|exists:ordered_items,pk',
+                'imported_items.*.ordered_item_pk' => 'required|uuid|exists:ordered_items,pk,order_pk,' . $params['order_pk'],
                 'imported_items.*.imported_quantity' => 'required|integer|between:1,2000000000',
                 'imported_items.*.comment' => 'nullable|string|max:20'
             ]);
