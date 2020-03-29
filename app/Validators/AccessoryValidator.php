@@ -75,8 +75,8 @@ class AccessoryValidator
         try {
             $this->validate($params, [
                 'accessory_pk' => 'required|uuid|exists:accessories,pk',
-                'image' => 'required'
-                //TODO implement validating file extension
+//                'image' => 'required|image|max:4000' //TODO enable php_fileinfo
+                'image' => 'required|max:4000'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
