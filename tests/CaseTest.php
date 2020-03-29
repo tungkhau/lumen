@@ -8,7 +8,8 @@ class CaseTest extends TestCase
 
     public function testCreate()
     {
-        $data = ['id' => 'QT-290320-AA'];
+        $id = 'QT-'.(string)date('dmy').'-AA';
+        $data = ['id' => $id];
         $this->call('POST', 'create_case');
         $this->seeStatusCode(200);
         $this->SeeInDatabase('cases', $data);
@@ -16,8 +17,8 @@ class CaseTest extends TestCase
 
     public function testDisable()
     {
-        $inputs = ['case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003'];
-        $data = ['pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',
+        $inputs = ['case_pk' => 'd993f450-7190-11ea-bc55-0242ac130003'];
+        $data = ['pk' => 'd993f450-7190-11ea-bc55-0242ac130003',
             'is_active' => False];
         $this->call('PATCH', 'disable_case', $inputs);
 //        $this->seeStatusCode(200);

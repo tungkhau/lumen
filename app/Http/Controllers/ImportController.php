@@ -100,11 +100,17 @@ class ImportController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
-        $request['id'] = $this->id($request['order_pk']);
-        $request['import_pk'] = (string)Str::uuid();
-        foreach ($request['imported_items'] as $key => $value) {
-            $request['imported_items'][$key]['import_pk'] = $request['import_pk'];
+        $temp = array();
+        foreach ($request['imported_groups'] as $imported_group) {
+            $temp[] = [
+                'received_item_pk' => $imported_group['imported_item_pk'],
+                'grouped_quantity' => $imported_group['grouped_quantity'],
+                'kind' => 'imported',
+                'receiving_session_pk' => $request['receiving_session_pk'],
+                'case_pk' => $request['case_pk']
+            ];
         }
+        $request['imported_groups'] = $temp;
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->create($request);
