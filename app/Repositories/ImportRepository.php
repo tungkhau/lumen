@@ -87,15 +87,7 @@ class ImportRepository
                     'pk' => $params['receiving_session_pk'],
                     'kind' => 'importing'
                 ]);
-                foreach ($params['imported_groups'] as $imported_group) {
-                    app('db')->table('received_groups')->insert([
-                        'received_item_pk' => $imported_group['imported_item_pk'],
-                        'grouped_quantity' => $imported_group['grouped_quantity'],
-                        'kind' => 'imported',
-                        'receiving_session_pk' => $params['receiving_session_pk'],
-                        'case_pk' => $params['case_pk']
-                    ]); //TODO optimize
-                }
+                app('db')->table('received_groups')->insert($params['imported_groups']);
                 app('db')->table('cases')->where('pk', $params['case_pk'])->update(['shelf_pk' => Null]);
             });
 
@@ -116,7 +108,7 @@ class ImportRepository
                 }
                 app('db')->table('receiving_sessions')->where('pk', $params['importing_session_pk'])->update([
                     'created_date' => date('Y-m-d H:i:s')
-                ]); //TODO optimize
+                ]);
             });
         } catch (Exception $e) {
             return $e;
