@@ -209,6 +209,17 @@ class ImportController extends Controller
 
         /* Map variables */
         $request['receiving_session_pk'] = (string)Str::uuid();
+        $temp = array();
+        foreach ($request['imported_groups'] as $imported_group) {
+            $temp[] = [
+                'received_item_pk' => $imported_group['imported_item_pk'],
+                'grouped_quantity' => $imported_group['grouped_quantity'],
+                'kind' => 'imported',
+                'receiving_session_pk' => $request['receiving_session_pk'],
+                'case_pk' => $request['case_pk']
+            ];
+        }
+        $request['imported_groups'] = $temp;
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->receive($request);
