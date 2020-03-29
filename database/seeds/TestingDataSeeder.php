@@ -395,6 +395,5 @@ class TestingDataSeeder extends Seeder
             'role' => 'Admin',
             'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
         ]);
-
     }
 }
