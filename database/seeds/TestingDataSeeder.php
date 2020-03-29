@@ -311,5 +311,40 @@ class TestingDataSeeder extends Seeder
             'import_pk' => '72774102-70df-11ea-bc55-0242ac130003',
             'ordered_item_pk' => '72773bda-70df-11ea-bc55-0242ac130003'
         ]);
+        app('db')->table('receiving_sessions')->insert([
+            'pk' => '727745c6-70df-11ea-bc55-0242ac130003',
+            'kind' => 'importing',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '727746b6-70df-11ea-bc55-0242ac130003',
+            'kind' => 'imported',
+            'grouped_quantity' => 100,
+            'received_item_pk' => '72773d4c-70df-11ea-bc55-0242ac130003',
+            'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '727745c6-70df-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '727747ce-70df-11ea-bc55-0242ac130003',
+            'kind' => 'imported',
+            'grouped_quantity' => 200,
+            'received_item_pk' => '72773ed2-70df-11ea-bc55-0242ac130003',
+            'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '727745c6-70df-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('workplaces')->insert([
+            'pk' => 'c00516d6-7195-11ea-bc55-0242ac130003',
+            'name' => 'Factory 1',
+        ]);
+        app('db')->table('users')->insert([
+            'pk' => 'cec3a882-7194-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => '100001',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
+            'name' => 'User merchandiser',
+            'role' => 'Merchandiser',
+            'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
+        ]);
+
     }
 }
