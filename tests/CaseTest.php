@@ -8,8 +8,7 @@ class CaseTest extends TestCase
 
     public function testCreate()
     {
-        $id = 'QT-'.(string)date('dmy').'-AA';
-        $data = ['id' => $id];
+        $data = ['id' => 'QT-290320-AA'];
         $this->call('POST', 'create_case');
         $this->seeStatusCode(200);
         $this->SeeInDatabase('cases', $data);

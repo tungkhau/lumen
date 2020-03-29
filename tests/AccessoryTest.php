@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\UploadedFile;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
 class AccessoryTest extends TestCase
@@ -35,15 +34,6 @@ class AccessoryTest extends TestCase
         $this->seeStatusCode(200);
         $this->seeInDatabase('accessories', $data);
     }
-
-//    public function testUploadPhoto()
-//    {
-//        $this->call('POST', 'upload_accessory_photo', ['accessory_pk' => '59a67c4c-6dd8-11ea-bc55-0242ac130003'], [], ['image' => UploadedFile::fake()->image('image.png')], []);
-//        $file_name = app('db')->table('accessories')->where('pk', '59a67c4c-6dd8-11ea-bc55-0242ac130003')->value('photo');
-//        $this->assertFileExists($file_name);
-//        $this->seeStatusCode(200);
-//    }
-
 
 }
 //TODO TẠO order 3, ordered item 13 đã có uuid

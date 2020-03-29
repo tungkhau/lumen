@@ -13,13 +13,7 @@ class DemandValidator
     {
         try {
             $this->validate($params, [
-                'workplace_pk' => 'required|uuid|exists:workplaces,pk',
-                'conception_pk' => 'required|uuid|exists:conceptions,pk,is_active,' . True,
-                'product_quantity' => 'nullable|integer|between:1,32000',
-                'demanded_items.*.accessory_pk' => 'required|uuid|exists:accessories,pk,is_active,' . True,
-                'demanded_items.*.demanded_quantity' => 'required|integer|between:1,2000000000',
-                'demanded_items.*.comment' => 'nullable|string|max:20',
-                'user_pk' => 'required|uuid|exists:users,pk'
+
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -32,11 +26,7 @@ class DemandValidator
     {
         try {
             $this->validate($params, [
-                'demand_pk' => 'required|uuid|exists:demands,pk',
-                'demanded_item_pk' => 'required|uuid|exists:demanded_items,pk,demand_pk,' . $params['demand_pk'],
-                'demanded_quantity' => 'required|integer|between:1,2000000000',
-                'comment' => 'nullable|string|max:20',
-                'user_pk' => 'required|uuid|exists:users,pk'
+
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -49,8 +39,7 @@ class DemandValidator
     {
         try {
             $this->validate($params, [
-                'demand_pk' => 'required|uuid|exists:demands,pk',
-                'user_pk' => 'required|uuid|exists:users,pk'
+
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -63,8 +52,7 @@ class DemandValidator
     {
         try {
             $this->validate($params, [
-                'demand_pk' => 'required|uuid|exists:demands,pk',
-                'user_pk' => 'required|uuid|exists:users,pk'
+
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -77,8 +65,7 @@ class DemandValidator
     {
         try {
             $this->validate($params, [
-                'demand_pk' => 'required|uuid|exists:demands,pk',
-                'user_pk' => 'required|uuid|exists:users,pk'
+
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
