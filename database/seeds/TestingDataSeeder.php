@@ -122,6 +122,11 @@ class TestingDataSeeder extends Seeder
             'pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',
             'is_active' => True
         ]);
+        app('db')->table('cases')->insert([
+            'id' => '123456789013',
+            'pk' => 'd993f450-7190-11ea-bc55-0242ac130003',
+            'is_active' => True
+        ]);
 
         app('db')->table('blocks')->insert([
             'pk' => '59a68750-6dd8-11ea-bc55-0242ac130003',
@@ -190,7 +195,7 @@ class TestingDataSeeder extends Seeder
             'customer_pk' => '59a6758a-6dd8-11ea-bc55-0242ac130003',
             'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
         ]);
-        app( 'db')->table('orders')->insert([
+        app('db')->table('orders')->insert([
             'pk' => '727734be-70df-11ea-bc55-0242ac130003',
             'id' => 'ORDER 1 open',
             'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
@@ -218,7 +223,7 @@ class TestingDataSeeder extends Seeder
             'accessory_pk' => '727733e2-70df-11ea-bc55-0242ac130003'
         ]);
 
-        app( 'db')->table('orders')->insert([
+        app('db')->table('orders')->insert([
             'pk' => '72773900-70df-11ea-bc55-0242ac130003',
             'id' => 'ORDER 2 close',
             'is_opened' => false,
@@ -247,7 +252,7 @@ class TestingDataSeeder extends Seeder
             'accessory_pk' => '727733e2-70df-11ea-bc55-0242ac130003'
         ]);
 
-        app( 'db')->table('orders')->insert([
+        app('db')->table('orders')->insert([
             'pk' => 'b7d9aa28-70f8-11ea-bc55-0242ac130003',
             'id' => 'ORDER 3 open',
             'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
@@ -261,9 +266,9 @@ class TestingDataSeeder extends Seeder
             'accessory_pk' => '72773130-70df-11ea-bc55-0242ac130003'
         ]);
         app('db')->table('imports')->insert([
-            'pk'=> '72773c8e-70df-11ea-bc55-0242ac130003',
-            'id'=> 'import_1',
-            'order_pk'=> '727734be-70df-11ea-bc55-0242ac130003',
+            'pk' => '72773c8e-70df-11ea-bc55-0242ac130003',
+            'id' => 'import_1',
+            'order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ]);
 
@@ -287,10 +292,10 @@ class TestingDataSeeder extends Seeder
         ]);
 
         app('db')->table('imports')->insert([
-            'pk'=> '72774102-70df-11ea-bc55-0242ac130003',
-            'id'=> 'import_2',
-            'is_opened' => False ,
-            'order_pk'=> '72773900-70df-11ea-bc55-0242ac130003',
+            'pk' => '72774102-70df-11ea-bc55-0242ac130003',
+            'id' => 'import_2',
+            'is_opened' => False,
+            'order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ]);
         app('db')->table('imported_items')->insert([
@@ -353,6 +358,42 @@ class TestingDataSeeder extends Seeder
             'name' => 'user manager',
             'role' => 'Manager',
             'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('users')->insert([
+            'pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => '100003',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
+            'name' => 'user mediator',
+            'role' => 'Mediator',
+            'workplace_pk' => 'c00516d6-7195-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('users')->insert([
+            'pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => '100004',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
+            'name' => 'user staff',
+            'role' => 'Staff',
+            'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('users')->insert([
+            'pk' => 'cec3adbe-7194-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => '100005',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
+            'name' => 'user inspector',
+            'role' => 'Inspector',
+            'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('users')->insert([
+            'pk' => 'cec3afc6-7194-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => '100006',
+            'password' => app('hash')->make(env('DEFAULT_PASSWORD')),
+            'name' => 'user admin',
+            'role' => 'Admin',
+            'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
         ]);
 
     }
