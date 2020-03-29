@@ -62,7 +62,7 @@ class OrderValidator
     {
         try {
             $this->validate($params, [
-                'required|uuid|exists:orders,pk,is_opened,' . True,
+                'order_pk' => 'required|uuid|exists:orders,pk,is_opened,' . True,
                 'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {
@@ -76,7 +76,7 @@ class OrderValidator
     {
         try {
             $this->validate($params, [
-                'required|uuid|exists:orders,pk,is_opened,' . False,
+                'order_pk' => 'required|uuid|exists:orders,pk,is_opened,' . False,
                 'user_pk' => 'required|uuid|exists:users,pk'
             ]);
         } catch (ValidationException $e) {

@@ -50,8 +50,8 @@ class OrderTest extends TestCase
     }
     public function testEdit ()
     {
-        $inputs = ['order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
-            'ordered_item_pk' => '72773612-70df-11ea-bc55-0242ac130003',
+        $inputs = ['order_pk' => 'b7d9aa28-70f8-11ea-bc55-0242ac130003',
+            'ordered_item_pk' => 'f521c1d6-70f8-11ea-bc55-0242ac130003',
             'ordered_quantity' => 500,
             'comment' => 'bla',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
@@ -60,5 +60,44 @@ class OrderTest extends TestCase
         $this->call('POST','edit_order',$inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('ordered_items',$data);
+    }
+    public function testDelete ()
+    {
+        $temp = app('db')->table('ordered_items')->where('order_pk', 'b7d9aa28-70f8-11ea-bc55-0242ac130003')->pluck('pk')->toArray();
+        $ordered_item_pks = array();
+        foreach ($temp as $item) {
+            $ordered_item_pks[] = [
+                'pk' => $item
+            ];
+        }
+        $inputs = ['order_pk' => 'b7d9aa28-70f8-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+        $data   = ['pk' => 'b7d9aa28-70f8-11ea-bc55-0242ac130003'];
+        $this->call('DELETE','delete_order',$inputs);
+        $this->seeStatusCode(200);
+        $this->notSeeInDatabase('orders',$data);
+        foreach ($ordered_item_pks as $ordered_item_pk) {
+            $this->notSeeInDatabase('ordered_items', $ordered_item_pk);
+        }
+    }
+    public function testTurnOff ()
+    {
+        $inputs = ['order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+        $data = ['pk' => '727734be-70df-11ea-bc55-0242ac130003',
+            'is_opened' => False ];
+        $this->call('PATCH','turn_off_order',$inputs);
+        $this->seeStatusCode(200);
+        $this->SeeInDatabase('orders',$data);
+    }
+    public function testTurnOn ()
+    {
+        $inputs = ['order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+        $data = ['pk' => '72773900-70df-11ea-bc55-0242ac130003',
+            'is_opened' => True ];
+        $this->call('PATCH','turn_on_order',$inputs);
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('orders',$data);
     }
 }
