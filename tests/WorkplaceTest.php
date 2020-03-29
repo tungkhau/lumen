@@ -16,8 +16,8 @@ class WorkplaceTest extends TestCase
     }
     public function testDelete()
     {
-        $input  = ['workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'];
-        $data   = ['pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'];
+        $input  = ['workplace_pk' => '07fc0a0c-719c-11ea-bc55-0242ac130003'];
+        $data   = ['pk' => '07fc0a0c-719c-11ea-bc55-0242ac130003'];
         $this->call('DELETE','delete_workplace',$input);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('workplaces',$data);

@@ -341,6 +341,10 @@ class TestingDataSeeder extends Seeder
             'pk' => 'c00516d6-7195-11ea-bc55-0242ac130003',
             'name' => 'Factory 1',
         ]);
+        app('db')->table('workplaces')->insert([
+            'pk' => '07fc0a0c-719c-11ea-bc55-0242ac130003',
+            'name' => 'Factory 2',
+        ]);
         app('db')->table('users')->insert([
             'pk' => 'cec3a882-7194-11ea-bc55-0242ac130003',
             'is_active' => True,

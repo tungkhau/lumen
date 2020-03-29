@@ -10,8 +10,8 @@ class ImportTest extends TestCase
 
     public function testEdit()
     {
-        $inputs = ['import_pk' => '72773c8e-70df-11ea-bc55-0242ac130003',
-            'imported_item_pk' => '72773d4c-70df-11ea-bc55-0242ac130003',
+        $inputs = ['import_pk' => '72774102-70df-11ea-bc55-0242ac130003',
+            'imported_item_pk' => '727741ca-70df-11ea-bc55-0242ac130003',
             'imported_quantity' => 3000,
             'comment' => 'bla bla',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
