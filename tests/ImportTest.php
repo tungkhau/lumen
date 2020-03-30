@@ -121,7 +121,9 @@ class ImportTest extends TestCase
             'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ];
-        $this->call('POST', 'receive_import', $inputs);
-        $receiving_session = ['kind' => 'importing'];
+        $this->call('POST','receive_import',$inputs);
+        $receiving_session = ['kind' => 'importing',
+            'pk' => app('db')->table('')];
+        $import_pk = app('db')->table('imports')->where('id', '666666#1')->value('pk');
     }
 }
