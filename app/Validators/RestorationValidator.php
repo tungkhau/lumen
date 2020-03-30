@@ -43,7 +43,7 @@ class RestorationValidator
         try {
             $this->validate($params, [
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
-                'restoration_pk' => 'required|uuid|exists:restorations,pk,is_confirmed' . False
+                'restoration_pk' => 'required|uuid|exists:restorations,pk,is_confirmed,' . False
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -57,7 +57,7 @@ class RestorationValidator
         try {
             $this->validate($params, [
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
-                'restoration_pk' => 'required|uuid|exists:restorations,pk,is_confirmed' . True
+                'restoration_pk' => 'required|uuid|exists:restorations,pk,is_confirmed,' . True,
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

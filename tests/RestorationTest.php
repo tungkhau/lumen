@@ -74,6 +74,7 @@ class RestorationTest extends TestCase
         $data = ['pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003',
             'is_confirmed' => True];
         $this->call('PATCH', 'confirm_restoration', $inputs);
+        $this->seeJsonEquals(['success' => 'Xác nhận phiếu trả thành công']);
         $this->seeStatusCode(200);
         $this->seeInDatabase('restorations', $data);
     }
@@ -85,11 +86,20 @@ class RestorationTest extends TestCase
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ];
         $data = ['pk' => '0756c72e-71d6-11ea-bc55-0242ac130003',
-            'is_confirmed' => false];
+            'is_confirmed' => False];
+        $temp = app('db')->table('restored_items')->where('restoration_pk', '0756c72e-71d6-11ea-bc55-0242ac130003')->pluck('pk')->toArray();
+        $restored_item_pks = array();
+        foreach ($temp as $item) {
+            $restored_item_pks[] = [
+                'pk' => $item
+            ];
+        }
         $this->call('DELETE', 'cancel_restoration', $inputs);
+        $this->seeJsonEquals(['success' => 'Hủy phiếu trả thành công']);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('restorations', $data);
+        $this->notSeeInDatabase('restorations', $data);
+        foreach ($restored_item_pks as $restored_item_pk) {
+            $this->notSeeInDatabase('restored_items', $restored_item_pk);
+        }
     }
-
-    // TODO Receive restored grouped items
 }
