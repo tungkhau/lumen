@@ -92,7 +92,7 @@ class ImportValidator
                 'import_pk' => 'required|uuid|exists:imports,pk,is_opened,' . True,
                 'case_pk' => 'required|uuid|exists:cases,pk|unstored_case',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
-                'imported_groups.*.imported_item_pk' => 'required|uuid|exists:imported_items,pk',
+                'imported_groups.*.imported_item_pk' => 'required|uuid|exists:imported_items,pk,import_pk,' . $params['import_pk'],
                 'imported_groups.*.grouped_quantity' => 'required|integer|between:1,2000000000'
             ]);
         } catch (ValidationException $e) {
@@ -108,7 +108,7 @@ class ImportValidator
             $this->validate($params, [
                 'importing_session_pk' => 'required|uuid|exists:receiving_sessions,pk,kind,' . 'importing',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
-                'imported_groups.*.imported_group_pk' => 'required|uuid|exists:received_groups,pk,kind,' . 'imported',
+                'imported_groups.*.imported_group_pk' => 'required|uuid|exists:received_groups,pk,kind,imported|exists:received_groups,pk,receiving_session_pk,' . $params['importing_session_pk'],
                 'imported_groups.*.grouped_quantity' => 'required|integer|between:1,2000000000'
             ]);
         } catch (ValidationException $e) {

@@ -41,28 +41,8 @@ class ImportPrecondition
         return !$owner || $classified || $checked_or_counted;
     }
 
-    public function receive($params)
-    {
-        $unique = false;
-        $imported_item_pks = array();
-        foreach ($params['imported_groups'] as $imported_group) {
-            $imported_item_pks[] = $imported_group['imported_item_pk'];
-        }
-        $imported_item_import_pks = app('db')->table('imported_items')->whereIn('pk', $imported_item_pks)->distinct('import_pk')->pluck('import_pk')->toArray();
-        if (count($imported_item_import_pks) == 1) if ($imported_item_import_pks[0] == $params['import_pk']) return $unique = True;
-        return !$unique;
-    }
-
     public function edit_receiving($params)
     {
-        //If all imported groups belong to given importing session
-        $unique = False;
-        $imported_group_pks = array();
-        foreach ($params['imported_groups'] as $imported_group) {
-            $imported_group_pks[] = $imported_group['imported_group_pk'];
-        }
-        $imported_group_importing_session_pks = app('db')->table('received_groups')->whereIn('pk', $imported_group_pks)->distinct('receiving_session_pk')->pluck('receiving_session_pk')->toArray();
-        if (count($imported_group_importing_session_pks) == 1) if ($imported_group_importing_session_pks[0] == $params['importing_session_pk']) return $unique = True;
         //If current user is its owner
         $owner = app('db')->table('receiving_sessions')->where('pk', $params['importing_session_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
         //If all imported groups belong to an opened import
@@ -71,7 +51,7 @@ class ImportPrecondition
         $import_pks = app('db')->table('imported_items')->whereIn('pk', $imported_item_pks)->distinct('import_pk')->pluck('import_pk')->toArray(); //Expect only one import
         if (count($import_pks) == 1) $opened = app('db')->table('imports')->where('pk', $import_pks[0])->value('is_opened');
 
-        return !$owner || !$unique || !$opened;
+        return !$owner || !$opened;
     }
 
     public function delete_receiving($params)

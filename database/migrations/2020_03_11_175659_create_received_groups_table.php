@@ -30,8 +30,6 @@ class CreateReceivedGroupsTable extends Migration
             $table->foreign('counting_session_pk')->references('pk')->on('counting_sessions');
             $table->foreign('checking_session_pk')->references('pk')->on('checking_sessions');
             $table->foreign('storing_session_pk')->references('pk')->on('storing_sessions');
-
-            $table->unique(['received_item_pk', 'kind']);
         });
     }
 

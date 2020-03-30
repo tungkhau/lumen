@@ -210,11 +210,10 @@ class ImportController extends Controller
         if ($validation) return $this->invalid_response($validation);
 
         /* Check preconditions, return conflict errors(409) */
-        $precondition = $this->precondition->receive($request);
-        if ($precondition) return $this->conflict_response();
 
         /* Map variables */
         $request['receiving_session_pk'] = (string)Str::uuid();
+
         $temp = array();
         foreach ($request['imported_groups'] as $imported_group) {
             $temp[] = [
