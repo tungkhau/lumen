@@ -64,4 +64,30 @@ class RestorationTest extends TestCase
             $this->notSeeInDatabase('restored_items', $restored_item_pk);
         }
     }
+    public function testConfirm ()
+    {
+        $inputs = [
+            'restoration_pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ];
+        $data = ['pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003',
+            'is_confirmed' => True ];
+        $this->call('PATCH','confirm_restoration',$inputs);
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('restorations',$data);
+    }
+    public function testCancel ()
+    {
+        $inputs = [
+            'restoration_pk' => '0756c72e-71d6-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ];
+        $data = ['pk' => '0756c72e-71d6-11ea-bc55-0242ac130003',
+            'is_confirmed' => false ];
+        $this->call('DELETE','cancel_restoration',$inputs);
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('restorations',$data);
+    }
+
+    // TODO Receive restored grouped items
 }
