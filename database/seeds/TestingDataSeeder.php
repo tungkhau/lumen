@@ -421,5 +421,42 @@ class TestingDataSeeder extends Seeder
             'role' => 'Admin',
             'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
         ]);
+        app('db')->table('restorations')->insert([
+            'pk' => '0756c72e-71d6-11ea-bc55-0242ac130003',
+            'id' => '111111',
+            'comment' => 'bla',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
+        ]);
+        app('db')->table('restored_items')->insert([
+            'pk' => '0756cb02-71d6-11ea-bc55-0242ac130003',
+            'restored_quantity' => '200',
+            'restoration_pk' => '0756c72e-71d6-11ea-bc55-0242ac130003',
+            'accessory_pk' => '72773130-70df-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('restored_items')->insert([
+            'pk' => '0756cc10-71d6-11ea-bc55-0242ac130003',
+            'restored_quantity' => '500',
+            'restoration_pk' => '0756c72e-71d6-11ea-bc55-0242ac130003',
+            'accessory_pk' => '72773234-70df-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('restorations')->insert([
+            'pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003',
+            'id' => '22222',
+            'is_confirmed' => false,
+            'comment' => 'bla',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
+        ]);
+        app('db')->table('restored_items')->insert([
+            'pk' => '0756ce4a-71d6-11ea-bc55-0242ac130003',
+            'restored_quantity' => '400',
+            'restoration_pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003',
+            'accessory_pk' => '72773130-70df-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('restored_items')->insert([
+            'pk' => '0756cf1c-71d6-11ea-bc55-0242ac130003',
+            'restored_quantity' => '500',
+            'restoration_pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003',
+            'accessory_pk' => '72773234-70df-11ea-bc55-0242ac130003'
+        ]);
     }
 }
