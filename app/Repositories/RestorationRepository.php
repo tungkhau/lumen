@@ -51,8 +51,8 @@ class RestorationRepository
     {
         try {
             app('db')->transaction(function () use ($params) {
-                app('db')->table('restorations')->where('pk', $params['restoration_pk'])->delete();
                 app('db')->table('restored_items')->where('restoration_pk', $params['restoration_pk'])->delete();
+                app('db')->table('restorations')->where('pk', $params['restoration_pk'])->delete();
             });
         } catch (Exception $e) {
             return $e;

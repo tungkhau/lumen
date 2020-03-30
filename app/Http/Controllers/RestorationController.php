@@ -110,7 +110,7 @@ class RestorationController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->cancel($request);
-        if ($unexpected) return $this->unexpected_response();
+        if ($unexpected) return response($unexpected->getMessage());
         return response()->json(['success' => 'Hủy phiếu trả thành công'], 200);
     }
 

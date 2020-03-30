@@ -424,7 +424,7 @@ class TestingDataSeeder extends Seeder
         app('db')->table('restorations')->insert([
             'pk' => '0756c72e-71d6-11ea-bc55-0242ac130003',
             'id' => '111111',
-            'is_confirmed' => true,
+            'is_confirmed' => True,
             'comment' => 'bla',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
         ]);
