@@ -34,9 +34,15 @@ class RestorationController extends Controller
         /* Map variables */
         $request['id'] = $this->id();
         $request['restoration_pk'] = (string)Str::uuid();
-        foreach ($request['restored_items'] as $key => $value) {
-            $request['restored_items'][$key]['restoration_pk'] = $request['restoration_pk'];
+        $temp = array();
+        foreach ($request['restored_items'] as $restored_item) {
+            $temp[] = [
+                'restored_quantity' => $restored_item['restored_quantity'],
+                'accessory_pk' => $restored_item['accessory_pk'],
+                'restoration_pk' => $request['restoration_pk']
+            ];
         }
+        $request['restored_items'] = $temp;
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->register($request);
