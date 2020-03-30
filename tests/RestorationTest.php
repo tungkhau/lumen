@@ -9,15 +9,16 @@ class RestorationTest extends TestCase
     public function testRegister()
     {
         $inputs = [
-            'restored_items' =>
+            'restored_items' => [
                 [
                     'accessory_pk' => '72773130-70df-11ea-bc55-0242ac130003',
                     'restored_quantity' => 500
                 ],
                 [
-                'accessory_pk' => '72773234-70df-11ea-bc55-0242ac130003',
-                'restored_quantity' => 200
-                ],
+                    'accessory_pk' => '72773234-70df-11ea-bc55-0242ac130003',
+                    'restored_quantity' => 200
+                ]
+            ],
             'comment' => 'bla',
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'
         ];
@@ -27,6 +28,8 @@ class RestorationTest extends TestCase
             'pk' => $pk,
             'comment' => 'bla',
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
+
+        $this->seeJsonEquals(['success' => 'Đăng kí phiếu trả thành công']);
         $this->seeStatusCode(200);
         $this->seeInDatabase('restorations', $restoration);
         $restored_items = array();
@@ -39,7 +42,7 @@ class RestorationTest extends TestCase
         }
         foreach ($restored_items as $restored_item) {
             $this->seeInDatabase('restored_items', $restored_item);
-        };
+        }
     }
 
     public function testDelete()
@@ -54,6 +57,7 @@ class RestorationTest extends TestCase
         $inputs = ['restoration_pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003'];
         $data = ['pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003'];
         $this->call('DELETE', 'delete_restoration', $inputs);
+        $this->seeJsonEquals(['success' => 'Hủy phiếu trả thành công']);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('restorations', $data);
         foreach ($restored_item_pks as $restored_item_pk) {

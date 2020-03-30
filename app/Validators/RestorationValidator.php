@@ -29,7 +29,7 @@ class RestorationValidator
     {
         try {
             $this->validate($params, [
-                'restoration_pk' => 'required|uuid|exists:restorations,pk,is_confirmed' . False
+                'restoration_pk' => 'required|uuid|exists:restorations,pk,is_confirmed,' . False
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
