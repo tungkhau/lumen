@@ -17,8 +17,10 @@ class UserTest extends TestCase
             'role' => 'merchandiser',
             'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'];
         $this->call('POST', 'create_user', $inputs);
+        $password = app('db')->table('users')->where('id', '545454')->value('password');
         $this->seeStatusCode(200);
         $this->seeInDatabase('users', $data);
+        $this->assertTrue(app('hash')->check(env('DEFAULT_PASSWORD'), $password));
     }
 
     public function testDeactivate()
@@ -45,7 +47,9 @@ class UserTest extends TestCase
     {
         $inputs = ['user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',];
         $this->call('PATCH', 'reset_user_password', $inputs);
+        $password = app('db')->table('users')->where('pk', '511f4482-6dd8-11ea-bc55-0242ac130003')->value('password');
         $this->seeStatusCode(200);
+        $this->assertTrue(app('hash')->check(env('DEFAULT_PASSWORD'), $password));
     }
 
     public function testChangeWorkPlace()
@@ -57,5 +61,17 @@ class UserTest extends TestCase
         $this->call('PATCH', 'change_user_workplace', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('users', $data);
+    }
+
+    public function testChangePassword()
+    {
+        $inputs = ['user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
+            'current_password' => 'AST@PDG',
+            'new_password' => 'jason',
+            'new_password_confirmation' => 'jason'];
+        $this->call('POST', 'change_password', $inputs);
+        $password = app('db')->table('users')->where('pk', '511f4482-6dd8-11ea-bc55-0242ac130003')->value('password');
+        $this->seeStatusCode(200);
+        $this->assertTrue(app('hash')->check('jason', $password));
     }
 }

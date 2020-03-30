@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('name', 30);
             $table->boolean('is_active')->default(true);
             $table->enum('role', ['admin', 'merchandiser', 'manager', 'staff', 'inspector', 'mediator']);
+            $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('workplace_pk');
 
             $table->foreign('workplace_pk')->references('pk')->on('workplaces');

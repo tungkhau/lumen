@@ -6,7 +6,6 @@ class ImportTest extends TestCase
 {
     use DatabaseTransactions;
 
-    //TODO fix bug test case
     public function testCreate()
     {
         $inputs = [
@@ -24,15 +23,15 @@ class ImportTest extends TestCase
                 ]
             ],
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
-            ];
+        ];
 
         $import = [
-            'id' => '666666#1',
+            'id' => '6666 66#01',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
             'order_pk' => 'a7d6665c-71a7-11ea-bc55-0242ac130003'
         ];
         $this->call('POST', 'create_import', $inputs);
-        $import_pk = app('db')->table('imports')->where('id', '666666#1')->value('pk');
+        $import_pk = app('db')->table('imports')->where('id', '6666 66#01')->value('pk');
         $imported_items = array();
         foreach ($inputs['imported_items'] as $input) {
             $imported_items[] = [
@@ -42,10 +41,11 @@ class ImportTest extends TestCase
                 'ordered_item_pk' => $input['ordered_item_pk']
             ];
         }
+        $this->seeJsonEquals(['success' => 'Tạo phiếu nhập thành công']);
+        $this->seeStatusCode(200);
         foreach ($imported_items as $imported_item) {
             $this->seeInDatabase('imported_items', $imported_item);
         }
-        $this->seeStatusCode(200);
         $this->seeInDatabase('imports', $import);
     }
 
@@ -104,7 +104,8 @@ class ImportTest extends TestCase
         $this->seeStatusCode(200);
         $this->seeInDatabase('imports', $data);
     }
-    public function testReceive ()
+
+    public function testReceive()
     {
         $inputs = ['import_pk' => '72773c8e-70df-11ea-bc55-0242ac130003',
             'imported_groups' => [
@@ -125,7 +126,4 @@ class ImportTest extends TestCase
             'pk' => app('db')->table('')];
         $import_pk = app('db')->table('imports')->where('id', '666666#1')->value('pk');
     }
-
-
-    //TODO Edit imported receiving
 }

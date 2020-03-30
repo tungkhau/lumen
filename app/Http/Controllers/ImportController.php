@@ -96,21 +96,21 @@ class ImportController extends Controller
         if ($validation) return $this->invalid_response($validation);
 
         /* Check preconditions, return conflict errors(409) */
-        $precondition = $this->precondition->create($request);
-        if ($precondition) return $this->conflict_response();
 
         /* Map variables */
+        $request['id'] = $this->id($request['order_pk']);
+        $request['import_pk'] = (string)Str::uuid();
         $temp = array();
-        foreach ($request['imported_groups'] as $imported_group) {
+        foreach ($request['imported_items'] as $imported_item) {
             $temp[] = [
-                'received_item_pk' => $imported_group['imported_item_pk'],
-                'grouped_quantity' => $imported_group['grouped_quantity'],
-                'kind' => 'imported',
-                'receiving_session_pk' => $request['receiving_session_pk'],
-                'case_pk' => $request['case_pk']
+                'imported_quantity' => $imported_item['imported_quantity'],
+                'ordered_item_pk' => $imported_item['ordered_item_pk'],
+                'comment' => $imported_item['comment'],
+                'import_pk' => $request['import_pk']
             ];
         }
-        $request['imported_groups'] = $temp;
+        $request['imported_items'] = $temp;
+
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->create($request);
@@ -120,7 +120,7 @@ class ImportController extends Controller
 
     private function id($order_pk)
     {
-        $order_id = app('db')->table('orders')->where('order_pk', $order_pk)->value('id');
+        $order_id = app('db')->table('orders')->where('pk', $order_pk)->value('id');
         $latest_import = app('db')->table('imports')->where('order_pk', $order_pk)->orderBy('id', 'desc')->first();
         if ($latest_import) {
             $num = (int)substr($latest_import->id, -2, 2);
@@ -215,6 +215,17 @@ class ImportController extends Controller
 
         /* Map variables */
         $request['receiving_session_pk'] = (string)Str::uuid();
+        $temp = array();
+        foreach ($request['imported_groups'] as $imported_group) {
+            $temp[] = [
+                'received_item_pk' => $imported_group['imported_item_pk'],
+                'grouped_quantity' => $imported_group['grouped_quantity'],
+                'kind' => 'imported',
+                'receiving_session_pk' => $request['receiving_session_pk'],
+                'case_pk' => $request['case_pk']
+            ];
+        }
+        $request['imported_groups'] = $temp;
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->receive($request);

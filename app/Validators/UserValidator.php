@@ -29,7 +29,7 @@ class UserValidator
     {
         try {
             $this->validate($params, [
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -68,7 +68,7 @@ class UserValidator
     {
         try {
             $this->validate($params, [
-                'user_pk' => 'required|uuid|exists:users,pk',
+                'user_pk' => 'required|uuid|exists:users,pk,role,' . 'mediator',
                 'workplace_pk' => 'required|uuid|exists:workplaces,pk'
             ]);
         } catch (ValidationException $e) {
@@ -77,4 +77,21 @@ class UserValidator
         }
         return False;
     }
+
+    public function change_password($params)
+    {
+        try {
+            $this->validate($params, [
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
+                'current_password' => 'required',
+                'new_password' => 'required|string|max:32|confirmed'
+            ]);
+        } catch (ValidationException $e) {
+            $error_messages = $e->errors();
+            return (string)array_shift($error_messages)[0];
+        }
+        return False;
+    }
+
+
 }

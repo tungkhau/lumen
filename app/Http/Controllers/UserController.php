@@ -105,5 +105,23 @@ class UserController extends Controller
         return response()->json(['success' => 'Đổi bộ phận thành công'], 200);
     }
 
+    public function change_password(Request $request)
+    {
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->change_password($request);
+        if ($validation) return $this->invalid_response($validation);
+
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->change_password($request);
+        if ($precondition) return $this->conflict_response();
+
+        /* Map variables */
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->change_password($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Đổi mật khẩu thành công'], 200);
+    }
+
 
 }

@@ -10,12 +10,12 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
 
-    public function login(Request $request)
+    public function login_desktop(Request $request)
     {
         //Validate request, catch invalid errors(400)
         try {
             $valid_request = $this->validate($request, [
-                'user_id' => 'required',
+                'user_id' => 'required|exists:users,id,is_active,' . True,
                 'password' => 'required'
             ]);
         } catch (ValidationException $e) {
@@ -25,19 +25,24 @@ class AuthController extends Controller
         }
 
         $user = app('db')->table('users')->where('id', $request['user_id'])->first();
-        if (!$user) return response()->json(['invalid' => 'Mã nhân viên hoặc mật khẩu không đúng'], 400);
         if (!app('hash')->check($valid_request['password'], $user->password)) return response()->json(['invalid' => 'Mã nhân viên hoặc mật khẩu không đúng'], 400);
-        $payload = [
-            'pk' => $user->pk,
-            'exp' => time() + env('EXPIRATION')
-        ];
-        $api_token = Crypt::encrypt($payload);
+        $api_token = $this->api_token($user->pk);
+
         try {
             app('db')->table('users')->where('pk', $user->pk)->update(['api_token' => $api_token]);
         } catch (Exception $e) {
             return response()->json(['unexpected' => $e->getMessage()], 500);
         }
         return response()->json([['success' => 'Đăng nhập thành công'], ['api_token' => $api_token]], 200);
+    }
+
+    private function api_token($user_pk)
+    {
+        $payload = [
+            'pk' => $user_pk,
+            'exp' => time() + env('EXPIRATION')
+        ];
+        return Crypt::encrypt($payload);
     }
 
     public function login_mobile(Request $request)

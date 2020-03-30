@@ -67,4 +67,15 @@ class UserRepository
         return False;
 
     }
+
+    public function change_password($params)
+    {
+        try {
+            app('db')->table('users')->where('pk', $params['user_pk'])
+                ->update(['password' => app('hash')->make($params['new_password'])]);
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
+    }
 }

@@ -18,7 +18,7 @@ class ConceptionValidator
                 'year' => 'required|digits:4|integer|between:2015,' . (date('Y') + 1),
                 'conception_name' => 'required|string|max:20',
                 'comment' => 'string|nullable|max:20',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -32,7 +32,7 @@ class ConceptionValidator
         try {
             $this->validate($params, [
                 'conception_pk' => 'required|uuid|exists:conceptions,pk',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -46,7 +46,7 @@ class ConceptionValidator
         try {
             $this->validate($params, [
                 'conception_pk' => 'required|uuid|exists:conceptions,pk,is_active,' . True,
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -60,7 +60,7 @@ class ConceptionValidator
         try {
             $this->validate($params, [
                 'conception_pk' => 'required|uuid|exists:conceptions,pk,is_active,' . False,
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -75,7 +75,7 @@ class ConceptionValidator
             $this->validate($params, [
                 'accessory_pk' => 'required|uuid|exists:accessories,pk,is_active,' . True,
                 'conception_pk' => 'required|uuid|exists:conceptions,pk,is_active,' . True,
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -90,7 +90,7 @@ class ConceptionValidator
             $this->validate($params, [
                 'accessory_pk' => 'required|uuid|exists:accessories,pk',
                 'conception_pk' => 'required|uuid|exists:conceptions,pk',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

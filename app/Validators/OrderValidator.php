@@ -18,7 +18,7 @@ class OrderValidator
                 'ordered_items.*.accessory_pk' => 'required|uuid|exists:accessories,pk,is_active,' . True,
                 'ordered_items.*.ordered_quantity' => 'required|integer|between:1,2000000000',
                 'ordered_items.*.comment' => 'nullable|string|max:20',
-                'user_pk' => 'required|uuid|exists:users,pk',
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -35,7 +35,7 @@ class OrderValidator
                 'ordered_item_pk' => 'required|uuid|exists:ordered_items,pk',
                 'ordered_quantity' => 'required|integer|between:1,2000000000',
                 'comment' => 'nullable|string|max:20',
-                'user_pk' => 'required|uuid|exists:users,pk',
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -49,7 +49,7 @@ class OrderValidator
         try {
             $this->validate($params, [
                 'order_pk' => 'required|uuid|exists:orders,pk',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -63,7 +63,7 @@ class OrderValidator
         try {
             $this->validate($params, [
                 'order_pk' => 'required|uuid|exists:orders,pk,is_opened,' . True,
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -77,7 +77,7 @@ class OrderValidator
         try {
             $this->validate($params, [
                 'order_pk' => 'required|uuid|exists:orders,pk,is_opened,' . False,
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
