@@ -23,7 +23,7 @@ class AccessoryValidator
                 'size' => 'string|nullable|max:10',
                 'accessory_name' => 'required|string|max:50',
                 'comment' => 'string|nullable|max:20',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -37,7 +37,7 @@ class AccessoryValidator
         try {
             $this->validate($params, [
                 'accessory_pk' => 'required|uuid|exists:accessories,pk',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -51,7 +51,7 @@ class AccessoryValidator
         try {
             $this->validate($params, [
                 'accessory_pk' => 'required|uuid|exists:accessories,pk,is_active,' . True,
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -65,7 +65,7 @@ class AccessoryValidator
         try {
             $this->validate($params, [
                 'accessory_pk' => 'required|uuid|exists:accessories,pk,is_active,' . False,
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -81,7 +81,7 @@ class AccessoryValidator
                 'accessory_pk' => 'required|uuid|exists:accessories,pk',
 //                'image' => 'required|image|max:4000' //TODO enable php_fileinfo
                 'image' => 'required|max:4000',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -95,7 +95,7 @@ class AccessoryValidator
         try {
             $this->validate($params, [
                 'accessory_pk' => 'required|uuid|exists:accessories,pk',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

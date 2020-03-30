@@ -29,8 +29,6 @@
 //    return \Illuminate\Support\Str::random(32);
 //});
 
-$router->post('login', 'AuthController@login');
-$router->post('logout', 'AuthController@logout');
 
 //Group 1
 //User
@@ -136,17 +134,14 @@ $router->post('move', 'EntryController@move');
 $router->post('store_case', 'CaseController@store');
 $router->post('replace', 'CaseController@replace');
 
-
+////Group 9
+$router->post('login_desktop', 'AuthController@login_desktop');
+$router->post('login_mobile', 'AuthController@login_mobile');
+$router->post('logout', 'AuthController@logout');
+$router->post('change_password', 'UserController@change_password');
 
 //$router->post('', '');
 //$router->patch('', '');
 //$router->delete('', '');
-
-////Group 9
-//$router->post('/login_desktop', 'AuthController@login_desktop');
-//$router->post('/login_mobile', 'AuthController@login_mobile');
-//$router->post('/logout','AuthController@logout');
-//$router->post('/change_password','AuthController@change_password');
-
 
 

@@ -16,7 +16,7 @@ class EntryValidator
                 'case_pk' => 'required|uuid|exists:entries, case_pk|stored_case',
                 'received_item_pk' => 'required|uuid|exists:entries,received_item_pk',
                 'adjusted_quantity' => 'adjusted_quantity:{$request["received_item_pk"]},{$request["cases_pk"]}',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -31,7 +31,7 @@ class EntryValidator
             $this->validate($params, [
                 'adjusting_session_pk' => 'required|uuid|exists:adjusting_sessions,pk,verifying_session_pk,' . Null,
                 'result' => 'required|boolean',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -47,7 +47,7 @@ class EntryValidator
                 'case_pk' => 'required|uuid|exists:entries, case_pk|stored_case',
                 'received_item_pk' => 'required|uuid|exists:entries,received_item_pk',
                 'discarded_quantity' => 'available_quantity:{$request["received_item_pk"]},{$request["cases_pk"]}',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -62,7 +62,7 @@ class EntryValidator
             $this->validate($params, [
                 'discarding_session_pk' => 'required|uuid|exists:discarding_sessions,pk,verifying_session_pk,' . Null,
                 'result' => 'required|boolean',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -79,7 +79,7 @@ class EntryValidator
                 'inCased_items.*.received_item_pk' => 'required|uuid|exists:entries,received_item_pk',
                 'inCased_items.*.quantity' => 'available_quantity:{$request["inCased_items.*.received_item_pk"]},{$request["start_cases_pk"]}',
                 'end_case_pk' => 'required|uuid|exists:entries, case_pk|stored_case|different:' . $params['start_case_pk'],
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

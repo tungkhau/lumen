@@ -17,7 +17,7 @@ class CustomerValidator
                 'customer_id' => 'required|size:3| alpha|unique:customers,id',
                 'address' => 'string|nullable|max:200',
                 'phone' => 'string|nullable|max:20',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -33,7 +33,7 @@ class CustomerValidator
                 'customer_pk' => 'required|uuid|exists:customers,pk',
                 'address' => 'string|nullable|max:200',
                 'phone' => 'string|nullable|max:20',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -47,7 +47,7 @@ class CustomerValidator
         try {
             $this->validate($params, [
                 'customer_pk' => 'required|uuid|exists:customers,pk',
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -61,7 +61,7 @@ class CustomerValidator
         try {
             $this->validate($params, [
                 'customer_pk' => 'required|uuid|exists:customers,pk,is_active,' . True,
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -75,7 +75,7 @@ class CustomerValidator
         try {
             $this->validate($params, [
                 'customer_pk' => 'required|uuid|exists:customers,pk,is_active,' . False,
-                'user_pk' => 'required|uuid|exists:users,pk'
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
