@@ -459,5 +459,37 @@ class TestingDataSeeder extends Seeder
             'restoration_pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003',
             'accessory_pk' => '72773234-70df-11ea-bc55-0242ac130003'
         ]);
+
+        // make for G6
+
+        app('db')->table('counting_sessions')->insert([
+            'pk' => '1cfd56fc-72a2-11ea-bc55-0242ac130003',
+            'counted_quantity' => 500,
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('checking_sessions')->insert([
+            'pk' => '1cfd592c-72a2-11ea-bc55-0242ac130003',
+            'checked_quantity' => 500,
+            'unqualified_quantity' => 10,
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ]);
+        app('db') ->table('classified_items')->insert([
+            'pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003',
+            'quality_state' => 'passed'
+        ]);
+        app('db') ->table('classified_items')->insert([
+            'pk' => '1cfd5cec-72a2-11ea-bc55-0242ac130003',
+            'quality_state' => 'failed'
+        ]);
+        app('db')->table('classifying_sessions')->insert([
+            'pk' => '1cfd5dbe-72a2-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
+            'classified_item_pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('sendbacking_sessions')->insert([
+            'pk' => '1cfd5e90-72a2-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ]);
+
     }
 }
