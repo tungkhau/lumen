@@ -85,7 +85,8 @@ class ImportRepository
             app('db')->transaction(function () use ($params) {
                 app('db')->table('receiving_sessions')->insert([
                     'pk' => $params['receiving_session_pk'],
-                    'kind' => 'importing'
+                    'kind' => 'importing',
+                    'user_pk' => $params['user_pk']
                 ]);
                 app('db')->table('received_groups')->insert($params['imported_groups']);
                 app('db')->table('cases')->where('pk', $params['case_pk'])->update(['shelf_pk' => Null]);
@@ -107,7 +108,7 @@ class ImportRepository
                     ]);
                 }
                 app('db')->table('receiving_sessions')->where('pk', $params['importing_session_pk'])->update([
-                    'created_date' => date('Y-m-d H:i:s')
+                    'executed_date' => date('Y-m-d H:i:s')
                 ]);
             });
         } catch (Exception $e) {
@@ -120,8 +121,8 @@ class ImportRepository
     {
         try {
             app('db')->transaction(function () use ($params) {
-                app('db')->table('received_groups')->where('receiving_session_pk', $params['receiving_session_pk'])->delete();
-                app('db')->table('receiving_sessions')->where('pk', $params['receiving_session_pk'])->delete();
+                app('db')->table('received_groups')->where('receiving_session_pk', $params['importing_session_pk'])->delete();
+                app('db')->table('receiving_sessions')->where('pk', $params['importing_session_pk'])->delete();
             });
         } catch (Exception $e) {
             return $e;

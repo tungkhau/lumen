@@ -121,9 +121,83 @@ class ImportTest extends TestCase
             'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ];
-        $this->call('POST','receive_import',$inputs);
+        $this->call('POST', 'receive_import', $inputs);
+        $receiving_session_pk = app('db')->table('receiving_sessions')->orderBy('executed_date', 'desc')->first()->pk;
+
         $receiving_session = ['kind' => 'importing',
-            'pk' => app('db')->table('')];
-        $import_pk = app('db')->table('imports')->where('id', '666666#1')->value('pk');
+            'pk' => $receiving_session_pk];
+        $received_groups = array();
+
+        foreach ($inputs['imported_groups'] as $imported_group) {
+            $received_groups[] = [
+                'received_item_pk' => $imported_group['imported_item_pk'],
+                'grouped_quantity' => $imported_group['grouped_quantity'],
+                'kind' => 'imported',
+                'receiving_session_pk' => $receiving_session_pk,
+                'case_pk' => $inputs['case_pk']
+            ];
+        }
+        $case = ['pk' => $inputs['case_pk'],
+            'shelf_pk' => Null];
+        $this->seeJsonEquals(['success' => 'Ghi nhận phiếu nhập thành công']);
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('receiving_sessions', $receiving_session);
+        $this->seeInDatabase('cases', $case);
+        foreach ($received_groups as $received_group) {
+            $this->seeInDatabase('received_groups', $received_group);
+        }
     }
+
+    public function testEditReceving()
+    {
+        $inputs = ['importing_session_pk' => '727745c6-70df-11ea-bc55-0242ac130003',
+            'imported_groups' => [
+                [
+                    'imported_group_pk' => '727746b6-70df-11ea-bc55-0242ac130003',
+                    'grouped_quantity' => 200
+                ],
+                [
+                    'imported_group_pk' => '727747ce-70df-11ea-bc55-0242ac130003',
+                    'grouped_quantity' => 500
+                ]
+            ],
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ];
+
+        $data = [
+            [
+                'pk' => '727746b6-70df-11ea-bc55-0242ac130003',
+                'grouped_quantity' => 200,
+            ],
+            [
+                'pk' => '727747ce-70df-11ea-bc55-0242ac130003',
+                'grouped_quantity' => 500,
+            ]
+        ];
+        $this->call('POST', 'edit_imported_receiving', $inputs);
+        $this->seeJsonEquals(['success' => 'Sửa phiên ghi nhận thành công']);
+        $this->seeStatusCode(200);
+        foreach ($data as $item) {
+            $this->seeInDatabase('received_groups', $item);
+        }
+    }
+
+    public function testDeleteReceiving()
+    {
+        $inputs = ['importing_session_pk' => '727745c6-70df-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ];
+
+        $received_groups = ['727746b6-70df-11ea-bc55-0242ac130003', '727747ce-70df-11ea-bc55-0242ac130003'];
+
+        $this->call('DELETE', 'delete_imported_receiving', $inputs);
+        $this->seeJsonEquals(['success' => 'Xóa phiên ghi nhận thành công']);
+        $this->seeStatusCode(200);
+        $this->notSeeInDatabase('receiving_sessions', ['pk' => '727745c6-70df-11ea-bc55-0242ac130003']);
+        foreach ($received_groups as $item) {
+            $this->notSeeInDatabase('received_groups', ['pk' => $item]);
+        }
+
+    }
+
 }
