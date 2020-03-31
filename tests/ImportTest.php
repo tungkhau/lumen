@@ -197,7 +197,50 @@ class ImportTest extends TestCase
         foreach ($received_groups as $item) {
             $this->notSeeInDatabase('received_groups', ['pk' => $item]);
         }
-
+    }
+    public function testClassify()
+    {
+        $inputs = ['imported_item_pk' => '72773d4c-70df-11ea-bc55-0242ac130003', //imported_item 1 (1) -> import_1 -> is_opened = true ???
+            'quality_state' => 'pending',
+            'comment' => 'bla',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+        $this->call('POST','classify',$inputs);
+        $pk = app('db')->table('classified_items')->where('quality_state','pending')->value('pk');
+        $classified_item = ['quality_state' => 'pending',
+            'pk' => $pk];
+        $classifying_session = ['classified_item_pk' => $pk,
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+        $imported_item = ['classified_item_pk' => $pk];
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('classified_items',$classified_item);
+        $this->seeInDatabase('classifying_sessions',$classifying_session);
+        $this->seeInDatabase('imported_items',$imported_item);
+    }
+    public function testReclassify()
+    {
+        $inputs = ['classified_item_pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003',
+            'quality_state' => 'failed',
+            'comment' => 'cho vừa lòng mài',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+        $data = ['pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003',
+            'quality_state' => 'failed'];
+        $this->call('PATCH','reclassify',$inputs);
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('classified_items',$data);
+        // TODO how to see execute_date in classifying_sessions table??
+    }
+    public function testDeleteClassification ()
+    {
+        $inputs = ['classified_item_pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003'];
+        $data = ['pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003'];
+        $imported_item = ['pk' => '72773d4c-70df-11ea-bc55-0242ac130003',
+            'classified_item_pk' => null];
+        $this->call('DELETE','delete_classification',$inputs);
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('imported_items',$imported_item);
+        $this->notSeeInDatabase('classifying_sessions',$inputs);
+        $this->notSeeInDatabase('classified_items',$data);
     }
 
+    //TODO tobe continue with send back failed ip item test!!!
 }

@@ -294,11 +294,17 @@ class TestingDataSeeder extends Seeder
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ]);
 
+        app('db') ->table('classified_items')->insert([
+            'pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003',
+            'quality_state' => 'passed'
+        ]);
+
         app('db')->table('imported_items')->insert([
             'pk' => '72773d4c-70df-11ea-bc55-0242ac130003',
             'imported_quantity' => '11',
             'import_pk' => '72773c8e-70df-11ea-bc55-0242ac130003',
-            'ordered_item_pk' => '72773612-70df-11ea-bc55-0242ac130003'
+            'ordered_item_pk' => '72773612-70df-11ea-bc55-0242ac130003',
+            'classified_item_pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003'
         ]);
         app('db')->table('imported_items')->insert([
             'pk' => '72773ed2-70df-11ea-bc55-0242ac130003',
@@ -343,6 +349,18 @@ class TestingDataSeeder extends Seeder
             'kind' => 'importing',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ]);
+        app('db')->table('counting_sessions')->insert([
+            'pk' => '1cfd56fc-72a2-11ea-bc55-0242ac130003',
+            'counted_quantity' => 500,
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('checking_sessions')->insert([
+            'pk' => '1cfd592c-72a2-11ea-bc55-0242ac130003',
+            'checked_quantity' => 500,
+            'unqualified_quantity' => 10,
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ]);
+
         app('db')->table('received_groups')->insert([
             'pk' => '727746b6-70df-11ea-bc55-0242ac130003',
             'kind' => 'imported',
@@ -357,7 +375,9 @@ class TestingDataSeeder extends Seeder
             'grouped_quantity' => 200,
             'received_item_pk' => '72773ed2-70df-11ea-bc55-0242ac130003',
             'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',
-            'receiving_session_pk' => '727745c6-70df-11ea-bc55-0242ac130003'
+            'receiving_session_pk' => '727745c6-70df-11ea-bc55-0242ac130003',
+            'counting_session_pk' => '1cfd56fc-72a2-11ea-bc55-0242ac130003',
+            'checking_session_pk' => '1cfd592c-72a2-11ea-bc55-0242ac130003'
         ]);
         app('db')->table('workplaces')->insert([
             'pk' => 'c00516d6-7195-11ea-bc55-0242ac130003',
@@ -462,21 +482,6 @@ class TestingDataSeeder extends Seeder
 
         // make for G6
 
-        app('db')->table('counting_sessions')->insert([
-            'pk' => '1cfd56fc-72a2-11ea-bc55-0242ac130003',
-            'counted_quantity' => 500,
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
-        ]);
-        app('db')->table('checking_sessions')->insert([
-            'pk' => '1cfd592c-72a2-11ea-bc55-0242ac130003',
-            'checked_quantity' => 500,
-            'unqualified_quantity' => 10,
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
-        ]);
-        app('db') ->table('classified_items')->insert([
-            'pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003',
-            'quality_state' => 'passed'
-        ]);
         app('db') ->table('classified_items')->insert([
             'pk' => '1cfd5cec-72a2-11ea-bc55-0242ac130003',
             'quality_state' => 'failed'
