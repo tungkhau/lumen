@@ -30,7 +30,7 @@ class ReceivedGroupRepository
         try {
             app('db')->table('counting_sessions')->where('pk', $params['counting_session_pk'])->update([
                 'counted_quantity' => $params['counted_quantity'],
-                'created_date' => date('Y-m-d H:i:s')
+                'executed_date' => date('Y-m-d H:i:s')
             ]);
         } catch (Exception $e) {
             return $e;
@@ -38,14 +38,14 @@ class ReceivedGroupRepository
         return False;
     }
 
-    public function delete_counting($key)
+    public function delete_counting($params)
     {
         try {
-            app('db')->transaction(function () use ($key) {
-                app('db')->table('received_groups')->where('counting_session_pk', $key)->update([
+            app('db')->transaction(function () use ($params) {
+                app('db')->table('received_groups')->where('counting_session_pk', $params['counting_session_pk'])->update([
                     'counting_session_pk' => Null
                 ]);
-                app('db')->table('counting_sessions')->where('pk', $key)->delete();
+                app('db')->table('counting_sessions')->where('pk', $params['counting_session_pk'])->delete();
             });
         } catch (Exception $e) {
             return $e;
@@ -79,7 +79,7 @@ class ReceivedGroupRepository
             app('db')->table('checking_sessions')->where('pk', $params['checking_session_pk'])->update([
                 'checked_quantity' => $params['checked_quantity'],
                 'unqualified_quantity' => $params['unqualified_quantity'],
-                'created_date' => date('Y-m-d H:i:s')
+                'executed_date' => date('Y-m-d H:i:s')
             ]);
         } catch (Exception $e) {
             return $e;
@@ -87,14 +87,14 @@ class ReceivedGroupRepository
         return False;
     }
 
-    public function delete_checking($key)
+    public function delete_checking($params)
     {
         try {
-            app('db')->transaction(function () use ($key) {
-                app('db')->table('received_groups')->where('checking_session_pk', $key)->update([
+            app('db')->transaction(function () use ($params) {
+                app('db')->table('received_groups')->where('checking_session_pk', $params['checking_session_pk'])->update([
                     'checking_session_pk' => Null
                 ]);
-                app('db')->table('checking_sessions')->where('pk', $key)->delete();
+                app('db')->table('checking_sessions')->where('pk', $params['checking_session_pk'])->delete();
             });
         } catch (Exception $e) {
             return $e;

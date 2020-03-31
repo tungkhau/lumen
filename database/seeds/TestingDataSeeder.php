@@ -123,6 +123,12 @@ class TestingDataSeeder extends Seeder
             'is_active' => True
         ]);
         app('db')->table('cases')->insert([
+            'id' => '123456789033',
+            'pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'is_active' => True
+        ]);
+
+        app('db')->table('cases')->insert([
             'id' => '123456789013',
             'pk' => 'd993f450-7190-11ea-bc55-0242ac130003',
             'is_active' => True
@@ -344,11 +350,33 @@ class TestingDataSeeder extends Seeder
             'import_pk' => '72774102-70df-11ea-bc55-0242ac130003',
             'ordered_item_pk' => '72773bda-70df-11ea-bc55-0242ac130003'
         ]);
+        app('db')->table('imports')->insert([
+            'pk' => '178ef7ba-7389-11ea-bc55-0242ac130003',
+            'id' => 'import_3',
+            'is_active' => False,
+            'order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('imported_items')->insert([
+            'pk' => '24f53a5e-7389-11ea-bc55-0242ac130003',
+            'imported_quantity' => '13',
+            'import_pk' => '178ef7ba-7389-11ea-bc55-0242ac130003',
+            'ordered_item_pk' => '727739be-70df-11ea-bc55-0242ac130003'
+        ]);
+
         app('db')->table('receiving_sessions')->insert([
             'pk' => '727745c6-70df-11ea-bc55-0242ac130003',
             'kind' => 'importing',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ]);
+
+        app('db')->table('receiving_sessions')->insert([
+            'pk' => '72b7a616-7387-11ea-bc55-0242ac130003',
+            'kind' => 'importing',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+        ]);
+
+
         app('db')->table('counting_sessions')->insert([
             'pk' => '1cfd56fc-72a2-11ea-bc55-0242ac130003',
             'counted_quantity' => 500,
@@ -379,6 +407,17 @@ class TestingDataSeeder extends Seeder
             'counting_session_pk' => '1cfd56fc-72a2-11ea-bc55-0242ac130003',
             'checking_session_pk' => '1cfd592c-72a2-11ea-bc55-0242ac130003'
         ]);
+
+        app('db')->table('received_groups')->insert([
+            'pk' => '7bd0f1bc-7387-11ea-bc55-0242ac130003',
+            'kind' => 'imported',
+            'grouped_quantity' => 100,
+            'received_item_pk' => '24f53a5e-7389-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '72b7a616-7387-11ea-bc55-0242ac130003'
+        ]);
+
+
         app('db')->table('workplaces')->insert([
             'pk' => 'c00516d6-7195-11ea-bc55-0242ac130003',
             'name' => 'Factory 1',

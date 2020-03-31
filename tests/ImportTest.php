@@ -200,21 +200,23 @@ class ImportTest extends TestCase
     }
     public function testClassify()
     {
-        $inputs = ['imported_item_pk' => '72773d4c-70df-11ea-bc55-0242ac130003', //imported_item 1 (1) -> import_1 -> is_opened = true ???
+        $inputs = ['imported_item_pk' => '72774396-70df-11ea-bc55-0242ac130003', //imported_item 1 (1) -> import_1 -> is_opened = true ??? (không phải) t lấy lại cái imported_item 3.2
             'quality_state' => 'pending',
             'comment' => 'bla',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
-        $this->call('POST','classify',$inputs);
-        $pk = app('db')->table('classified_items')->where('quality_state','pending')->value('pk');
+        $this->call('POST', 'classify', $inputs);
+        $classified_item_pk = app('db')->table('imported_items')->where('pk', '72774396-70df-11ea-bc55-0242ac130003')->value('classified_item_pk');
         $classified_item = ['quality_state' => 'pending',
-            'pk' => $pk];
-        $classifying_session = ['classified_item_pk' => $pk,
+            'pk' => $classified_item_pk];
+        $classifying_session = ['classified_item_pk' => $classified_item_pk,
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
-        $imported_item = ['classified_item_pk' => $pk];
+        $imported_item = ['classified_item_pk' => $classified_item_pk,
+            'pk' => '72774396-70df-11ea-bc55-0242ac130003'];
+        $this->seeJsonEquals(['success' => 'Đánh giá phụ liệu nhập thành công']);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('classified_items',$classified_item);
-        $this->seeInDatabase('classifying_sessions',$classifying_session);
-        $this->seeInDatabase('imported_items',$imported_item);
+        $this->seeInDatabase('classified_items', $classified_item);
+        $this->seeInDatabase('classifying_sessions', $classifying_session);
+        $this->seeInDatabase('imported_items', $imported_item);
     }
     public function testReclassify()
     {

@@ -15,10 +15,10 @@ class ReceivedGroupPrecondition
             $imported_item = app('db')->table('imported_items')->where('pk', $imported_item_pk)->select('import_pk', 'classified_item_pk')->first();
             $opened = app('db')->table('imports')->where('pk', $imported_item->import_pk)->value('is_opened');
 
-            $classified = $imported_item->classified_item_pk ? True : False;
+            $classified = $imported_item->classified_item_pk == Null ? False : True;
         }
-        $counted = $received_group->couting_session_pk ? True : False;
-        $stored = $received_group->storing_session_pk ? True : False;
+        $counted = $received_group->counting_session_pk == Null ? False : True;
+        $stored = $received_group->storing_session_pk == Null ? False : True;
 
         return $opened || $classified || $counted || $stored;
     }
@@ -31,7 +31,7 @@ class ReceivedGroupPrecondition
         if ($received_group->kind == 'imported' ? True : False) {
             $classified = app('db')->table('imported_items')->where('pk', $received_group->received_item_pk)->value('classified_item_pk') ? True : False;
         }
-        $stored = $received_group->storing_session_pk ? True : False;
+        $stored = $received_group->storing_session_pk == Null ? False : True;
         return !$owner || $classified || $stored;
     }
 
@@ -43,19 +43,19 @@ class ReceivedGroupPrecondition
         if ($received_group->kind == 'imported' ? True : False) {
             $classified = app('db')->table('imported_items')->where('pk', $received_group->received_item_pk)->value('classified_item_pk') ? True : False;
         }
-        $stored = $received_group->storing_session_pk ? True : False;
+        $stored = $received_group->storing_session_pk == Null ? False : True;
         return !$owner || $classified || $stored;
     }
 
     public function check($params)
     {
         $imported_group = app('db')->table('received_groups')->where('pk', $params['imported_group_pk'])->first();
-        $stored = $imported_group->storing_session_pk ? True : False;
-        $checked = $imported_group->checking_session_pk ? True : False;
+        $stored = $imported_group->storing_session_pk == Null ? False : True;
+        $checked = $imported_group->checking_session_pk == Null ? False : True;
 
         $imported_item = app('db')->table('imported_items')->where('pk', $imported_group->received_item_pk)->select('import_pk', 'classified_item_pk')->first();
         $opened = app('db')->table('imports')->where('pk', $imported_item->import_pk)->value('is_opened');
-        $classified = $imported_item->classified_item_pk ? True : False;
+        $classified = $imported_item->classified_item_pk == Null ? False : True;
 
         return $stored || $checked || $opened || $classified;
     }
@@ -63,7 +63,7 @@ class ReceivedGroupPrecondition
     public function edit_checking($params)
     {
         $imported_group = app('db')->table('received_groups')->where('checking_session_pk', $params['checking_session_pk'])->first();
-        $stored = $imported_group->storing_session_pk ? True : False;
+        $stored = $imported_group->storing_session_pk == Null ? False : True;
         $classified = app('db')->table('imported_items')->where('pk', $imported_group->received_item_pk)->value('classified_item_pk') ? True : False;
         $owner = app('db')->table('checking_sessions')->where('pk', $params['checking_session_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
         return $stored || $classified || !$owner;
@@ -72,7 +72,7 @@ class ReceivedGroupPrecondition
     public function delete_checking($params)
     {
         $imported_group = app('db')->table('received_groups')->where('checking_session_pk', $params['checking_session_pk'])->first();
-        $stored = $imported_group->storing_session_pk ? True : False;
+        $stored = $imported_group->storing_session_pk == Null ? False : True;
         $classified = app('db')->table('imported_items')->where('pk', $imported_group->received_item_pk)->value('classified_item_pk') ? True : False;
         $owner = app('db')->table('checking_sessions')->where('pk', $params['checking_session_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
         return $stored || $classified || !$owner;

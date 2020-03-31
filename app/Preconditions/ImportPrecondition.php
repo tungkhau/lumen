@@ -70,7 +70,7 @@ class ImportPrecondition
     {
         $imported_item = app('db')->table('imported_items')->where('pk', $params['imported_item_pk'])->select('import_pk', 'classified_item_pk')->first();
         $opened = app('db')->table('imports')->where('pk', $imported_item->import_pk)->value('is_opened');
-        $classified = $imported_item->classified_item ? True : False;
+        $classified = $imported_item->classified_item_pk == Null ? False : True;
         return $opened || $classified;
     }
 

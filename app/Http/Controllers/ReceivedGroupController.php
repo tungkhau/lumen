@@ -33,10 +33,11 @@ class ReceivedGroupController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
+        $request['counting_session_pk'] = (string)Str::uuid();
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->count($request);
-        if ($unexpected) return $this->unexpected_response();
+        if ($unexpected) return response($unexpected->getMessage());
         return response()->json(['success' => 'Kiểm số lượng thành công'], 200);
     }
 
@@ -54,7 +55,7 @@ class ReceivedGroupController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->edit_counting($request);
-        if ($unexpected) return $this->unexpected_response();
+        if ($unexpected) return response($unexpected->getMessage());
         return response()->json(['success' => 'Sửa phiên kiểm số lượng thành công'], 200);
     }
 
@@ -87,6 +88,7 @@ class ReceivedGroupController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
+        $request['checking_session_pk'] = (string)Str::uuid();
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->check($request);
@@ -97,6 +99,7 @@ class ReceivedGroupController extends Controller
     public function edit_checking(Request $request)
     {
         /* Validate request, catch invalid errors(400) */
+        $request['imported_group_pk'] = app('db')->table('received_groups')->where('checking_session_pk', $request['checking_session_pk'])->value('pk');
         $validation = $this->validator->edit_checking($request);
         if ($validation) return $this->invalid_response($validation);
 
@@ -108,7 +111,7 @@ class ReceivedGroupController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->edit_checking($request);
-        if ($unexpected) return $this->unexpected_response();
+        if ($unexpected) return response($unexpected->getMessage());
         return response()->json(['success' => 'Sửa phiên kiểm chất lượng thành công'], 200);
     }
 
