@@ -353,7 +353,7 @@ class TestingDataSeeder extends Seeder
         app('db')->table('imports')->insert([
             'pk' => '178ef7ba-7389-11ea-bc55-0242ac130003',
             'id' => 'import_3',
-            'is_active' => False,
+            'is_opened' => False,
             'order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ]);
