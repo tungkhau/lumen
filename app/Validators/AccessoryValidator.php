@@ -79,8 +79,7 @@ class AccessoryValidator
         try {
             $this->validate($params, [
                 'accessory_pk' => 'required|uuid|exists:accessories,pk',
-//                'image' => 'required|image|max:4000' //TODO enable php_fileinfo
-                'image' => 'required|max:4000',
+                'image' => 'required|image|max:4000',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {

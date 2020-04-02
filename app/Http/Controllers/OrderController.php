@@ -52,8 +52,7 @@ class OrderController extends Controller
         return response()->json(['success' => 'Tạo đơn đặt thành công'], 200);
     }
 
-    public
-    function edit(Request $request)
+    public function edit(Request $request)
     {
         /* Validate request, catch invalid errors(400) */
         $validation = $this->validator->edit($request);
@@ -71,8 +70,7 @@ class OrderController extends Controller
         return response()->json(['success' => 'Sửa đơn đặt thành công'], 200);
     }
 
-    public
-    function delete(Request $request)
+    public function delete(Request $request)
     {
         /* Validate request, catch invalid errors(400) */
         $validation = $this->validator->delete($request);
@@ -90,8 +88,7 @@ class OrderController extends Controller
         return response()->json(['success' => 'Xóa đơn đặt thành công'], 200);
     }
 
-    public
-    function turn_off(Request $request)
+    public function turn_off(Request $request)
     {
         /* Validate request, catch invalid errors(400) */
         $validation = $this->validator->turn_off($request);
@@ -109,8 +106,7 @@ class OrderController extends Controller
         return response()->json(['success' => 'Đóng đơn đặt thành công'], 200);
     }
 
-    public
-    function turn_on(Request $request)
+    public function turn_on(Request $request)
     {
         /* Validate request, catch invalid errors(400) */
         $validation = $this->validator->turn_on($request);
@@ -126,5 +122,22 @@ class OrderController extends Controller
         $unexpected = $this->repository->turn_on($request);
         if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Mở đơn đặt thành công'], 200);
+    }
+
+
+    /* ANGULAR */
+    public function get()
+    {
+        $orders = app('db')->table('orders')->select('pk', 'id')->get();
+        $data = array();
+        foreach ($orders as $order) {
+            $data[] = [
+                'id' => $order->id,
+                'pk' => $order->pk
+            ];
+        }
+        return response()->json([
+            'data' => $data
+        ]);
     }
 }

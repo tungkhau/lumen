@@ -18,7 +18,7 @@ class CreateClassifyingSessionsTable extends Migration
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->dateTime('executed_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('user_pk');
-            $table->uuid('classified_item_pk');
+            $table->uuid('classified_item_pk')->unique();
 
             $table->foreign('user_pk')->references('pk')->on('users');
             $table->foreign('classified_item_pk')->references('pk')->on('classified_items');
