@@ -134,6 +134,14 @@ $router->post('move', 'EntryController@move');
 $router->post('store_case', 'CaseController@store');
 $router->post('replace', 'CaseController@replace');
 
+//Group 7
+//Demand Group
+$router->post('create_demand','DemandController@create');
+$router->patch('edit_demand','DemandController@edit');
+$router->delete('delete_demand','DemandController@delete');
+$router->patch('turn_off_demand','DemandController@turn_off');
+$router->patch('turn_on_demand','DemandController@turn_on');
+
 ////Group 9
 $router->post('login_desktop', 'AuthController@login_desktop');
 $router->post('login_mobile', 'AuthController@login_mobile');
