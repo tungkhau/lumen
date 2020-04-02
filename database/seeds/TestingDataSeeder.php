@@ -534,6 +534,5 @@ class TestingDataSeeder extends Seeder
             'pk' => '1cfd5e90-72a2-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ]);
-
     }
 }
