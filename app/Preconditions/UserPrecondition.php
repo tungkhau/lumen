@@ -6,13 +6,35 @@ class UserPrecondition
 {
     public function create($params)
     {
-        //TODO Implement precondition
-        return False;
+        $workplace = app('db')->table('workplaces')->where('pk', $params['workplace_pk'])->value('name');
+        switch ($params['role']) {
+            case 'merchandiser':
+            {
+                if ($workplace != 'Văn phòng') return True;
+                return False;
+            }
+            case 'manager':
+            case 'staff':
+            case 'inspector':
+            {
+                if ($workplace != 'Kho phụ liệu') return True;
+                return False;
+            }
+            default :
+            {
+                if ($workplace == 'Văn phòng' || $workplace == 'Kho phụ liệu') return True;
+                return False;
+            }
+        }
     }
 
     public function change_workplace($params)
     {
-        //TODO Implement precondition
+        $current_workplace_pk = app('db')->table('users')->where('pk', $params['user_pk'])->value('workplace_pk');
+        if ($params['workplace_pk'] == $current_workplace_pk) return True;
+
+        $workplace = app('db')->table('workplaces')->where('pk', $params['workplace_pk'])->value('name');
+        if ($workplace == 'Văn phòng' || $workplace == 'Kho phụ liệu') return True;
         return False;
     }
 

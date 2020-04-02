@@ -55,9 +55,9 @@ class UserTest extends TestCase
     public function testChangeWorkPlace()
     {
         $inputs = ['user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
-            'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'];
+            'workplace_pk' => '07fc0a0c-719c-11ea-bc55-0242ac130003'];
         $data = ['pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
-            'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'];
+            'workplace_pk' => '07fc0a0c-719c-11ea-bc55-0242ac130003'];
         $this->call('PATCH', 'change_user_workplace', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('users', $data);

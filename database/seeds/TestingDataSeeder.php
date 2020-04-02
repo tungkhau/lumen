@@ -13,11 +13,11 @@ class TestingDataSeeder extends Seeder
     {
         app('db')->table('workplaces')->insert([
             'pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003',
-            'name' => 'Office',
+            'name' => 'Văn phòng',
         ]);
         app('db')->table('workplaces')->insert([
             'pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003',
-            'name' => 'Warehouse',
+            'name' => 'Kho phụ liệu',
         ]);
         app('db')->table('users')->insert([
             'pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',

@@ -12,7 +12,7 @@ return [
     | as the size rules. Feel free to tweak each of these messages here.
     |
     */
-
+    'image' => 'File vừa chọn có định dạng không hợp lệ.',
     'available_quantity' => 'Số lượng nhập không phù hợp',
     'adjusted_quantity' => 'Số lượng nhập không phù hợp',
     'required' => 'Không thể để trống :attribute.',
@@ -110,7 +110,6 @@ return [
         'string' => 'The :attribute must be greater than or equal :value characters.',
         'array' => 'The :attribute must have :value items or more.',
     ],
-    'image' => 'The :attribute must be an image.',
     'in_array' => 'The :attribute field does not exist in :other.',
     'ip' => 'The :attribute must be a valid IP address.',
     'ipv4' => 'The :attribute must be a valid IPv4 address.',
