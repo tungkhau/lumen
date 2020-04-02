@@ -24,10 +24,10 @@
 //});
 
 //Group 0
-//$router->get('/', function () use ($router) {
-//    echo phpinfo();
+$router->get('/', function () use ($router) {
+    echo phpinfo();
 //    return \Illuminate\Support\Str::random(32);
-//});
+});
 
 
 //Group 1
@@ -143,5 +143,8 @@ $router->post('change_password', 'UserController@change_password');
 //$router->post('', '');
 //$router->patch('', '');
 //$router->delete('', '');
+
+/* ANGULAR */
+$router->get('orders', 'OrderController@get');
 
 

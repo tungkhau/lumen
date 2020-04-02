@@ -224,12 +224,18 @@ class ImportTest extends TestCase
             'quality_state' => 'failed',
             'comment' => 'cho vừa lòng mài',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
-        $data = ['pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003',
+        $classified_item = ['pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003',
             'quality_state' => 'failed'];
-        $this->call('PATCH','reclassify',$inputs);
+
+        $this->call('PATCH', 'reclassify', $inputs);
+        $classifying_session_pk = app('db')->table('classifying_sessions')->where('classified_item_pk', $inputs['classified_item_pk'])->value('pk');
+        $classifying_session = [
+            'pk' => $classifying_session_pk,
+            'user_pk' => $inputs['user_pk']
+        ];
         $this->seeStatusCode(200);
-        $this->seeInDatabase('classified_items',$data);
-        // TODO how to see execute_date in classifying_sessions table??
+        $this->seeInDatabase('classified_items', $classified_item);
+        $this->seeInDatabase('classifying_sessions', $classifying_session);
     }
     public function testDeleteClassification ()
     {
