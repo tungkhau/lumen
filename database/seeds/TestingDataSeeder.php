@@ -160,6 +160,7 @@ class TestingDataSeeder extends Seeder
             'id' => 'ABCACVASDEQDFQEJ',
             'item' => '12345',
             'name' => 'TESTA',
+            'photo' => 'e2cdd742-1dcb-4508-9c24-5159f15d8d0d.PNG',
             'type_pk' => '59a679fe-6dd8-11ea-bc55-0242ac130003',
             'unit_pk' => '59a67ad0-6dd8-11ea-bc55-0242ac130003',
             'customer_pk' => '59a6758a-6dd8-11ea-bc55-0242ac130003',

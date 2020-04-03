@@ -135,7 +135,7 @@ $router->post('store_case', 'CaseController@store');
 $router->post('replace', 'CaseController@replace');
 
 //Group 7
-//Demand Group
+//Demand
 $router->post('create_demand','DemandController@create');
 $router->patch('edit_demand','DemandController@edit');
 $router->delete('delete_demand','DemandController@delete');

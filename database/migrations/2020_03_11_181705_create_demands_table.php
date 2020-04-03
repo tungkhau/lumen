@@ -19,6 +19,7 @@ class CreateDemandsTable extends Migration
             $table->string('id', 11)->unique();
             $table->smallInteger('product_quantity');
             $table->boolean('is_opened')->default(true);
+            $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('workplace_pk');
             $table->uuid('conception_pk');
             $table->uuid('user_pk');

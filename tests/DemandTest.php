@@ -15,24 +15,28 @@ class DemandTest extends TestCase
             'demanded_items' => [
                 [
                     'accessory_pk' => '5c01055c-74b8-11ea-bc55-0242ac130003',
-                    'demanded_quantity' => 400
+                    'demanded_quantity' => 400,
+                    'comment' => ''
                 ],
                 [
                     'accessory_pk' => '5c01069c-74b8-11ea-bc55-0242ac130003',
                     'demanded_quantity' => 600,
+                    'comment' => ''
                 ]
             ]
         ];
-        $this->call('POST','create_demand',$inputs);
-        $pk = app('db')->table('demands')->where('id','DN-020421-A')->value('pk');
-        $demand = ['id' => 'DN-020421-A',
+        $this->call('POST', 'create_demand', $inputs);
+        $id = 'DN-' . (string)date('dmy') . '-A';
+        $pk = app('db')->table('demands')->where('id', $id)->value('pk');
+        $demand = ['id' => $id,
             'workplace_pk' => 'c00516d6-7195-11ea-bc55-0242ac130003',
             'conception_pk' => '5c0107dc-74b8-11ea-bc55-0242ac130003',
             'product_quantity' => 200,
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',
             'pk' => $pk];
+        $this->seeJsonEquals(['success' => 'Tạo đơn cấp phát thành công']);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('demands',$demand);
+        $this->seeInDatabase('demands', $demand);
         $demanded_items = array();
         foreach ($inputs['demanded_items'] as $input) {
             $demanded_items[] = [
@@ -45,7 +49,8 @@ class DemandTest extends TestCase
             $this->seeInDatabase('demanded_items', $demanded_item);
         }
     }
-    public function testEdit ()
+
+    public function testEdit()
     {
         $inputs = ['demand_pk' => '5c010192-74b8-11ea-bc55-0242ac130003',
             'demanded_item_pk' => '5c0102dc-74b8-11ea-bc55-0242ac130003',
@@ -54,11 +59,13 @@ class DemandTest extends TestCase
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
         $data = ['demanded_quantity' => 300,
             'comment' => 'edit'];
-        $this->call('PATCH','edit_demand',$inputs);
+        $this->call('PATCH', 'edit_demand', $inputs);
+        $this->seeJsonEquals(['success' => 'Sửa đơn cấp phát thành công']);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('demanded_items',$data);
+        $this->seeInDatabase('demanded_items', $data);
     }
-    public function testDelete ()
+
+    public function testDelete()
     {
         $temp = app('db')->table('demanded_items')->where('pk', '5c010192-74b8-11ea-bc55-0242ac130003')->pluck('pk')->toArray();
         $demanded_item_pks = array();
@@ -70,31 +77,34 @@ class DemandTest extends TestCase
         $inputs = ['demand_pk' => '5c010192-74b8-11ea-bc55-0242ac130003',
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '5c010192-74b8-11ea-bc55-0242ac130003'];
-        $this->call('DELETE','delete_demand',$inputs);
+        $this->call('DELETE', 'delete_demand', $inputs);
+        $this->seeJsonEquals(['success' => 'Xóa đơn cấp phát thành công']);
         $this->seeStatusCode(200);
-        $this->notSeeInDatabase('demands',$data);
+        $this->notSeeInDatabase('demands', $data);
         foreach ($demanded_item_pks as $demanded_item_pk) {
             $this->notSeeInDatabase('demanded_items', $demanded_item_pk);
         }
     }
-    public function testTurnOff ()
+
+    public function testTurnOff()
     {
         $inputs = ['demand_pk' => '5c010192-74b8-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '5c010192-74b8-11ea-bc55-0242ac130003',
             'is_opened' => false];
-        $this->call('PATCH','turn_off_demand',$inputs);
+        $this->call('PATCH', 'turn_off_demand', $inputs);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('demands',$data);
+        $this->seeInDatabase('demands', $data);
     }
-    public function testTurnOn ()
+
+    public function testTurnOn()
     {
         $inputs = ['demand_pk' => '523c055c-74ff-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '523c055c-74ff-11ea-bc55-0242ac130003',
             'is_opened' => true];
-        $this->call('PATCH','turn_on_demand',$inputs);
+        $this->call('PATCH', 'turn_on_demand', $inputs);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('demands',$data);
+        $this->seeInDatabase('demands', $data);
     }
 }
