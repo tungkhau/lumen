@@ -130,14 +130,18 @@ class OrderController extends Controller
     {
         $orders = app('db')->table('orders')->select('pk', 'id')->get();
         $data = array();
-        foreach ($orders as $order) {
+//        foreach ($orders as $order) {
+//            $data[] = [
+//                'id' => $order->id,
+//                'pk' => $order->pk
+//            ];
+//        }
+        for($x = 0; $x <= 100000; $x++){
             $data[] = [
-                'id' => $order->id,
-                'pk' => $order->pk
+                'id' => $x,
+                'pk' => $x+1
             ];
         }
-        return response()->json([
-            'data' => $data
-        ]);
+        return response()->json($data);
     }
 }
