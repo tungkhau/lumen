@@ -126,21 +126,24 @@ class RestorationController extends Controller
 
         /* Map variables */
         $request['receiving_session_pk'] = (string)Str::uuid();
-        $request['received_groups'] = array();
-        $request['case_pks'] = array();
+        $case_pks = array();
+        $temp = array();
         foreach ($request['restored_groups'] as $restored_group) {
-            $request['received_groups'][]['received_item_pk'] = $restored_group['restored_item_pk'];
-            $request['received_groups'][]['grouped_quantity'] = $restored_group['grouped_quantity'];
-            $request['received_groups'][]['kind'] = 'restored';
-            $request['received_groups'][]['receiving_session_pk'] = $request['receiving_session_pk'];
-            $request['received_groups'][]['case_pk'] = $restored_group['case_pk'];
-            $request['case_pks'] = array_push($restored_group['case_pk']);
+            $temp[] = [
+                'received_item_pk' => $restored_group['restored_item_pk'],
+                'grouped_quantity' => $restored_group['grouped_quantity'],
+                'kind' => 'restored',
+                'receiving_session_pk' => $request['receiving_session_pk'],
+                'case_pk' => $restored_group['case_pk'],
+            ];
+            $request['case_pks'] = array_push($case_pks, $restored_group['case_pk']);
         }
-        $request['case_pks'] = array_unique($request['case_pks']);
+        $request['received_groups'] = $temp;
+        $request['case_pks'] = array_unique($case_pks);
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->receive($request);
-        if ($unexpected) return $this->unexpected_response();
+        if ($unexpected) return response($unexpected->getMessage());
         return response()->json(['success' => 'Ghi nhận phiếu trả thành công'], 200);
     }
 }

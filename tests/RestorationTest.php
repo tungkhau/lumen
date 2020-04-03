@@ -103,4 +103,70 @@ class RestorationTest extends TestCase
             $this->notSeeInDatabase('restored_items', $restored_item_pk);
         }
     }
+
+    public function testReceive()
+    {
+        $inputs = [
+            'restoration_pk' => '0756c72e-71d6-11ea-bc55-0242ac130003',
+            'restored_groups' => [
+                [
+                    'restored_item_pk' => '0756cb02-71d6-11ea-bc55-0242ac130003',
+                    'grouped_quantity' => '150',
+                    'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003', //Case 1
+                ],
+                [
+                    'restored_item_pk' => '0756cc10-71d6-11ea-bc55-0242ac130003',
+                    'grouped_quantity' => '300',
+                    'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003', //Case 1
+                ],
+                [
+                    'restored_item_pk' => '0756cb02-71d6-11ea-bc55-0242ac130003',
+                    'grouped_quantity' => '50',
+                    'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003', //Case 2
+                ],
+                [
+                    'restored_item_pk' => '0756cc10-71d6-11ea-bc55-0242ac130003',
+                    'grouped_quantity' => '200',
+                    'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003', //Case 2
+                ]
+            ],
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
+        ];
+        $this->call('POST', 'receive_restoration', $inputs);
+        $receiving_session_pk = app('db')->table('receiving_sessions')->orderBy('executed_date', 'desc')->first()->pk;
+        $receiving_session = [
+            'kind' => 'restoring',
+            'pk' => $receiving_session_pk,
+            'user_pk' => $inputs['user_pk']
+        ];
+        $restoration = [
+            'pk' => $inputs['restoration_pk'],
+            'receiving_session_pk' => $receiving_session_pk
+        ];
+        $cases = array();
+        $received_groups = array();
+        foreach ($inputs['restored_groups'] as $restored_group) {
+            $received_groups[] = [
+                'received_item_pk' => $restored_group['restored_item_pk'],
+                'grouped_quantity' => $restored_group['grouped_quantity'],
+                'kind' => 'restored',
+                'receiving_session_pk' => $receiving_session_pk,
+                'case_pk' => $restored_group['case_pk']
+            ];
+            $cases[] = [
+                'pk' => $restored_group['case_pk'],
+                'shelf_pk' => Null
+            ];
+        }
+        $this->seeJsonEquals(['success' => 'Ghi nhận phiếu trả thành công']);
+        $this->seeStatusCode(200);
+        foreach ($received_groups as $received_group) {
+            $this->seeInDatabase('received_groups', $received_group);
+        }
+        foreach ($cases as $case) {
+            $this->seeInDatabase('cases', $case);
+        }
+        $this->seeInDatabase('receiving_sessions', $receiving_session);
+        $this->seeInDatabase('restorations', $restoration);
+    }
 }

@@ -66,7 +66,8 @@ class RestorationRepository
             app('db')->transaction(function () use ($params) {
                 app('db')->table('receiving_sessions')->insert([
                     'kind' => 'restoring',
-                    'pk' => $params['receiving_session_pk']
+                    'pk' => $params['receiving_session_pk'],
+                    'user_pk' => $params['user_pk']
                 ]);
                 app('db')->table('received_groups')->insert($params['received_groups']);
                 app('db')->table('cases')->whereIn('pk', $params['case_pks'])->update([

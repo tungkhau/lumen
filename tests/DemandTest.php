@@ -86,16 +86,16 @@ class DemandTest extends TestCase
         }
     }
 
-    public function testTurnOff()
-    {
-        $inputs = ['demand_pk' => '5c010192-74b8-11ea-bc55-0242ac130003',
-            'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
-        $data = ['pk' => '5c010192-74b8-11ea-bc55-0242ac130003',
-            'is_opened' => false];
-        $this->call('PATCH', 'turn_off_demand', $inputs);
-        $this->seeStatusCode(200);
-        $this->seeInDatabase('demands', $data);
-    }
+//    public function testTurnOff() TODO Test after having consuming session
+//    {
+//        $inputs = ['demand_pk' => '5c010192-74b8-11ea-bc55-0242ac130003',
+//            'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
+//        $data = ['pk' => '5c010192-74b8-11ea-bc55-0242ac130003',
+//            'is_opened' => false];
+//        $this->call('PATCH', 'turn_off_demand', $inputs);
+//        $this->seeStatusCode(200);
+//        $this->seeInDatabase('demands', $data);
+//    }
 
     public function testTurnOn()
     {

@@ -70,9 +70,9 @@ class RestorationValidator
     {
         try {
             $this->validate($params, [
-                'restoration_pk' => 'required|uuid|exists:restorations,pk,is_confirmed' . True,
+                'restoration_pk' => 'required|uuid|exists:restorations,pk,is_confirmed,' . True,
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
-                'restored_groups.*.restored_item_pk' => 'required|uuid|exists:restored_items,pk',
+                'restored_groups.*.restored_item_pk' => 'required|uuid|exists:restored_items,pk,restoration_pk,' . $params['restoration_pk'],
                 'restored_groups.*.grouped_quantity' => 'required|integer|between:1,2000000000',
                 'restored_groups.*.case_pk' => 'required|uuid|exists:cases,pk|unstored_case'
             ]);

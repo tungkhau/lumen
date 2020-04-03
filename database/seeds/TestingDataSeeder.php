@@ -11,6 +11,14 @@ class TestingDataSeeder extends Seeder
      */
     public function run()
     {
+        $tables = app('db')->select('SHOW TABLES');
+        app('db')->statement('SET FOREIGN_KEY_CHECKS=0;');
+        foreach ($tables as $table) {
+            app('db')->table($table->Tables_in_main)->truncate();
+        }
+        app('db')->statement('SET FOREIGN_KEY_CHECKS=1;');
+
+
         app('db')->table('workplaces')->insert([
             'pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003',
             'name' => 'Văn phòng',
@@ -301,7 +309,7 @@ class TestingDataSeeder extends Seeder
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
         ]);
 
-        app('db') ->table('classified_items')->insert([
+        app('db')->table('classified_items')->insert([
             'pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003',
             'quality_state' => 'passed'
         ]);
@@ -522,7 +530,7 @@ class TestingDataSeeder extends Seeder
 
         // make for G6
 
-        app('db') ->table('classified_items')->insert([
+        app('db')->table('classified_items')->insert([
             'pk' => '1cfd5cec-72a2-11ea-bc55-0242ac130003',
             'quality_state' => 'failed'
         ]);
