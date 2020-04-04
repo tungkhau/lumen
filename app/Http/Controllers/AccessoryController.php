@@ -32,11 +32,27 @@ class AccessoryController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
+        $request['accessory_id'] = $this->id($request['type_pk'], $request['customer_pk'], $request['item'], $request['supplier_pk']);
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->create($request);
         if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Tạo phụ liệu thành công'], 200);
+    }
+
+    private function id($type_pk, $customer_pk, $item, $supplier_pk)
+    {
+        $customer_id = app('db')->table('customers')->where('pk', $customer_pk)->value('id');
+        $supplier_id = app('db')->table('suppliers')->where('pk', $supplier_pk)->value('id');
+        $type_id = app('db')->table('')->where('pk', $type_pk)->value('id');
+        $latest_accessory = app('db')->table('accessories')->where([['customer_pk', $customer_pk], ['item', $item]])->orderBy('created_date', 'desc')->first();
+        if ($latest_accessory) {
+            $num = (int)substr($latest_accessory->id, 7, 5);
+            $num++;
+            $num = substr("00000{$num}", -5);
+            return $type_id . '-' . $customer_id . '-' . $num . '-' . $supplier_id;
+        }
+        return $type_id . '-' . $customer_id . '-00001-' . $supplier_id;
     }
 
     public function delete(Request $request)
@@ -101,13 +117,13 @@ class AccessoryController extends Controller
         /* Check preconditions, return conflict errors(409) */
 
         /* Map variables */
-        $request['photo'] = (string)Str::uuid().'.'.$request['image']->getClientOriginalExtension();
+        $request['photo'] = (string)Str::uuid() . '.' . $request['image']->getClientOriginalExtension();
         $request['old_photo'] = app('db')->table('accessories')->where('pk', $request['accessory_pk'])->value('photo');
         $request['accessory_id'] = app('db')->table('accessories')->where('pk', $request['accessory_pk'])->value('id');
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->upload_photo($request);
-        if($unexpected) return $this->unexpected_response();
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Cập nhật hình ảnh phụ liệu thành công'], 200);
     }
 
@@ -127,12 +143,8 @@ class AccessoryController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->delete_photo($request);
-        if($unexpected) return $this->unexpected_response();
-        return response()->json(['success' => 'Xóa hình ảnh phụ liệu thành công'], 200);    }
-
-    private function id($type_pk, $customer_pk, $item, $supplier_pk)
-    {
-        //TODO implement id generate
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Xóa hình ảnh phụ liệu thành công'], 200);
     }
 }
 

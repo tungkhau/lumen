@@ -17,7 +17,7 @@ class AccessoryValidator
                 'supplier_pk' => 'required|uuid|exists:suppliers,pk,is_active,' . True,
                 'type_pk' => 'required|uuid|exists:types,pk',
                 'unit_pk' => 'required|uuid|exists:units,pk',
-                'item' => 'required|string|max:20',
+                'item' => 'required|string|max:20|unique_type:{$params["customer_pk"]},{$params["type_pk"]}|unique_accessory:{$params["customer_pk"]},{$params["supplier_pk"]}',
                 'art' => 'string|nullable|max:20',
                 'color' => 'string|nullable|max:20',
                 'size' => 'string|nullable|max:10',
