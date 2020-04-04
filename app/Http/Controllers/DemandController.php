@@ -6,6 +6,7 @@ use App\Preconditions\DemandPrecondition;
 use App\Repositories\DemandRepository;
 use App\Validators\DemandValidator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DemandController extends Controller
 {
@@ -33,6 +34,7 @@ class DemandController extends Controller
 
         /* Map variables */
         $request['demand_pk'] = (string)Str::uuid();
+        $request['id'] = $this->id();
         $temp = array();
         foreach ($request['demanded_items'] as $demanded_item) {
             $temp[] = [
@@ -46,7 +48,7 @@ class DemandController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->create($request);
-        if ($unexpected) return $this->unexpected_response();
+        if ($unexpected) return response($unexpected->getMessage());
         return response()->json(['success' => 'Tạo đơn cấp phát thành công'], 200);
     }
 
@@ -64,7 +66,7 @@ class DemandController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->edit($request);
-        if ($unexpected) return $this->unexpected_response();
+        if ($unexpected) return response($unexpected->getMessage());
         return response()->json(['success' => 'Sửa đơn cấp phát thành công'], 200);
     }
 
@@ -82,7 +84,7 @@ class DemandController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->delete($request);
-        if ($unexpected) return $this->unexpected_response();
+        if ($unexpected) return response($unexpected->getMessage());
         return response()->json(['success' => 'Xóa đơn cấp phát thành công'], 200);
     }
 
@@ -120,5 +122,64 @@ class DemandController extends Controller
         $unexpected = $this->repository->turn_on($request);
         if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Mở đơn cấp phát thành công'], 200);
+    }
+
+    public function issue(Request $request)
+    {
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->issue($request);
+        if ($validation) return $this->invalid_response($validation);
+
+        /* Check preconditions, return conflict errors(409) */
+
+//        //Transfer to collections
+//        $issued_groups = collect($request['issued_groups']);
+//        $inCased_items = collect($request['inCased_items']);
+//        //Mapping
+//        $issued_groups = $issued_groups->mapToGroups(function ($item, $key) {
+//            return [$item['received_item_pk'] => $item['grouped_quantity']];
+//        });
+//        $inCased_items =  $inCased_items->mapToGroups(function ($item, $key) {
+//            return [$item['received_item_pk'] => $item['issued_quantity']];
+//        });
+
+
+    }
+
+    private function id()
+    {
+        $date = (string)date('dmy');
+        $date_string = "%" . $date . "%";
+        $latest_demand = app('db')->table('demands')->where('id', 'like', $date_string)->orderBy('created_date', 'desc')->first();
+        if ($latest_demand) {
+            $key = substr($latest_demand->id, -1, 1);
+            $key++;
+        } else $key = "A";
+        return (string)"DN" . "-" . $date . "-" . $key;
+    }
+
+    private function accessory_pk($received_item_pk)
+    {
+        $kind = app('received_groups')->where('received_item_pk', $received_item_pk)->distinct('kind')->select('kind')->first()->kind;
+        switch ($kind) {
+            case 'imported' :
+            {
+                $accessory_pk = app('db')->table('imported_items')->where('pk', $received_item_pk)
+                    ->join('ordered_items', 'imported_items.ordered_item_pk', '=', 'ordered_items.pk')->value('accessory_pk');
+                break;
+            }
+            case 'restored' :
+            {
+                $accessory_pk = app('db')->table('restored_items')->where('pk', $received_item_pk)->value('accessory_pk');
+                break;
+            }
+            default :
+            {
+                $accessory_pk = app('db')->table('collected_items')->where('pk', $received_item_pk)
+                    ->join('in_distributed_items', 'collected_items.in_distributed_item_pk', '=', 'in_distributed_items.pk')->value('accessory_pk');
+                break;
+            }
+        }
+        return $accessory_pk;
     }
 }

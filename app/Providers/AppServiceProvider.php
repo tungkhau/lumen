@@ -96,5 +96,22 @@ class AppServiceProvider extends ServiceProvider
             if ($value <= $celling) return True;
             return False;
         });
+
+        Validator::extend('unique_type', function ($attribute, $value, $parameters, $validator) {
+            $customer_pk = $parameters[0];
+            $type_pk = $parameters[1];
+            $item = $value;
+            $existed_accessory = app('db')->table('accessories')->where([['item', $item], ['customer_pk', $customer_pk]])->first();
+            if (!$existed_accessory) return True;
+            if ($existed_accessory->type_pk == $type_pk) return True;
+            return False;
+        });
+
+        Validator::extend('unique_accessory', function ($attribute, $value, $parameters, $validator) {
+            $customer_pk = $parameters[0];
+            $supplier_pk = $parameters[1];
+            $item = $value;
+            return app('db')->table('accessories')->where(['item', $item], ['customer_pk', $customer_pk], ['supplier_pk', $supplier_pk])->doesntExist();
+        });
     }
 }
