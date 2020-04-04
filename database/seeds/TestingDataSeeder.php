@@ -766,7 +766,7 @@ class TestingDataSeeder extends Seeder
             'kind' => 'restored',
             'grouped_quantity' => 500,
             'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
-            'case_pk' => '30ddcb36-7629-11ea-bc55-0242ac130003', // case 4x
+            'case_pk' => null, // case 4x
             'receiving_session_pk' => '1bd2b8c6-758b-11ea-bc55-0242ac130003',
         ]);
         //TODO received_group -> case_pk => nullable?
@@ -775,7 +775,7 @@ class TestingDataSeeder extends Seeder
             'kind' => 'restored',
             'grouped_quantity' => 500,
             'received_item_pk' => '1bd2b7f4-758b-11ea-bc55-0242ac130003',
-            'case_pk' => '30ddcb36-7629-11ea-bc55-0242ac130003', // case 4x
+            'case_pk' => null , // case 4x
             'receiving_session_pk' => '1bd2b8c6-758b-11ea-bc55-0242ac130003',
         ]);
 
@@ -827,7 +827,7 @@ class TestingDataSeeder extends Seeder
             'kind' => 'restored',
             'entry_kind' => 'out',
             'quantity' => -200,
-            'session_pk' => '1bd2bd3a-758b-11ea-bc55-0242ac130003',
+            'session_pk' => '1bd2c19a-758b-11ea-bc55-0242ac130003',
             'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
             'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
         ]);
@@ -837,7 +837,7 @@ class TestingDataSeeder extends Seeder
             'kind' => 'restored',
             'entry_kind' => 'in',
             'quantity' => +200,
-            'session_pk' => '1bd2bd3a-758b-11ea-bc55-0242ac130003',
+            'session_pk' => '1bd2c19a-758b-11ea-bc55-0242ac130003',
             'case_pk' => '1bd2b286-758b-11ea-bc55-0242ac130003',
             'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
         ]);
