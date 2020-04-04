@@ -60,11 +60,12 @@ class CaseTest extends TestCase
             'case_pk' => null];
         $case = ['pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
             'shelf_pk' => '59a68228-6dd8-11ea-bc55-0242ac130003'];
-        $this->seeInDatabase('received_groups',$receive_group_A);
-        $this->seeInDatabase('received_groups',$receive_group_B);
-        $this->seeInDatabase('cases',$case);
+        $this->seeInDatabase('received_groups', $receive_group_A);
+        $this->seeInDatabase('received_groups', $receive_group_B);
+        $this->seeInDatabase('cases', $case);
     }
-    public function testMoveCase ()
+
+    public function testReplace()
     {
         $inputs = ['case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
             'end_shelf_pk' => '3ad6f1da-7688-11ea-bc55-0242ac130003',
@@ -77,7 +78,7 @@ class CaseTest extends TestCase
             'shelf_pk' => '3ad6f1da-7688-11ea-bc55-0242ac130003'];
         $this->call('POST','replace',$inputs);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('moving_sessions',$data);
-        $this->seeInDatabase('cases',$case);
+        $this->seeInDatabase('replacing_sessions', $data);
+        $this->seeInDatabase('cases', $case);
     }
 }
