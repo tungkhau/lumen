@@ -650,5 +650,305 @@ class TestingDataSeeder extends Seeder
             'demand_pk' => '523c055c-74ff-11ea-bc55-0242ac130003',
             'accessory_pk' => '5c01055c-74b8-11ea-bc55-0242ac130003'
         ]);
+
+        // for g6 testing
+        app('db')->table('cases')->insert([
+            'id' => '123456789-04',
+            'pk' => '1bd2a750-758b-11ea-bc55-0242ac130003',
+            'is_active' => True
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => '123456789-05',
+            'pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'shelf_pk' => '59a68228-6dd8-11ea-bc55-0242ac130003',
+            'is_active' => True
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => '123456789-06',
+            'pk' => '1bd2b286-758b-11ea-bc55-0242ac130003',
+            'shelf_pk' => '59a68228-6dd8-11ea-bc55-0242ac130003',
+            'is_active' => True
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => '123456789-07',
+            'pk' => '1bd2b34e-758b-11ea-bc55-0242ac130003',
+            'shelf_pk' => '59a68228-6dd8-11ea-bc55-0242ac130003',
+            'is_active' => True
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => '123456789-08',
+            'pk' => '1bd2b420-758b-11ea-bc55-0242ac130003',
+            'shelf_pk' => '59a68228-6dd8-11ea-bc55-0242ac130003',
+            'is_active' => True
+        ]);
+        app('db')->table('restorations')->insert([
+            'pk' => '1bd2a9da-758b-11ea-bc55-0242ac130003',
+            'id' => 'RN-040420-A',
+            'is_confirmed' => True,
+            'comment' => 'restoration 3',
+            'user_pk' => 'cec3ab2a-7194-11ea-bc55-0242ac130003',
+            // receiving_session 3        1bd2ac82-758b-11ea-bc55-0242ac130003 null because foreign key law
+        ]);
+        app('db')->table('restored_items')->insert([
+            'pk' => '1bd2aad4-758b-11ea-bc55-0242ac130003',
+            'restored_quantity' => 1000,
+            'restoration_pk' => '1bd2a9da-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('restored_items')->insert([
+            'pk' => '1bd2abb0-758b-11ea-bc55-0242ac130003',
+            'restored_quantity' => 2000,
+            'restoration_pk' => '1bd2a9da-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00fbde-74b8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('receiving_sessions')->insert([
+            'pk' => '1bd2ac82-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restoring',
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '1bd2ad54-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'grouped_quantity' => 1000,
+            'received_item_pk' => '1bd2aad4-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2a750-758b-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '1bd2ac82-758b-11ea-bc55-0242ac130003',
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '1bd2ae1c-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'grouped_quantity' => 2000,
+            'received_item_pk' => '1bd2abb0-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2a750-758b-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '1bd2ac82-758b-11ea-bc55-0242ac130003',
+        ]);
+        //// Restoration 4
+        app('db')->table('cases')->insert([
+            'id' => '123456789-14',
+            'pk' => '30ddcb36-7629-11ea-bc55-0242ac130003',
+            'is_active' => True
+        ]);
+        app('db')->table('restorations')->insert([
+            'pk' => '1bd2b4e8-758b-11ea-bc55-0242ac130003',
+            'id' => 'RN-040420-B',
+            'is_confirmed' => True,
+            'comment' => 'restoration 4',
+            'user_pk' => 'cec3ab2a-7194-11ea-bc55-0242ac130003',
+        ]);
+        app('db')->table('restored_items')->insert([
+            'pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
+            'restored_quantity' => 500,
+            'restoration_pk' => '1bd2b4e8-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('restored_items')->insert([
+            'pk' => '1bd2b7f4-758b-11ea-bc55-0242ac130003',
+            'restored_quantity' => 500,
+            'restoration_pk' => '1bd2b4e8-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00fbde-74b8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('receiving_sessions')->insert([
+            'pk' => '1bd2b8c6-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restoring',
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '1bd2b98e-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'grouped_quantity' => 500,
+            'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '30ddcb36-7629-11ea-bc55-0242ac130003', // case 4x
+            'receiving_session_pk' => '1bd2b8c6-758b-11ea-bc55-0242ac130003',
+        ]);
+        //TODO received_group -> case_pk => nullable?
+        app('db')->table('received_groups')->insert([
+            'pk' => '1bd2ba56-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'grouped_quantity' => 500,
+            'received_item_pk' => '1bd2b7f4-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '30ddcb36-7629-11ea-bc55-0242ac130003', // case 4x
+            'receiving_session_pk' => '1bd2b8c6-758b-11ea-bc55-0242ac130003',
+        ]);
+
+//        app('db')->table('entries')->insert([
+//            'pk' => '',
+//            'received_item_pk' => '',
+//            'kind' => '',
+//            'entry_kind' => '',
+//            'quantity' => ,
+//            'session_pk' => '',
+//            'case_pk' => '',
+//            'accessory_pk' => ''
+//        ]);
+        // storing_session_1
+        app('db')->table('storing_sessions')->insert([
+            'pk' => '1bd2bd3a-758b-11ea-bc55-0242ac130003',
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('entries')->insert([
+            'pk' => '1bd2be02-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'entry_kind' => 'storing',
+            'quantity' => 500,
+            'session_pk' => '1bd2bd3a-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('entries')->insert([
+            'pk' => '1bd2c000-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2b7f4-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'entry_kind' => 'storing',
+            'quantity' => 500,
+            'session_pk' => '1bd2bd3a-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00fbde-74b8-11ea-bc55-0242ac130003'
+        ]);
+        ////moving session A -5 +6
+        app('db')->table('moving_sessions')->insert([
+            'pk' => '1bd2c19a-758b-11ea-bc55-0242ac130003',
+            'start_case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'end_case_pk' => '1bd2b286-758b-11ea-bc55-0242ac130003',
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('entries')->insert([
+            'pk' => '1bd2c262-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'entry_kind' => 'out',
+            'quantity' => -200,
+            'session_pk' => '1bd2bd3a-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('entries')->insert([
+            'pk' => '1bd2c33e-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'entry_kind' => 'in',
+            'quantity' => +200,
+            'session_pk' => '1bd2bd3a-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2b286-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
+        ////moving_session A -6 +5
+        app('db')->table('moving_sessions')->insert([
+            'pk' => '1bd2c5fa-758b-11ea-bc55-0242ac130003',
+            'start_case_pk' => '1bd2b286-758b-11ea-bc55-0242ac130003',
+            'end_case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('entries')->insert([
+            'pk' => '1bd2c6d6-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'entry_kind' => 'out',
+            'quantity' => -100,
+            'session_pk' => '1bd2c5fa-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2b286-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('entries')->insert([
+            'pk' => '1bd2c79e-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'entry_kind' => 'in',
+            'quantity' => +100,
+            'session_pk' => '1bd2c5fa-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
+        //// moving session A -5 +7
+        app('db')->table('moving_sessions')->insert([
+            'pk' => '1bd2c92e-758b-11ea-bc55-0242ac130003',
+            'start_case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'end_case_pk' => '1bd2b34e-758b-11ea-bc55-0242ac130003',
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('entries')->insert([
+            'pk' => '1bd2c9f6-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'entry_kind' => 'out',
+            'quantity' => -100,
+            'session_pk' => '1bd2c92e-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('entries')->insert([
+            'pk' => '1bd2cc62-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'entry_kind' => 'in',
+            'quantity' => +100,
+            'session_pk' => '1bd2c92e-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2b34e-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
+        //// adjusting session A 5 +200
+        app('db')->table('adjusting_sessions')->insert([
+            'pk' => '1bd2cdfc-758b-11ea-bc55-0242ac130003',
+            'quantity' => +200,
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003',
+        ]);
+        app('db')->table('entries')->insert([
+            'pk' => '1bd2cec4-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'entry_kind' => 'adjusting',
+            'quantity' => +200,
+            'session_pk' => '1bd2cdfc-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
+        //// Discard session A 5 -100
+        app('db')->table('discarding_sessions')->insert([
+            'pk'=> '1bd2d108-758b-11ea-bc55-0242ac130003',
+            'quantity' => -100,
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('entries')->insert([
+            'pk' => '1bd2d1da-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'entry_kind' => 'discarding',
+            'quantity' => -100,
+            'session_pk' => '1bd2d108-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
+        //// Adjust session A 6 +100
+        app('db')->table('adjusting_sessions')->insert([
+            'pk' => '1bd2d36a-758b-11ea-bc55-0242ac130003',
+            'quantity' => +100,
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003',
+        ]);
+        app('db')->table('entries')->insert([
+            'pk' => '1bd2d432-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2d432-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'entry_kind' => 'adjusting',
+            'quantity' => +100,
+            'session_pk' => '1bd2d36a-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2b286-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
+        //// Discard session A 7 -100
+        app('db')->table('discarding_sessions')->insert([
+            'pk'=> '1bd2d720-758b-11ea-bc55-0242ac130003',
+            'quantity' => -100,
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('entries')->insert([
+            'pk' => '1bd2d7e8-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2d7e8-758b-11ea-bc55-0242ac130003',
+            'kind' => 'restored',
+            'entry_kind' => 'discarding',
+            'quantity' => -100,
+            'session_pk' => '1bd2d720-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2b34e-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
+        ]);
     }
 }
