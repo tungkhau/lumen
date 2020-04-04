@@ -85,7 +85,7 @@ class CaseController extends Controller
             $received_group_pks = array();
             $entries = array();
             foreach ($received_groups as $received_group) {
-                $temp[] = ['kind' => $received_group->kind,
+                $entries[] = ['kind' => $received_group->kind,
                     'received_item_pk' => $received_group->received_item_pk,
                     'entry_kind' => 'storing',
                     'quantity' => $received_group->grouped_quantity,

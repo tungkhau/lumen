@@ -35,7 +35,7 @@ class CaseRepository
     public function store($params)
     {
         try {
-            if ($params['count']) {
+            if ($params['count'] != 0) {
                 app('db')->transaction(function () use ($params) {
                     app('db')->table('storing_sessions')->insert([
                         'pk' => $params['storing_session_pk'],
