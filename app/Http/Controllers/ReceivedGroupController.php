@@ -171,20 +171,23 @@ class ReceivedGroupController extends Controller
 
         /* Map variables */
         $request['storing_session_pk'] = (string)Str::uuid();
-        $received_groups = app('db')->table('received_groups')->whereIn('pk', array_values($request['received_groups']))->get()->toArray();
+        $received_groups = app('db')->table('received_groups')->whereIn('pk', array_values($request['received_groups']))->get();
+        $temp = array();
         foreach ($received_groups as $received_group) {
-            $request['entries']['received_item_pk'] = $received_group['received_item_pk'];
-            $request['entries']['kind'] = $received_group['kind'];
-            $request['entries']['quantity'] = $received_group['grouped_quantity'];
-            $request['entries']['entry_kind'] = 'storing';
-            $request['entries']['session_pk'] = $request['storing_session_pk'];
-            $request['entries']['case_pk'] = $request['case_pk'];
-            $request['entries']['accessory_pk'] = $this::accessory_pk($received_group['pk']);
+            $temp[] = [
+                'received_item_pk' => $received_group->received_item_pk,
+                'kind' => $received_group->kind,
+                'quantity' => $received_group->grouped_quantity,
+                'entry_kind' => 'storing',
+                'session_pk' => $request['storing_session_pk'],
+                'case_pk' => $request['case_pk'],
+                'accessory_pk' => $this::accessory_pk($received_group->pk)
+            ];
         }
-
+        $request['entries'] = $temp;
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->store($request);
-        if ($unexpected) return $this->unexpected_response();
+        if ($unexpected) return response($unexpected->getMessage());
         return response()->json(['success' => 'Lưu kho cụm phụ liệu nhập thành công'], 200);
     }
 

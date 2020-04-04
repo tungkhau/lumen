@@ -119,7 +119,7 @@ class ReceivedGroupValidator
     {
         try {
             $this->validate($params, [
-                'received_groups.*.pk' => 'required|uuid|exists:received_groups,pk',
+                'received_groups.*.received_group_pk' => 'required|uuid|exists:received_groups,pk',
                 'case_pk' => 'required|uuid|exists:cases,pk|stored_case',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);

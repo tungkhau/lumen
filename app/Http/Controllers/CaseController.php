@@ -33,8 +33,20 @@ class CaseController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->create($request);
-        if($unexpected) return $this->unexpected_response();
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Tạo đơn vị chứa thành công'], 200);
+    }
+
+    private function id()
+    {
+        $date = (string)date('dmy');
+        $date_string = "%" . $date . "%";
+        $latest_case = app('db')->table('cases')->where('id', 'like', $date_string)->latest()->first();
+        if ($latest_case) {
+            $key = substr($latest_case->id, -2, 2);
+            $key++;
+        } else $key = "AA";
+        return (string)env('DEFAULT_SITE') . "-" . $date . "-" . $key;
     }
 
     public function disable(Request $request)
@@ -45,13 +57,13 @@ class CaseController extends Controller
 
         /* Check preconditions, return conflict errors(409) */
         $precondition = $this->precondition->disable($request);
-        if ($precondition)  return $this->conflict_response();
+        if ($precondition) return $this->conflict_response();
 
         /* Map variables */
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->disable($request);
-        if($unexpected) return $this->unexpected_response();
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Xóa đơn vị chứa thành công'], 200);
     }
 
@@ -70,19 +82,21 @@ class CaseController extends Controller
         $request['count'] = count($received_groups);
         if ($request['count']) {
             $request['storing_session_pk'] = (string)Str::uuid();
-            $request['received_group_pks'] = array();
-            $request['entries'][] = array();
+            $received_group_pks = array();
+            $entries = array();
             foreach ($received_groups as $received_group) {
-                $request['entries'][]['kind'] = $received_group->kind;
-                $request['entries'][]['received_item_pk'] = $received_group->received_item_pk;
-                $request['entries'][]['entry_kind'] = 'storing';
-                $request['entries'][]['quantity'] = $received_group->grouped_quantity;
-                $request['entries'][]['session_pk'] = $request['storing_session_pk'];
-                $request['entries'][]['case_pk'] = $request['case_pk'];
-                $request['entries'][]['accessory_pk'] = ReceivedGroupController::accessory_pk($received_group->pk);
-
-                array_push($request['received_group_pks'], $received_group->pk);
+                $temp[] = ['kind' => $received_group->kind,
+                    'received_item_pk' => $received_group->received_item_pk,
+                    'entry_kind' => 'storing',
+                    'quantity' => $received_group->grouped_quantity,
+                    'session_pk' => $request['storing_session_pk'],
+                    'case_pk' => $request['case_pk'],
+                    'accessory_pk' => ReceivedGroupController::accessory_pk($received_group->pk)
+                ];
+                array_push($received_group_pks, $received_group->pk);
             }
+            $request['entries'] = $entries;
+            $request['received_group_pks'] = $received_group_pks;
         }
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
@@ -109,17 +123,5 @@ class CaseController extends Controller
         $unexpected = $this->repository->replace($request);
         if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Di chuyển đơn vị chứa thành công'], 200);
-    }
-
-    private function id()
-    {
-        $date = (string)date('dmy');
-        $date_string = "%" . $date . "%";
-        $latest_case = app('db')->table('cases')->where('id', 'like', $date_string)->latest()->first();
-        if ($latest_case) {
-            $key = substr($latest_case->id, -2, 2);
-            $key++;
-        } else $key = "AA";
-        return (string)env('DEFAULT_SITE') . "-" . $date . "-" . $key;
     }
 }

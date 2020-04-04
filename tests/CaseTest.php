@@ -26,17 +26,17 @@ class CaseTest extends TestCase
         $this->seeInDatabase('cases', $data);
     }
 
-    public function testStoreCase()
+    public function testStore()
     {
         $inputs = ['shelf_pk' => '59a68228-6dd8-11ea-bc55-0242ac130003',
             'case_pk' => '1bd2a750-758b-11ea-bc55-0242ac130003',
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
-        $this->call('POST','store_case',$inputs);
+        $this->call('POST', 'store_case', $inputs);
         $this->seeStatusCode(200);
-        $pk = app('db')->table('storing_sessions')->where('user_pk','cec3ac24-7194-11ea-bc55-0242ac130003')->value('pk');
+        $pk = app('db')->table('storing_sessions')->orderBy('executed_date', 'desc')->first()->pk;
         $storing_session = ['user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',
             'pk' => $pk];
-        $this->seeInDatabase('storing_sessions',$storing_session);
+        $this->seeInDatabase('storing_sessions', $storing_session);
         $entry_A = ['kind' => 'restored',
             'received_item_pk' => '1bd2aad4-758b-11ea-bc55-0242ac130003',
             'entry_kind' => 'storing',
