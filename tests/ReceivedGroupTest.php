@@ -98,4 +98,45 @@ class ReceivedGroupTest extends TestCase
         $this->notSeeInDatabase('checking_sessions', $data);
         $this->seeInDatabase('received_groups', $received_group);
     }
+    //// G6 test
+    public function testStoring()
+    {
+        $inputs = [
+            'received_group' => [
+                ['received_group_pk' => '1bd2ad54-758b-11ea-bc55-0242ac130003'],
+                ['received_group_pk' => '1bd2ae1c-758b-11ea-bc55-0242ac130003']
+            ],
+            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
+        $this->call('POST','store_received_groups',$inputs);
+        $this->seeStatusCode(200);
+        $pk = app('db')->table('storing_sessions')->where('user_pk','cec3ac24-7194-11ea-bc55-0242ac130003')->value('pk');
+        $storing_session = ['user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',
+            'pk' => $pk];
+        $this->seeInDatabase('storing_sessions',$storing_session);
+        $entry_A = ['kind' => 'restored',
+            'received_item_pk' => '1bd2aad4-758b-11ea-bc55-0242ac130003',
+            'entry_kind' => 'storing',
+            'quantity' => 1000,
+            'session_pk' => $pk,
+            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'];
+        $entry_B = ['kind' => 'restored',
+            'received_item_pk' => '1bd2abb0-758b-11ea-bc55-0242ac130003',
+            'entry_kind' => 'storing',
+            'quantity' => 2000,
+            'session_pk' => $pk,
+            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'accessory_pk' => '5c00fbde-74b8-11ea-bc55-0242ac130003'
+        ];
+        $this->seeInDatabase('entries',$entry_A);
+        $this->seeInDatabase('entries',$entry_B);
+        $receive_group_A = ['pk' => '1bd2ad54-758b-11ea-bc55-0242ac130003',
+            'case_pk' => null];
+        $receive_group_B = ['pk' => '1bd2ae1c-758b-11ea-bc55-0242ac130003',
+            'case_pk' => null];
+        $this->seeInDatabase('received_groups',$receive_group_A);
+        $this->seeInDatabase('received_groups',$receive_group_B);
+    }
+
 }
