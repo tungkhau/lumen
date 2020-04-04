@@ -19,7 +19,7 @@ class CreateReceivedGroupsTable extends Migration
             $table->enum('kind', ['imported', 'restored', 'collected']);
             $table->integer('grouped_quantity');
             $table->uuid('received_item_pk');
-            $table->uuid('case_pk');
+            $table->uuid('case_pk')->nullable();
             $table->uuid('receiving_session_pk')->nullable();
             $table->uuid('counting_session_pk')->nullable()->unique()->default(null);
             $table->uuid('checking_session_pk')->nullable()->unique()->default(null);

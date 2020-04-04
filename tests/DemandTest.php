@@ -26,7 +26,8 @@ class DemandTest extends TestCase
             ]
         ];
         $this->call('POST', 'create_demand', $inputs);
-        $id = 'DN-' . (string)date('dmy') . '-A';
+        $conception_id = app('db')->table('conceptions')->where('pk', $inputs['conception_pk'])->value('id');
+        $id = 'DN-' . $conception_id . '-A';
         $pk = app('db')->table('demands')->where('id', $id)->value('pk');
         $demand = ['id' => $id,
             'workplace_pk' => 'c00516d6-7195-11ea-bc55-0242ac130003',
