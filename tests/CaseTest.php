@@ -42,14 +42,14 @@ class CaseTest extends TestCase
             'entry_kind' => 'storing',
             'quantity' => 1000,
             'session_pk' => $pk,
-            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2a750-758b-11ea-bc55-0242ac130003',
             'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'];
         $entry_B = ['kind' => 'restored',
             'received_item_pk' => '1bd2abb0-758b-11ea-bc55-0242ac130003',
             'entry_kind' => 'storing',
             'quantity' => 2000,
             'session_pk' => $pk,
-            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2a750-758b-11ea-bc55-0242ac130003',
             'accessory_pk' => '5c00fbde-74b8-11ea-bc55-0242ac130003'
         ];
         $this->seeInDatabase('entries',$entry_A);
@@ -62,6 +62,22 @@ class CaseTest extends TestCase
             'shelf_pk' => '59a68228-6dd8-11ea-bc55-0242ac130003'];
         $this->seeInDatabase('received_groups',$receive_group_A);
         $this->seeInDatabase('received_groups',$receive_group_B);
+        $this->seeInDatabase('cases',$case);
+    }
+    public function testMoveCase ()
+    {
+        $inputs = ['case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'end_shelf_pk' => '3ad6f1da-7688-11ea-bc55-0242ac130003',
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'];
+        $data = ['case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'start_shelf_pk' => '59a68228-6dd8-11ea-bc55-0242ac130003',
+            'end_shelf_pk' => '3ad6f1da-7688-11ea-bc55-0242ac130003',
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'];
+        $case = ['pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'shelf_pk' => '3ad6f1da-7688-11ea-bc55-0242ac130003'];
+        $this->call('POST','replace',$inputs);
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('moving_sessions',$data);
         $this->seeInDatabase('cases',$case);
     }
 }

@@ -959,5 +959,22 @@ class TestingDataSeeder extends Seeder
             'case_pk' => '1bd2b34e-758b-11ea-bc55-0242ac130003',
             'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
         ]);
+        app('db')->table('blocks')->insert([
+            'pk' => '3ad6f2f2-7688-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'C',
+            'row' => 1,
+            'col' => 1
+        ]);
+        app('db')->table('shelves')->insert([
+            'pk' => '3ad6f1da-7688-11ea-bc55-0242ac130003',
+            'name' => '1',
+            'block_pk' => '3ad6f2f2-7688-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => '123456789-19',
+            'pk' => '3ad6ef14-7688-11ea-bc55-0242ac130003',
+            'is_active' => True
+        ]);
     }
 }

@@ -38,14 +38,14 @@ class BlockTest extends TestCase
         $blocks = ['col' => null,
             'row' => null,
             'is_active' => False];
-        $temp = app('db')->table('shelves')->where('block_pk', '59a68750-6dd8-11ea-bc55-0242ac130003')->pluck('pk')->toArray();
+        $temp = app('db')->table('shelves')->where('block_pk', '3ad6f2f2-7688-11ea-bc55-0242ac130003')->pluck('pk')->toArray();
         $shelves = array();
         foreach ($temp as $key => $value) {
             $shelves[] = [
                 'pk' => $value
             ];
         }
-        $inputs = ['block_pk' => '59a68750-6dd8-11ea-bc55-0242ac130003'];
+        $inputs = ['block_pk' => '3ad6f2f2-7688-11ea-bc55-0242ac130003'];
         $this->call('PATCH', 'close_block', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('blocks', $blocks);
