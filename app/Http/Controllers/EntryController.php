@@ -22,28 +22,6 @@ class EntryController extends Controller
         $this->precondition = $precondition;
     }
 
-    public static function inCased_quantity($received_item_pk, $case_pk)
-    {
-        $entries = app('db')->table('entries')->where([['received_item_pk', '=', $received_item_pk], ['case_pk', '=', $case_pk]])->pluck('quantity');
-        $inCased_quantity = 0;
-        if (count($entries)) {
-            foreach ($entries as $entry) {
-                if ($entry->quantity == Null) return False;
-                $inCased_quantity += $entry->quantity;
-            }
-            return $inCased_quantity;
-        }
-        return 0;
-    }
-
-    private static function inCased_item($received_item_pk, $case_pk)
-    {
-        $inCased_item = app('db')->table('entries')->where([['received_item_pk', '=', $received_item_pk], ['case_pk', '=', $case_pk]])->distinct('received_item_pk')->first()->toArray();
-        if ($inCased_item) return $inCased_item;
-        return False;
-    }
-
-
     public function ajdust(Request $request)
     {
         /* Validate request, catch invalid errors(400) */
@@ -56,19 +34,42 @@ class EntryController extends Controller
         $request['adjusting_session_pk'] = (string)Str::uuid();
         $request['quantity'] = $request['adjusted_quantity'] - $this->inCased_quantity($request['received_item_pk'], $request['case_pk']);
         $inCased_item = $this::inCased_item($request['received_item_pk'], $request['case_pk']);
+        $entry = array();
+        $entry['kind'] = $inCased_item->kind;
+        $entry['received_item_pk'] = $request['received_item_pk'];
+        $entry['entry_kind'] = 'adjusting';
+        $entry['quantity'] = Null;
+        $entry['session_pk'] = $request['adjusting_session_pk'];
+        $entry['case_pk'] = $request['case_pk'];
+        $entry['accessory_pk'] = $inCased_item->accessory_pk;
 
-        $request['entry']['kind'] = $inCased_item['kind'];
-        $request['entry']['received_item_pk'] = $request['received_item_pk'];
-        $request['entry']['entry_kind'] = 'adjusting';
-        $request['entry']['quantity'] = Null;
-        $request['entry']['session_pk'] = $request['adjusting_session_pk'];
-        $request['entry']['case_pk'] = $request['case_pk'];
-        $request['entry']['accessory_pk'] = $inCased_item['accessory_pk'];
+        $request['entry'] = $entry;
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->adjust($request);
         if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Đăng kí hiệu chỉnh thành công'], 200);
+    }
+
+    public static function inCased_quantity($received_item_pk, $case_pk)
+    {
+        $entry_quantities = app('db')->table('entries')->where([['received_item_pk', '=', $received_item_pk], ['case_pk', '=', $case_pk]])->pluck('quantity');
+        $inCased_quantity = 0;
+        if (count($entry_quantities)) {
+            foreach ($entry_quantities as $entry_quantity) {
+                if ($entry_quantity == Null) return False;
+                $inCased_quantity += $entry_quantity;
+            }
+            return $inCased_quantity;
+        }
+        return 0;
+    }
+
+    private static function inCased_item($received_item_pk, $case_pk)
+    {
+        $inCased_item = app('db')->table('entries')->where([['received_item_pk', '=', $received_item_pk], ['case_pk', '=', $case_pk]])->distinct('received_item_pk')->first();
+        if ($inCased_item) return $inCased_item;
+        return False;
     }
 
     public function discard(Request $request)
@@ -85,14 +86,15 @@ class EntryController extends Controller
 
         $inCased_item = $this::inCased_item($request['received_item_pk'], $request['case_pk']);
 
-        $request['entry']['kind'] = $inCased_item['kind'];
-        $request['entry']['received_item_pk'] = $request['received_item_pk'];
-        $request['entry']['entry_kind'] = 'discarding';
-        $request['entry']['quantity'] = Null;
-        $request['entry']['session_pk'] = $request['discarding_session_pk'];
-        $request['entry']['case_pk'] = $request['case_pk'];
-        $request['entry']['accessory_pk'] = $inCased_item['accessory_pk'];
-
+        $entry = array();
+        $entry['kind'] = $inCased_item->kind;
+        $entry['received_item_pk'] = $request['received_item_pk'];
+        $entry['entry_kind'] = 'discarding';
+        $entry['quantity'] = Null;
+        $entry['session_pk'] = $request['discarding_session_pk'];
+        $entry['case_pk'] = $request['case_pk'];
+        $entry['accessory_pk'] = $inCased_item->accessory_pk;
+        $request['entry'] = $entry;
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->discard($request);
         if ($unexpected) return $this->unexpected_response();
@@ -106,6 +108,8 @@ class EntryController extends Controller
         if ($validation) return $this->invalid_response($validation);
 
         /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->verify_adjusting($request);
+        if ($precondition) return $this->conflict_response();
 
         /* Map variables */
         $request['verifying_session_pk'] = (string)Str::uuid();
@@ -124,6 +128,8 @@ class EntryController extends Controller
         if ($validation) return $this->invalid_response($validation);
 
         /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->verify_discarding($request);
+        if ($precondition) return $this->conflict_response();
 
         /* Map variables */
         $request['verifying_session_pk'] = (string)Str::uuid();

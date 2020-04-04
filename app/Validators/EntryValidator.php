@@ -15,7 +15,7 @@ class EntryValidator
             $this->validate($params, [
                 'case_pk' => 'required|uuid|exists:entries,case_pk|stored_case',
                 'received_item_pk' => 'required|uuid|exists:entries,received_item_pk',
-                'adjusted_quantity' => 'adjusted_quantity:{$request["received_item_pk"]},{$request["cases_pk"]}',
+                'adjusted_quantity' => 'adjusted_quantity:' . $params['received_item_pk'] . ',' . $params['case_pk'],
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
@@ -29,7 +29,7 @@ class EntryValidator
     {
         try {
             $this->validate($params, [
-                'adjusting_session_pk' => 'required|uuid|exists:adjusting_sessions,pk,verifying_session_pk,' . Null,
+                'adjusting_session_pk' => 'required|uuid|exists:adjusting_sessions,pk', //TODO add precondition
                 'result' => 'required|boolean',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
@@ -46,7 +46,7 @@ class EntryValidator
             $this->validate($params, [
                 'case_pk' => 'required|uuid|exists:entries, case_pk|stored_case',
                 'received_item_pk' => 'required|uuid|exists:entries,received_item_pk',
-                'discarded_quantity' => 'available_quantity:{$request["received_item_pk"]},{$request["cases_pk"]}',
+                'discarded_quantity' => 'available_quantity:' . $params['received_item_pk'] . ',' . $params['case_pk'],
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
@@ -60,7 +60,7 @@ class EntryValidator
     {
         try {
             $this->validate($params, [
-                'discarding_session_pk' => 'required|uuid|exists:discarding_sessions,pk,verifying_session_pk,' . Null,
+                'discarding_session_pk' => 'required|uuid|exists:discarding_sessions,pk',
                 'result' => 'required|boolean',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
