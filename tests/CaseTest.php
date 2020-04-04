@@ -42,14 +42,14 @@ class CaseTest extends TestCase
             'entry_kind' => 'storing',
             'quantity' => 1000,
             'session_pk' => $pk,
-            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2a750-758b-11ea-bc55-0242ac130003',
             'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'];
         $entry_B = ['kind' => 'restored',
             'received_item_pk' => '1bd2abb0-758b-11ea-bc55-0242ac130003',
             'entry_kind' => 'storing',
             'quantity' => 2000,
             'session_pk' => $pk,
-            'case_pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '1bd2a750-758b-11ea-bc55-0242ac130003',
             'accessory_pk' => '5c00fbde-74b8-11ea-bc55-0242ac130003'
         ];
         $this->seeInDatabase('entries',$entry_A);
