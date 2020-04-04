@@ -44,7 +44,7 @@ class EntryValidator
     {
         try {
             $this->validate($params, [
-                'case_pk' => 'required|uuid|exists:entries, case_pk|stored_case',
+                'case_pk' => 'required|uuid|exists:entries,case_pk|stored_case',
                 'received_item_pk' => 'required|uuid|exists:entries,received_item_pk',
                 'discarded_quantity' => 'available_quantity:' . $params['received_item_pk'] . ',' . $params['case_pk'],
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True

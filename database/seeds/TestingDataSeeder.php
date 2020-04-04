@@ -938,7 +938,7 @@ class TestingDataSeeder extends Seeder
             'received_item_pk' => '1bd2d432-758b-11ea-bc55-0242ac130003',
             'kind' => 'restored',
             'entry_kind' => 'adjusting',
-            'quantity' => +100,
+            'quantity' => Null,
             'session_pk' => '1bd2d36a-758b-11ea-bc55-0242ac130003',
             'case_pk' => '1bd2b286-758b-11ea-bc55-0242ac130003',
             'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
@@ -954,7 +954,7 @@ class TestingDataSeeder extends Seeder
             'received_item_pk' => '1bd2d7e8-758b-11ea-bc55-0242ac130003',
             'kind' => 'restored',
             'entry_kind' => 'discarding',
-            'quantity' => -100,
+            'quantity' => Null,
             'session_pk' => '1bd2d720-758b-11ea-bc55-0242ac130003',
             'case_pk' => '1bd2b34e-758b-11ea-bc55-0242ac130003',
             'accessory_pk' => '5c00f918-74b8-11ea-bc55-0242ac130003'
