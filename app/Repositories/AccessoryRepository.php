@@ -18,7 +18,7 @@ class AccessoryRepository
                     'user_pk' => $params['user_pk']
                 ]);
                 app('db')->table('accessories')->insert([
-                    'id' => $params['id'],
+                    'id' => $params['accessory_id'],
                     'customer_pk' => $params['customer_pk'],
                     'supplier_pk' => $params['supplier_pk'],
                     'type_pk' => $params['type_pk'],

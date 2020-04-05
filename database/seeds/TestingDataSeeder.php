@@ -1014,7 +1014,7 @@ class TestingDataSeeder extends Seeder
         app('db')->table('accessories')->insert([
             'pk' => '1b4a19a4-771a-11ea-bc55-0242ac130003',
             'is_active' => True,
-            'id' => 'AA-AAA-00001-AA',
+            'id' => 'AA-AAA-00001-AAA',
             'item' => 'E',
             'name' => 'Phụ liệu E',
             'type_pk' => '1b49c36e-771a-11ea-bc55-0242ac130003',

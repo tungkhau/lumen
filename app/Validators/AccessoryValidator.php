@@ -17,13 +17,16 @@ class AccessoryValidator
                 'supplier_pk' => 'required|uuid|exists:suppliers,pk,is_active,' . True,
                 'type_pk' => 'required|uuid|exists:types,pk',
                 'unit_pk' => 'required|uuid|exists:units,pk',
-                'item' => 'required|string|max:20|unique_type:{$params["customer_pk"]},{$params["type_pk"]}|unique_accessory:{$params["customer_pk"]},{$params["supplier_pk"]}',
+                'item' => 'required|string|max:20|unique_type:' . $params["customer_pk"] . ',' . $params["type_pk"] . '|unique_accessory:' . $params["customer_pk"] . ',' . $params["supplier_pk"],
                 'art' => 'string|nullable|max:20',
                 'color' => 'string|nullable|max:20',
                 'size' => 'string|nullable|max:10',
                 'accessory_name' => 'required|string|max:50',
                 'comment' => 'string|nullable|max:20',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
+            ], [
+                'item.unique_type' => 'Mã item đã được tạo với loại phụ liệu khác',
+                'item.unique_accessory' => 'Phụ liệu đã tồn tại'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

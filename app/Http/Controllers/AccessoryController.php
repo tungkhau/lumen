@@ -28,15 +28,13 @@ class AccessoryController extends Controller
         if ($validation) return $this->invalid_response($validation);
 
         /* Check preconditions, return conflict errors(409) */
-        $precondition = $this->precondition->create($request);
-        if ($precondition) return $this->conflict_response();
 
         /* Map variables */
         $request['accessory_id'] = $this->id($request['type_pk'], $request['customer_pk'], $request['item'], $request['supplier_pk']);
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->create($request);
-        if ($unexpected) return $this->unexpected_response();
+        if ($unexpected) return $unexpected->getMessage();
         return response()->json(['success' => 'Tạo phụ liệu thành công'], 200);
     }
 
@@ -44,9 +42,13 @@ class AccessoryController extends Controller
     {
         $customer_id = app('db')->table('customers')->where('pk', $customer_pk)->value('id');
         $supplier_id = app('db')->table('suppliers')->where('pk', $supplier_pk)->value('id');
-        $type_id = app('db')->table('')->where('pk', $type_pk)->value('id');
-        $latest_accessory = app('db')->table('accessories')->where([['customer_pk', $customer_pk], ['item', $item]])->orderBy('created_date', 'desc')->first();
-        if ($latest_accessory) {
+        $type_id = app('db')->table('types')->where('pk', $type_pk)->value('id');
+        $latest_accessory = app('db')->table('accessories')->where([['customer_pk', $customer_pk], ['type_pk', $type_pk]])->orderBy('created_date', 'desc')->first();
+        if ($latest_accessory != Null) {
+            if ($latest_accessory->item == $item) {
+                $temp = (string)substr($latest_accessory->id, 0, 13);
+                return $temp . $supplier_id;
+            }
             $num = (int)substr($latest_accessory->id, 7, 5);
             $num++;
             $num = substr("00000{$num}", -5);

@@ -8,7 +8,7 @@ class AccessoryTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testCreate_1()
+    public function testCreateNew()
     {
         $inputs = ['customer_pk' => '1b4a1594-771a-11ea-bc55-0242ac130003',
             'supplier_pk' => '1b4a17ec-771a-11ea-bc55-0242ac130003',
@@ -21,7 +21,7 @@ class AccessoryTest extends TestCase
             'accessory_name' => 'M',
             'comment' => 'M' ,
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $data = ['id' => 'BB-BBB-0001-BB',
+        $data = ['id' => 'BB-BBB-00001-BBB',
             'customer_pk' => '1b4a1594-771a-11ea-bc55-0242ac130003',
             'supplier_pk' => '1b4a17ec-771a-11ea-bc55-0242ac130003',
             'type_pk' => '1b49c620-771a-11ea-bc55-0242ac130003',
@@ -32,49 +32,53 @@ class AccessoryTest extends TestCase
             'size' => 'M',
             'name' => 'M',
             'comment' => 'M'];
-        $activity_log = ['id' => 'BB-BBB-0001-BB',
+        $activity_log = ['id' => 'BB-BBB-00001-BBB',
             'type' => 'create',
             'object' => 'accessory',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('POST','create_accessory',$inputs);
+        $this->call('POST', 'create_accessory', $inputs);
+        $this->seeJsonEquals(['success' => 'Tạo phụ liệu thành công']);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('accessories',$data);
-        $this->seeInDatabase('activity_logs',$activity_log);
+        $this->seeInDatabase('accessories', $data);
+        $this->seeInDatabase('activity_logs', $activity_log);
     }
-    public function testCreate_2() //giống cus/type/sup khác item
-{
-    $inputs = ['customer_pk' => '1b49c742-771a-11ea-bc55-0242ac130003',
-        'supplier_pk' => '1b4a1706-771a-11ea-bc55-0242ac130003',
-        'type_pk' => '1b49c36e-771a-11ea-bc55-0242ac130003',
-        'unit_pk' => '59a67ad0-6dd8-11ea-bc55-0242ac130003',
-        'item' => 'F',
-        'art' => 'F',
-        'color' => 'F',
-        'size' => 'F',
-        'accessory_name' => 'F',
+
+    public function testCreateIncreased()
+    {
+        $inputs = ['customer_pk' => '1b49c742-771a-11ea-bc55-0242ac130003',
+            'supplier_pk' => '1b4a1706-771a-11ea-bc55-0242ac130003',
+            'type_pk' => '1b49c36e-771a-11ea-bc55-0242ac130003',
+            'unit_pk' => '59a67ad0-6dd8-11ea-bc55-0242ac130003',
+            'item' => 'F',
+            'art' => 'F',
+            'color' => 'F',
+            'size' => 'F',
+            'accessory_name' => 'F',
         'comment' => 'F' ,
         'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-    $data = ['id' => 'AA-AAA-00002-AA',
-        'customer_pk' => '1b49c742-771a-11ea-bc55-0242ac130003',
-        'supplier_pk' => '1b4a1706-771a-11ea-bc55-0242ac130003',
-        'type_pk' => '1b49c36e-771a-11ea-bc55-0242ac130003',
-        'unit_pk' => '59a67ad0-6dd8-11ea-bc55-0242ac130003',
-        'item' => 'F',
-        'art' => 'F',
-        'color' => 'F',
-        'size' => 'F',
-        'name' => 'F',
-        'comment' => 'F'];
-    $activity_log = ['id' => 'AA-AAA-00002-AA',
-        'type' => 'create',
-        'object' => 'accessory',
-        'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-    $this->call('POST','create_accessory',$inputs);
-    $this->seeStatusCode(200);
-    $this->seeInDatabase('accessories',$data);
-    $this->seeInDatabase('activity_logs',$activity_log);
+        $data = ['id' => 'AA-AAA-00002-AAA',
+            'customer_pk' => '1b49c742-771a-11ea-bc55-0242ac130003',
+            'supplier_pk' => '1b4a1706-771a-11ea-bc55-0242ac130003',
+            'type_pk' => '1b49c36e-771a-11ea-bc55-0242ac130003',
+            'unit_pk' => '59a67ad0-6dd8-11ea-bc55-0242ac130003',
+            'item' => 'F',
+            'art' => 'F',
+            'color' => 'F',
+            'size' => 'F',
+            'name' => 'F',
+            'comment' => 'F'];
+        $activity_log = ['id' => 'AA-AAA-00002-AAA',
+            'type' => 'create',
+            'object' => 'accessory',
+            'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
+        $this->call('POST', 'create_accessory', $inputs);
+        $this->seeJsonEquals(['success' => 'Tạo phụ liệu thành công']);
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('accessories', $data);
+        $this->seeInDatabase('activity_logs', $activity_log);
     }
-    public function testCreate_3() // giống cus/iem/type, khác ncc (B)
+
+    public function testCreateDiffSup()
     {
         $inputs = ['customer_pk' => '1b49c742-771a-11ea-bc55-0242ac130003',
             'supplier_pk' => '1b4a17ec-771a-11ea-bc55-0242ac130003',
@@ -87,7 +91,7 @@ class AccessoryTest extends TestCase
             'accessory_name' => 'Phụ liệu E',
             'comment' => '',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $data = ['id' => 'AA-AAA-0001-BB',
+        $data = ['id' => 'AA-AAA-00001-BBB',
             'customer_pk' => '1b49c742-771a-11ea-bc55-0242ac130003',
             'supplier_pk' => '1b4a17ec-771a-11ea-bc55-0242ac130003',
             'type_pk' => '1b49c36e-771a-11ea-bc55-0242ac130003',
@@ -98,16 +102,17 @@ class AccessoryTest extends TestCase
             'size' => '',
             'name' => 'Phụ liệu E',
             'comment' => ''];
-        $activity_log = ['id' => 'AA-AAA-0001-BB',
+        $activity_log = ['id' => 'AA-AAA-00001-BBB',
             'type' => 'create',
             'object' => 'accessory',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('POST','create_accessory',$inputs);
+        $this->call('POST', 'create_accessory', $inputs);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('accessories',$data);
-        $this->seeInDatabase('activity_logs',$activity_log);
+        $this->seeInDatabase('accessories', $data);
+        $this->seeInDatabase('activity_logs', $activity_log);
     }
-    public function testCreateFail_4()
+
+    public function testCreateFailedUniqueType()
     {
         $inputs = ['customer_pk' => '1b49c742-771a-11ea-bc55-0242ac130003',
             'supplier_pk' => '1b4a1706-771a-11ea-bc55-0242ac130003',
@@ -118,12 +123,14 @@ class AccessoryTest extends TestCase
             'color' => '',
             'size' => '',
             'accessory_name' => 'E',
-            'comment' => '' ,
+            'comment' => '',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('POST','create_accessory',$inputs);
+        $this->call('POST', 'create_accessory', $inputs);
+        $this->seeJsonEquals(['invalid' => 'Mã item đã được tạo với loại phụ liệu khác']);
         $this->seeStatusCode(400);
     }
-    public function testCreateFail_5()
+
+    public function testCreateFailedUniqueAccessory()
     {
         $inputs = ['customer_pk' => '1b49c742-771a-11ea-bc55-0242ac130003',
             'supplier_pk' => '1b4a1706-771a-11ea-bc55-0242ac130003',
@@ -136,7 +143,8 @@ class AccessoryTest extends TestCase
             'accessory_name' => 'E',
             'comment' => '' ,
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('POST','create_accessory',$inputs);
+        $this->call('POST', 'create_accessory', $inputs);
+        $this->seeJsonEquals(['invalid' => 'Phụ liệu đã tồn tại']);
         $this->seeStatusCode(400);
     }
     public function testDelete()

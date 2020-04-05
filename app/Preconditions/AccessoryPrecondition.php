@@ -4,12 +4,6 @@ namespace App\Preconditions;
 
 class AccessoryPrecondition
 {
-    public function create($params)
-    {
-        //TODO implement precondition (ensure unique rule)
-        return True;
-    }
-
     public function delete($params)
     {
         $conceptions = app('db')->table('accessories_conceptions')->where('accessory_pk', $params['accessory_pk'])->exists();
