@@ -976,5 +976,51 @@ class TestingDataSeeder extends Seeder
             'pk' => '3ad6ef14-7688-11ea-bc55-0242ac130003',
             'is_active' => True
         ]);
+        // For test create accessory
+        app('db')->table('types')->insert([
+            'pk' => '1b49c36e-771a-11ea-bc55-0242ac130003',
+            'id' => 'AA',
+            'name' => 'A TYPE',
+        ]);
+        app('db')->table('types')->insert([
+            'pk' => '1b49c620-771a-11ea-bc55-0242ac130003',
+            'id' => 'BB',
+            'name' => 'B TYPE',
+        ]);
+        app('db')->table('customers')->insert([
+            'pk' => '1b49c742-771a-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'AAA',
+            'name' => 'CUSTOMER A',
+            ]);
+        app('db')->table('customers')->insert([
+            'pk' => '1b4a1594-771a-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'BBB',
+            'name' => 'CUSTOMER B',
+        ]);
+        app('db')->table('suppliers')->insert([
+            'pk' => '1b4a1706-771a-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'AAA',
+            'name' => 'SUPPLIER A',
+        ]);
+        app('db')->table('suppliers')->insert([
+            'pk' => '1b4a17ec-771a-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'BBB',
+            'name' => 'SUPPLIER B',
+        ]);
+        app('db')->table('accessories')->insert([
+            'pk' => '1b4a19a4-771a-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'AA-AAA-00001-AA',
+            'item' => 'E',
+            'name' => 'Phụ liệu E',
+            'type_pk' => '1b49c36e-771a-11ea-bc55-0242ac130003',
+            'unit_pk' => '59a67ad0-6dd8-11ea-bc55-0242ac130003',
+            'customer_pk' => '1b49c742-771a-11ea-bc55-0242ac130003',
+            'supplier_pk' => '1b4a1706-771a-11ea-bc55-0242ac130003',
+        ]);
     }
 }
