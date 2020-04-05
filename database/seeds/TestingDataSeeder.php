@@ -935,7 +935,7 @@ class TestingDataSeeder extends Seeder
         ]);
         app('db')->table('entries')->insert([
             'pk' => '1bd2d432-758b-11ea-bc55-0242ac130003',
-            'received_item_pk' => '1bd2d432-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
             'kind' => 'restored',
             'entry_kind' => 'adjusting',
             'quantity' => Null,
@@ -951,7 +951,7 @@ class TestingDataSeeder extends Seeder
         ]);
         app('db')->table('entries')->insert([
             'pk' => '1bd2d7e8-758b-11ea-bc55-0242ac130003',
-            'received_item_pk' => '1bd2d7e8-758b-11ea-bc55-0242ac130003',
+            'received_item_pk' => '1bd2b5a6-758b-11ea-bc55-0242ac130003',
             'kind' => 'restored',
             'entry_kind' => 'discarding',
             'quantity' => Null,

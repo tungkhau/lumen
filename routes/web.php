@@ -153,6 +153,6 @@ $router->post('change_password', 'UserController@change_password');
 //$router->delete('', '');
 
 /* ANGULAR */
-$router->get('orders', 'OrderController@get');
+$router->get('orders', 'AngularController@get_orders');
 
 

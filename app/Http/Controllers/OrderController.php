@@ -123,19 +123,4 @@ class OrderController extends Controller
         if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Mở đơn đặt thành công'], 200);
     }
-
-
-    /* ANGULAR */
-    public function get()
-    {
-        $orders = app('db')->table('orders')->select('pk', 'id')->get();
-        $data = array();
-        foreach ($orders as $order) {
-            $data[] = [
-                'id' => $order->id,
-                'pk' => $order->pk
-            ];
-        }
-        return response()->json($data);
-    }
 }
