@@ -21,7 +21,7 @@ class CreateIssuedGroupsTable extends Migration
             $table->uuid('received_item_pk');
             $table->uuid('issuing_session_pk');
             $table->uuid('issued_item_pk');
-            $table->uuid('case_pk');
+            $table->uuid('case_pk')->nullable();
 
             $table->foreign('issuing_session_pk')->references('pk')->on('issuing_sessions');
             $table->foreign('issued_item_pk')->references('pk')->on('issued_items');

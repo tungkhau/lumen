@@ -135,14 +135,14 @@ class DemandController extends Controller
         return response()->json(['success' => 'Mở đơn cấp phát thành công'], 200);
     }
 
-    public function issue(Request $request)
-    {
-        /* Validate request, catch invalid errors(400) */
-        $validation = $this->validator->issue($request);
-        if ($validation) return $this->invalid_response($validation);
-
-        /* Check preconditions, return conflict errors(409) */
-
+//    public function issue(Request $request)
+//    {
+//        /* Validate request, catch invalid errors(400) */
+//        $validation = $this->validator->issue($request);
+//        if ($validation) return $this->invalid_response($validation);
+//
+//        /* Check preconditions, return conflict errors(409) */
+//
 //        //Transfer to collections
 //        $issued_groups = collect($request['issued_groups']);
 //        $inCased_items = collect($request['inCased_items']);
@@ -153,9 +153,61 @@ class DemandController extends Controller
 //        $inCased_items =  $inCased_items->mapToGroups(function ($item, $key) {
 //            return [$item['received_item_pk'] => $item['issued_quantity']];
 //        });
+//    }
 
+    public function confirm_issuing(Request $request)
+    {
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->confirm_issuing($request);
+        if ($validation) return $this->invalid_response($validation);
 
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->confirm_issuing($request);
+        if ($precondition) return $this->conflict_response();
+
+        /* Map variables */
+        $request['progressing_session_pk'] = (string)Str::uuid();
+        $request['issued_group_pks'] = app('db')->table('issued_groups')->where('issuing_session_pk', $request['consuming_session_pk'])->pluck('pk');
+
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->confirm_issuing($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Nhận phụ liệu thành công'], 200);
     }
+
+    public function return_issuing(Request $request)
+    {
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->return_issuing($request);
+        if ($validation) return $this->invalid_response($validation);
+
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->return_issuing($request);
+        if ($precondition) return $this->conflict_response();
+
+        /* Map variables */
+        $request['returning_session_pk'] = (string)Str::uuid();
+        $request['issued_group_pks'] = app('db')->table('issued_groups')->where('issuing_session_pk', $request['consuming_session_pk'])->pluck('pk');
+        $request['issued_item_pks'] = app('db')->table('issued_items')->where('issuing_session_pk', $request['consuming_session_pk'])->pluck('pk');
+        $issued_groups = app('db')->table('issued_groups')->where('issuing_session_pk', $request['consuming_session_pk'])->get();
+        $entries = array();
+
+        foreach ($issued_groups as $issued_group) {
+            $entries[] = ['kind' => $issued_group->kind,
+                'received_item_pk' => $issued_group->received_item_pk,
+                'entry_kind' => 'returning',
+                'quantity' => $issued_group->grouped_quantity,
+                'session_pk' => $request['returning_session_pk'],
+                'case_pk' => $issued_group->case_pk,
+                'accessory_pk' => ReceivedGroupController::accessory_pk($issued_group->received_item_pk)
+            ];
+        }
+        /* Execute method, return success message(200) or catch unexpected errors(500) */
+        $unexpected = $this->repository->return_issuing($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Hủy xuất phụ liệu thành công'], 200);
+    }
+
 
     private function accessory_pk($received_item_pk)
     {

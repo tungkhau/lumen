@@ -20,8 +20,8 @@ class CreateIssuingSessionsTable extends Migration
             $table->dateTime('executed_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('container_pk'); // {consuming} demand >< {transferring} out_distribution
             $table->uuid('user_pk');
-            $table->uuid('returning_session_pk')->nullable();
-            $table->uuid('progressing_session_pk')->nullable();
+            $table->uuid('returning_session_pk')->nullable()->default(Null);
+            $table->uuid('progressing_session_pk')->nullable()->default(Null);
 
 
             $table->foreign('user_pk')->references('pk')->on('users');

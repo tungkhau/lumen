@@ -86,4 +86,35 @@ class DemandValidator
         }
         return False;
     }
+
+    public function confirm_issuing($params)
+    {
+        try {
+            $this->validate($params, [
+                'consuming_session_pk' => 'required|uuid|exists:issuing_sessions,pk,kind,consuming',
+                'enabled_cases.*.case_pk' => 'required|uuid|exists:issued_groups,case_pk,issuing_session_pk,' . $params['consuming_session_pk'],
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
+            ]);
+        } catch (ValidationException $e) {
+            $error_messages = $e->errors();
+            return (string)array_shift($error_messages)[0];
+        }
+        return False;
+    }
+
+    public function return_issuing($params)
+    {
+        try {
+            $this->validate($params, [
+                'consuming_session_pk' => 'required|uuid|exists:issuing_sessions,pk,kind,consuming',
+                'pair.*.case_pk' => 'required|uuid|exists:issued_groups,case_pk,issuing_session_pk,' . $params['consuming_session_pk'],
+                'pair.*.shelf_pk' => 'required|uuid|exists:shelves,pk',
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
+            ]);
+        } catch (ValidationException $e) {
+            $error_messages = $e->errors();
+            return (string)array_shift($error_messages)[0];
+        }
+        return False;
+    }
 }

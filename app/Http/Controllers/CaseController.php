@@ -90,8 +90,8 @@ class CaseController extends Controller
                     'entry_kind' => 'storing',
                     'quantity' => $received_group->grouped_quantity,
                     'session_pk' => $request['storing_session_pk'],
-                    'case_pk' => $request['case_pk'],
-                    'accessory_pk' => ReceivedGroupController::accessory_pk($received_group->pk)
+                    'case_pk' => $received_group->case_pk,
+                    'accessory_pk' => ReceivedGroupController::accessory_pk($received_group->received_item_pk)
                 ];
                 array_push($received_group_pks, $received_group->pk);
             }

@@ -181,7 +181,7 @@ class ReceivedGroupController extends Controller
                 'entry_kind' => 'storing',
                 'session_pk' => $request['storing_session_pk'],
                 'case_pk' => $request['case_pk'],
-                'accessory_pk' => $this::accessory_pk($received_group->pk)
+                'accessory_pk' => $this::accessory_pk($received_group->received_item_pk)
             ];
         }
         $request['entries'] = $temp;
@@ -191,22 +191,22 @@ class ReceivedGroupController extends Controller
         return response()->json(['success' => 'Lưu kho cụm phụ liệu nhập thành công'], 200);
     }
 
-    public static function accessory_pk($received_group_pk)
+    public static function accessory_pk($received_item_pk)
     {
-        $received_group = app('db')->table('received_groups')->where('pk', $received_group_pk)->select('received_item_pk', 'kind')->first();
-        switch ($received_group->kind) {
+        $kind = app('db')->table('received_groups')->where('received_item_pk', $received_item_pk)->distinct('kind')->value('kind');
+        switch ($kind) {
             case 'restored':
             {
-                return app('db')->table('restored_items')->where('pk', $received_group->received_item_pk)->value('accessory_pk');
+                return app('db')->table('restored_items')->where('pk', $received_item_pk)->value('accessory_pk');
             }
             case 'collected':
             {
-                $in_distributed_item_pk = app('db')->table('collected_items')->where('pk', $received_group->received_item_pk)->value('in_distributed_item_pk');
+                $in_distributed_item_pk = app('db')->table('collected_items')->where('pk', $received_item_pk)->value('in_distributed_item_pk');
                 return app('db')->table('in_distributed_items')->where('pk', $in_distributed_item_pk)->value('accessory_pk');
             }
             default:
             {
-                $ordered_item_pk = app('db')->table('imported_items')->where('pk', $received_group->received_item_pk)->value('ordered_item_pk');
+                $ordered_item_pk = app('db')->table('imported_items')->where('pk', $received_item_pk)->value('ordered_item_pk');
                 return app('db')->table('ordered_items')->where('pk', $ordered_item_pk)->value('accessory_pk');
             }
         }

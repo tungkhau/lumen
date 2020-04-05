@@ -46,4 +46,22 @@ class DemandPrecondition
         return !$owner;
 
     }
+
+    public function confirm_issuing($params)
+    {
+        $consuming_session = app('db')->table('issuing_sessions')->where('pk', $params['consuming_session_pk'])->first();
+        $returned = $consuming_session->returing_session_pk == Null ? False : True;
+        $confirmed = $consuming_session->progressing_session_pk == Null ? False : True;
+        $temp = app('db')->table('issuing_sessions')->where('pk', $params['consuming_session_pk'])->join('demands', 'issuing_sessions.container_pk', '=', 'demands.pk')->value('demands.workplace_pk');
+        $workplace = app('db')->table('users')->where('pk', $params['user_pk'])->value('workplace_pk') == $temp ? True : False;
+        return $returned || $confirmed || !$workplace;
+    }
+
+    public function return_issuing($params)
+    {
+        $consuming_session = app('db')->table('issuing_sessions')->where('pk', $params['consuming_session_pk'])->first();
+        $returned = $consuming_session->returing_session_pk == Null ? False : True;
+        $confirmed = $consuming_session->progressing_session_pk == Null ? False : True;
+        return $returned || $confirmed;
+    }
 }
