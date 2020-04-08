@@ -2,6 +2,8 @@
 
 namespace App\Preconditions;
 
+use App\Http\Controllers\OrderController;
+
 class OrderPrecondition
 {
     public function create($params)
@@ -25,9 +27,7 @@ class OrderPrecondition
 
     public function delete($params)
     {
-        $imports = app('db')->table('imports')->where('order_pk', $params['order_pk'])->exists();
-        $owner = app('db')->table('orders')->where('pk', $params['order_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
-        return $imports || !$owner;
+        return !OrderController::is_mutable($params['order_pk']);
 
     }
 

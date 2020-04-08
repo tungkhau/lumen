@@ -37,6 +37,14 @@ class TestingDataSeeder extends Seeder
             'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
         ]);
         app('db')->table('users')->insert([
+            'is_active' => True,
+            'id' => '1',
+            'password' => app('hash')->make('1'),
+            'name' => 'Quản lý mặt hàng',
+            'role' => 'Merchandiser',
+            'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('users')->insert([
             'pk' => '59a67242-6dd8-11ea-bc55-0242ac130003',
             'is_active' => False,
             'id' => '234567',
@@ -56,17 +64,35 @@ class TestingDataSeeder extends Seeder
             'id' => 'ABC',
             'name' => 'ABC',
         ]);
+        app('db')->table('activity_logs')->insert([
+            'id' => 'ABC',
+            'type' => 'create',
+            'object' => 'customer',
+            'user_pk' => '59a67242-6dd8-11ea-bc55-0242ac130003',
+        ]);
         app('db')->table('customers')->insert([
             'pk' => '59a6765c-6dd8-11ea-bc55-0242ac130003',
             'is_active' => False,
             'id' => 'XYZ',
             'name' => 'XYZ',
         ]);
+        app('db')->table('activity_logs')->insert([
+            'id' => 'XYZ',
+            'type' => 'create',
+            'object' => 'customer',
+            'user_pk' => '59a67242-6dd8-11ea-bc55-0242ac130003',
+        ]);
         app('db')->table('suppliers')->insert([
             'pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
             'is_active' => True,
             'id' => 'ABC',
             'name' => 'ABC',
+        ]);
+        app('db')->table('activity_logs')->insert([
+            'id' => 'ABC',
+            'type' => 'create',
+            'object' => 'supplier',
+            'user_pk' => '59a67242-6dd8-11ea-bc55-0242ac130003',
         ]);
         app('db')->table('suppliers')->insert([
             'pk' => '59a677ec-6dd8-11ea-bc55-0242ac130003',

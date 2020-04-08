@@ -24,7 +24,8 @@ class AuthController extends Controller
             return response()->json(['invalid' => $error_message], 400);
         }
 
-        $user = app('db')->table('users')->where('id', $request['user_id'])->first();
+        $user = app('db')->table('users')->where('id', $request['user_id'])->whereIn('role', ['merchandiser', 'admin', 'manager'])->first();
+        if (!$user) return response()->json(['invalid' => 'Tài khoản không có quyền truy cập'], 400);
         if (!app('hash')->check($valid_request['password'], $user->password)) return response()->json(['invalid' => 'Mã nhân viên hoặc mật khẩu không đúng'], 400);
         $api_token = $this->api_token($user->pk);
 
@@ -33,7 +34,16 @@ class AuthController extends Controller
         } catch (Exception $e) {
             return response()->json(['unexpected' => $e->getMessage()], 500);
         }
-        return response()->json([['success' => 'Đăng nhập thành công'], ['api_token' => $api_token]], 200);
+        $temp = app('db')->table('users')->where('api_token', $api_token)->first();
+        $response = [
+            'pk' => $temp->pk,
+            'name' => $temp->name,
+            'id' => $temp->id,
+            'role' => $temp->role,
+            'apiToken' => $temp->api_token
+        ];
+
+        return response()->json(['success' => 'Đăng nhập thành công', 'user' => $response], 200);
     }
 
     private function api_token($user_pk)
@@ -53,7 +63,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            app('db')->table('users')->where('api_token', $request['api_token'])->update(['api_token' => Null]);
+            app('db')->table('users')->where('api_token', $request->header('api_token'))->update(['api_token' => Null]);
         } catch (Exception $e) {
             return response()->json(['unexpected' => $e->getMessage()], 500);
         }

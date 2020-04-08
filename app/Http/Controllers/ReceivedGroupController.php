@@ -22,6 +22,13 @@ class ReceivedGroupController extends Controller
         $this->precondition = $precondition;
     }
 
+    public static function actual_quantity($received_group_pk)
+    {
+        $received_group = app('db')->table('received_groups')->where('pk', $received_group_pk)->first();
+        if ($received_group->counting_session_pk == Null) return $received_group->grouped_quantity;
+        return app('db')->table('counting_sessions')->where('pk', $received_group->counting_session_pk)->value('counted_quantity');
+    }
+
     public function count(Request $request)
     {
         /* Validate request, catch invalid errors(400) */

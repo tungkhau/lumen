@@ -21,6 +21,12 @@ class UserController extends Controller
         $this->precondition = $precondition;
     }
 
+    public static function info($user_pk)
+    {
+        $user = app('db')->table('users')->where('pk', $user_pk)->first();
+        return ['name' => $user->name, 'id' => $user->id];
+    }
+
     public function create(Request $request)
     {
         /* Validate request, catch invalid errors(400) */

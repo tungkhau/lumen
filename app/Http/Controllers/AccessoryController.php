@@ -21,6 +21,25 @@ class AccessoryController extends Controller
         $this->validator = $validator;
     }
 
+    public static function info($accessory_pk)
+    {
+        $accessory = app('db')->table('accessories')->where('pk', $accessory_pk)->first();
+        $customer_name = app('db')->table('customers')->where('pk', $accessory->customer_pk)->value('name');
+        $supplier_name = app('db')->table('suppliers')->where('pk', $accessory->supplier_pk)->value('name');
+        $unit = app('db')->table('units')->where('pk', $accessory->unit_pk)->value('name');
+        return [
+            'id' => $accessory->id,
+            'name' => $accessory->name,
+            'item' => $accessory->item,
+            'art' => $accessory->art,
+            'color' => $accessory->color,
+            'size' => $accessory->size,
+            'unit' => $unit,
+            'customer' => $customer_name,
+            'supplier' => $supplier_name,
+        ];
+    }
+
     public function create(Request $request)
     {
         /* Validate request, catch invalid errors(400) */

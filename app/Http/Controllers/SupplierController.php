@@ -21,6 +21,12 @@ class SupplierController extends Controller
         $this->repository = $repository;
     }
 
+    public static function info($supplier_pk)
+    {
+        $supplier = app('db')->table('suppliers')->where('pk', $supplier_pk)->first();
+        return ['name' => $supplier->name, 'id' => $supplier->id];
+    }
+
     public function create(Request $request)
     {
         /* Validate request, catch invalid errors(400) */

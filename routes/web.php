@@ -12,22 +12,22 @@
 */
 
 
-//$router->group(['middleware' => 'auth'], function () use ($router) {
-//
-//    $router->get('/', function () use ($router) {
-//        echo phpinfo();
-//    });
-//    $router->group(['middleware' => 'role:manager'], function () use ($router) {
-//    });
-//    $router->group(['middleware' => 'role:staff'], function () use ($router) {
-//    });
-//});
+$router->group(['middleware' => 'auth'], function () use ($router) {
+
+    $router->get('/', function () use ($router) {
+        echo phpinfo();
+    });
+    $router->group(['middleware' => 'role:manager'], function () use ($router) {
+    });
+    $router->group(['middleware' => 'role:staff'], function () use ($router) {
+    });
+});
 
 //Group 0
-$router->get('/', function () use ($router) {
-    echo phpinfo();
-//    return \Illuminate\Support\Str::random(32);
-});
+//$router->get('/', function () use ($router) {
+//    echo phpinfo();
+////    return \Illuminate\Support\Str::random(32);
+//});
 
 
 //Group 1
@@ -43,6 +43,7 @@ $router->delete('delete_device', 'DeviceController@delete');
 //Workplace
 $router->post('create_workplace', 'WorkplaceController@create');
 $router->delete('delete_workplace', 'WorkplaceController@delete');
+
 
 //Group 2
 //Customer
@@ -72,6 +73,7 @@ $router->patch('reactivate_conception', 'ConceptionController@reactivate');
 $router->post('link_conception_accessory', 'ConceptionController@link_accessory');
 $router->delete('unlink_conception_accessory', 'ConceptionController@unlink_accessory');
 
+
 //Group 3
 //Case
 $router->post('create_case', 'CaseController@create');
@@ -82,6 +84,7 @@ $router->delete('delete_shelf', 'ShelfController@delete');
 //Block
 $router->patch('open_block', 'BlockController@open');
 $router->patch('close_block', 'BlockController@close');
+
 
 //Group 4
 //Order
@@ -106,6 +109,7 @@ $router->patch('confirm_restoration', 'RestorationController@confirm');
 $router->delete('cancel_restoration', 'RestorationController@cancel');
 $router->post('receive_restoration', 'RestorationController@receive');
 
+
 //Group 5
 //Received Group
 $router->post('count', 'ReceivedGroupController@count');
@@ -120,6 +124,7 @@ $router->post('classify', 'ImportController@classify');
 $router->patch('reclassify', 'ImportController@reclassify');
 $router->delete('delete_classification', 'ImportController@delete_classification');
 $router->post('sendback', 'ImportController@sendback');
+
 
 //Group 6
 //Received Group
@@ -154,5 +159,8 @@ $router->post('change_password', 'UserController@change_password');
 
 /* ANGULAR */
 $router->get('orders', 'AngularController@get_orders');
+$router->get('partners', 'AngularController@get_partners');
+$router->get('histories', 'AngularController@get_histories');
+$router->get('inventories', 'AngularController@get_inventories');
 
 

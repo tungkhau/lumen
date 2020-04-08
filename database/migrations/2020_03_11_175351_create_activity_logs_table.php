@@ -19,6 +19,7 @@ class CreateActivityLogsTable extends Migration
             $table->string('id', 25); //Maximum length for Order ID
             $table->enum('type', ['create', 'update', 'delete', 'deactivate', 'reactivate', 'link', 'unlink', 'photo_update']);
             $table->enum('object', ['accessory', 'customer', 'supplier', 'conception']);
+            $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('user_pk');
 
             $table->foreign('user_pk')->references('pk')->on('users');

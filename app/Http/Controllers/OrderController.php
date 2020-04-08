@@ -123,4 +123,19 @@ class OrderController extends Controller
         if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Mở đơn đặt thành công'], 200);
     }
+
+    public static function is_mutable($order_pk)
+    {
+        $imports = app('db')->table('imports')->where('order_pk', $order_pk)->exists();
+        $owner = app('db')->table('orders')->where('pk', $order_pk)->value('user_pk') == $order_pk ? True : False;
+        return !$imports || $owner;
+    }
+
+    //For Angular app only (doesn't check ownership)
+    public static function is_switchable($order_pk)
+    {
+        $status = app('db')->table('orders')->where('pk', $order_pk)->value('is_opened');
+        if ($status) return app('db')->table('imports')->where('order_pk', $order_pk)->exists();
+        return True;
+    }
 }
