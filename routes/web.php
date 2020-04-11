@@ -157,11 +157,16 @@ $router->post('change_password', 'UserController@change_password');
 //$router->patch('', '');
 //$router->delete('', '');
 
+<<<<<<< Updated upstream
 /* ANGULAR */
 $router->get('orders', 'AngularController@get_orders');
 $router->get('ordered_items', 'AngularController@get_ordered_items');
 $router->get('partners', 'AngularController@get_partners');
 $router->get('histories', 'AngularController@get_histories');
 $router->get('inventories', 'AngularController@get_inventories');
+=======
+$router->get('orders', 'Order@Controller@get');
+$router->get('orders/{pk}', 'Order@Controller@find');
+>>>>>>> Stashed changes
 
 
