@@ -249,6 +249,4 @@ class ImportTest extends TestCase
         $this->notSeeInDatabase('classifying_sessions',$inputs);
         $this->notSeeInDatabase('classified_items',$data);
     }
-
-    //TODO tobe continue with send back failed ip item test!!!
 }

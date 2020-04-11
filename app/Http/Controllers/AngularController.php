@@ -31,6 +31,31 @@ class AngularController extends Controller
         return response()->json(['orders' => $response], 201);
     }
 
+    public function get_ordered_items(Request $request)
+    {
+        $ordered_items = app('db')->table('ordered_items')->where($request->all())->get();
+        $response = array();
+        foreach ($ordered_items as $ordered_item) {
+            $accessory = AccessoryController::info($ordered_item->accessory_pk);
+            $response[] = [
+                'pk' => $ordered_item->pk,
+                'accessoryId' => $accessory['id'],
+                'accessoryName' => $accessory['name'],
+                'accessoryItem' => $accessory['item'],
+                'accessoryArt' => $accessory['art'],
+                'accessoryColor' => $accessory['color'],
+                'accessorySize' => $accessory['size'],
+                'accessoryUnit' => $accessory['unit'],
+                'comment' => $ordered_item->comment,
+                'orderedQuantity' => $ordered_item->ordered_quantity,
+                'sumImportedQuantity' => OrderController::sum_imported_quantity($ordered_item->pk),
+                'sumActualQuantity' => OrderController::sum_actual_quantity($ordered_item->pk),
+                'orderPk' => $request['order_pk'],
+            ];
+        }
+        return response()->json(['ordered_items' => $response], 201);
+    }
+
     public function get_partners(Request $request)
     {
         $customers = app('db')->table('customers')->where($request->all())->get();
@@ -66,22 +91,17 @@ class AngularController extends Controller
         $temp = app('db')->table('activity_logs')->where($request->all())->get();
         $histories = array();
         foreach ($temp as $item) {
-            $user = $this::user($item->user_pk);
+            $user = UserController::info($item->user_pk);
             $histories[] = [
                 'type' => $this::translate_type($item->type),
                 'object' => $this::translate_object($item->object),
                 'createdDate' => $item->created_date,
-                'userName' => $user->name,
-                'userId' => $user->id,
+                'userName' => $user['name'],
+                'userId' => $user['id'],
                 'id' => $item->id,
             ];
         }
         return response()->json(['histories' => $histories], 201);
-    }
-
-    private static function user($user_pk)
-    {
-        return app('db')->table('users')->where('pk', $user_pk)->select('name', 'id')->first();
     }
 
     private static function translate_type($type)
@@ -207,6 +227,7 @@ class AngularController extends Controller
         }
         return response()->json(['inventories' => $response], 201);
     }
+
 
 }
 

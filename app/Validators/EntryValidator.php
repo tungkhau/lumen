@@ -29,7 +29,7 @@ class EntryValidator
     {
         try {
             $this->validate($params, [
-                'adjusting_session_pk' => 'required|uuid|exists:adjusting_sessions,pk', //TODO add precondition
+                'adjusting_session_pk' => 'required|uuid|exists:adjusting_sessions,pk',
                 'result' => 'required|boolean',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);

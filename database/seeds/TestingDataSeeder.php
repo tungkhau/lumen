@@ -795,7 +795,6 @@ class TestingDataSeeder extends Seeder
             'case_pk' => null, // case 4x
             'receiving_session_pk' => '1bd2b8c6-758b-11ea-bc55-0242ac130003',
         ]);
-        //TODO received_group -> case_pk => nullable?
         app('db')->table('received_groups')->insert([
             'pk' => '1bd2ba56-758b-11ea-bc55-0242ac130003',
             'kind' => 'restored',

@@ -159,6 +159,7 @@ $router->post('change_password', 'UserController@change_password');
 
 /* ANGULAR */
 $router->get('orders', 'AngularController@get_orders');
+$router->get('ordered_items', 'AngularController@get_ordered_items');
 $router->get('partners', 'AngularController@get_partners');
 $router->get('histories', 'AngularController@get_histories');
 $router->get('inventories', 'AngularController@get_inventories');

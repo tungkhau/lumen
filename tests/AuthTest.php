@@ -8,16 +8,23 @@ class AuthTest extends TestCase
 
     public function testLoginDesktop()
     {
-        $inputs = ['user_id' => '123456',
-            'password' => 'AST@PDG',];
+        $inputs = ['user_id' => '1',
+            'password' => '1',];
         $this->call('POST', 'login_desktop', $inputs);
-        $api_token = app('db')->table('users')->where('id', '123456')->value('api_token');
+        $user = app('db')->table('users')->where('id', $inputs['user_id'])->first();
         $data = [
-            'id' => '123456',
-            'api_token' => $api_token
+            'id' => '1',
+            'api_token' => $user->api_token
+        ];
+        $response = [
+            'pk' => $user->pk,
+            'name' => $user->name,
+            'id' => $user->id,
+            'role' => $user->role,
+            'apiToken' => $user->api_token
         ];
         $this->seeStatusCode(200);
-        $this->seeJsonEquals([['success' => 'Đăng nhập thành công'], ['api_token' => $api_token]]);
+        $this->seeJsonEquals(['success' => 'Đăng nhập thành công','user' => $response]);
         $this->SeeInDatabase('users', $data);
     }
 }
