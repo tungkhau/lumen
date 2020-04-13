@@ -140,4 +140,40 @@ class ReceivedGroupTest extends TestCase
         $this->seeInDatabase('received_groups', $receive_group_B);
     }
 
+    public function testArrange()
+    {
+        $inputs = ['start_case_pk' => '1bd2a750-758b-11ea-bc55-0242ac130003',
+            'end_case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',
+            'received_groups' =>
+            [
+                [
+                    'received_group_pk' => '1bd2ad54-758b-11ea-bc55-0242ac130003'
+                ],
+                [
+                    'received_group_pk' => '1bd2ae1c-758b-11ea-bc55-0242ac130003'
+                ]
+            ],
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'];
+        $this->call('POST','arrange',$inputs);
+        $this->seeJsonEquals(['success' => 'Sắp xếp cụm phụ liệu thành công']);
+        $this->seeStatusCode(200);
+        $pk = app('db')->table('arranging_sessions')->orderBy('executed_date', 'desc')->first()->pk;
+        $arranging_session = ['pk' => $pk,
+            'start_case_pk' => '1bd2a750-758b-11ea-bc55-0242ac130003',
+            'end_case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'];
+        $received_groups_arranging_session_1 = ['received_group_pk' => '1bd2ad54-758b-11ea-bc55-0242ac130003',
+            'arranging_session_pk' => $pk];
+        $received_groups_arranging_session_2 = ['received_group_pk' => '1bd2ae1c-758b-11ea-bc55-0242ac130003',
+            'arranging_session_pk' => $pk];
+        $received_group_1 = ['pk' => '1bd2ad54-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003'];
+        $received_group_2 = ['pk' => '1bd2ae1c-758b-11ea-bc55-0242ac130003',
+            'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003'];
+        $this->seeInDatabase('arranging_sessions',$arranging_session);
+        $this->seeInDatabase('received_group_arranging_sessions',$received_groups_arranging_session_1);
+        $this->seeInDatabase('received_group_arranging_sessions',$received_groups_arranging_session_2);
+        $this->seeInDatabase('received_groups',$received_group_1);
+        $this->seeInDatabase('received_groups',$received_group_2);
+    }
 }

@@ -104,7 +104,7 @@ class ReceivedGroupValidator
         try {
             $this->validate($params, [
                 'start_case_pk' => 'required|uuid|exists:received_groups,case_pk|unstored_case',
-                'end_case_pk' => 'required|uuid|exists:cases,pk|unstored_case|different:' . $params['start_case_pk'],
+                'end_case_pk' => 'required|uuid|exists:cases,pk|unstored_case|different:start_case_pk',
                 'received_groups.*.received_group_pk' => 'required|uuid|exists:received_groups,pk,case_pk,' . $params['start_case_pk'],
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
