@@ -10,9 +10,8 @@ class AngularController extends Controller
 
     public function get_orders(Request $request)
     {
-
         $orders = app('db')->table('orders')->where($request->all())->get();
-        $reponse = array();
+        $response = array();
         foreach ($orders as $order) {
             $user = UserController::info($order->user_pk);
             $supplier = SupplierController::info($order->supplier_pk);

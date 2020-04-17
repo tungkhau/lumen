@@ -124,7 +124,7 @@ class OrderController extends Controller
         return response()->json(['success' => 'Mở đơn đặt thành công'], 200);
     }
 
-<<<<<<< Updated upstream
+
     public static function is_mutable($order_pk)
     {
         $imports = app('db')->table('imports')->where('order_pk', $order_pk)->exists();
@@ -158,12 +158,4 @@ class OrderController extends Controller
         }
         return $sum;
     }
-=======
-    /* For ANGULAR  */
-    /******************/
-
-//    public function get
-
-
->>>>>>> Stashed changes
 }
