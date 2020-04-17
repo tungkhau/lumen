@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCollectingsTable extends Migration
+class CreateInTransfersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateCollectingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('collectings', function (Blueprint $table) {
+        Schema::create('in_transfers', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->dateTime('sent_date');
             $table->uuid('in_distribution_pk');
@@ -32,6 +32,6 @@ class CreateCollectingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('collectings');
+        Schema::dropIfExists('in_transfers');
     }
 }

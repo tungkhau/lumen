@@ -206,9 +206,9 @@ class ReceivedGroupController extends Controller
             {
                 return app('db')->table('restored_items')->where('pk', $received_item_pk)->value('accessory_pk');
             }
-            case 'collected':
+            case 'in_transferred':
             {
-                $in_distributed_item_pk = app('db')->table('collected_items')->where('pk', $received_item_pk)->value('in_distributed_item_pk');
+                $in_distributed_item_pk = app('db')->table('in_transferred_items')->where('pk', $received_item_pk)->value('in_distributed_item_pk');
                 return app('db')->table('in_distributed_items')->where('pk', $in_distributed_item_pk)->value('accessory_pk');
             }
             default:

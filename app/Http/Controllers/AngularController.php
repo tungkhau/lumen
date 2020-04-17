@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\ViewModels\Receiving;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AngularController extends Controller
 {
+    private $receiving;
+
+    public function __construct(Receiving $receiving)
+    {
+        $this->receiving = $receiving;
+    }
 
     public function get_orders(Request $request)
     {
@@ -225,6 +232,12 @@ class AngularController extends Controller
             ];
         }
         return response()->json(['inventories' => $response], 201);
+    }
+
+    public function get_receiving(Request $request)
+    {
+        $response = $this->receiving->get($request);
+        return response()->json(['receivings' => $response], 201);
     }
 
 

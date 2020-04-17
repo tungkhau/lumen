@@ -17,7 +17,7 @@ class CreateEntriesTable extends Migration
         Schema::create('entries', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->uuid('received_item_pk');
-            $table->enum('kind', ['imported', 'restored', 'collected']);
+            $table->enum('kind', ['imported', 'restored', 'in_transferred']);
             $table->enum('entry_kind', ['storing', 'in', 'out', 'issuing', 'adjusting', 'discarding', 'returning']);
             $table->integer('quantity')->nullable();
             $table->uuid('session_pk');

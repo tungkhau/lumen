@@ -163,5 +163,8 @@ $router->get('partners', 'AngularController@get_partners');
 $router->get('histories', 'AngularController@get_histories');
 $router->get('inventories', 'AngularController@get_inventories');
 
+$router->get('receivings', 'AngularController@get_receiving');
+
+
 
 

@@ -16,7 +16,7 @@ class CreateReceivedGroupsTable extends Migration
     {
         Schema::create('received_groups', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
-            $table->enum('kind', ['imported', 'restored', 'collected']);
+            $table->enum('kind', ['imported', 'restored', 'in_transferred']);
             $table->integer('grouped_quantity');
             $table->uuid('received_item_pk');
             $table->uuid('case_pk')->nullable();

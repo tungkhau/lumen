@@ -19,9 +19,9 @@ class OrderPrecondition
     public function edit($params)
     {
         $ordered_item_order_pk = app('db')->table('ordered_items')->where('pk', $params['ordered_item_pk'])->value('order_pk');
-        $unique = $ordered_item_order_pk == $params['order_pk'] ? True : False;
+        $unique = $ordered_item_order_pk == $params['order_pk'];
         $imports = app('db')->table('imports')->where('order_pk', $params['order_pk'])->exists();
-        $owner = app('db')->table('orders')->where('pk', $params['order_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
+        $owner = app('db')->table('orders')->where('pk', $params['order_pk'])->value('user_pk') == $params['user_pk'];
         return !$unique || $imports || !$owner;
     }
 
@@ -34,13 +34,13 @@ class OrderPrecondition
     public function turn_off($params)
     {
         $imports = app('db')->table('imports')->where('order_pk', $params['order_pk'])->exists();
-        $owner = app('db')->table('orders')->where('pk', $params['order_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
+        $owner = app('db')->table('orders')->where('pk', $params['order_pk'])->value('user_pk') == $params['user_pk'];
         return !$imports || !$owner;
     }
 
     public function turn_on($params)
     {
-        $owner = app('db')->table('orders')->where('pk', $params['order_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
+        $owner = app('db')->table('orders')->where('pk', $params['order_pk'])->value('user_pk') == $params['user_pk'];
         return !$owner;
     }
 }

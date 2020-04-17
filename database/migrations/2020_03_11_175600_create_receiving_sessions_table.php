@@ -16,7 +16,7 @@ class CreateReceivingSessionsTable extends Migration
     {
         Schema::create('receiving_sessions', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
-            $table->enum('kind', ['importing', 'restoring', 'collecting']);
+            $table->enum('kind', ['importing', 'restoring', 'in_transferring']);
             $table->dateTime('executed_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('user_pk');
 

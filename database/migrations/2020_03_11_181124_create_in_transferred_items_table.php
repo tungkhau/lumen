@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCollectedItemsTable extends Migration
+class CreateInTransferredItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +14,13 @@ class CreateCollectedItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('collected_items', function (Blueprint $table) {
+        Schema::create('in_transferred_items', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
-            $table->integer('collected_quantity');
-            $table->uuid('collecting_pk');
+            $table->integer('in_transferred_quantity');
+            $table->uuid('in_transfer_pk');
             $table->uuid('in_distributed_item_pk');
 
-            $table->foreign('collecting_pk')->references('pk')->on('collectings');
+            $table->foreign('in_transfer_pk')->references('pk')->on('in_transfers');
             $table->foreign('in_distributed_item_pk')->references('pk')->on('in_distributed_items');
         });
     }
@@ -32,6 +32,6 @@ class CreateCollectedItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('collected_items');
+        Schema::dropIfExists('in_transferred_items');
     }
 }

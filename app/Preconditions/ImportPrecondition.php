@@ -8,8 +8,8 @@ class ImportPrecondition
     {
         $imported_item_pks = app('db')->table('imported_items')->where('import_pk', $params['import_pk'])->pluck('pk')->toArray();
         $received_groups = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->exists();
-        $owner = app('db')->table('imports')->where('pk', $params['import_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
-        $unique = app('db')->table('imported_items')->where('pk', $params['imported_item_pk'])->value('import_pk') == $params['import_pk'] ? True : False;
+        $owner = app('db')->table('imports')->where('pk', $params['import_pk'])->value('user_pk') == $params['user_pk'];
+        $unique = app('db')->table('imported_items')->where('pk', $params['imported_item_pk'])->value('import_pk') == $params['import_pk'];
 
         return $received_groups || !$owner || !$unique;
     }
@@ -18,7 +18,7 @@ class ImportPrecondition
     {
         $imported_item_pks = app('db')->table('imported_items')->where('import_pk', $params['import_pk'])->pluck('pk')->toArray();
         $received_groups = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->exists();
-        $owner = app('db')->table('imports')->where('pk', $params['import_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
+        $owner = app('db')->table('imports')->where('pk', $params['import_pk'])->value('user_pk') == $params['user_pk'];
 
         return $received_groups || !$owner;
     }
@@ -27,7 +27,7 @@ class ImportPrecondition
     {
         $imported_item_pks = app('db')->table('imported_items')->where('import_pk', $params['import_pk'])->pluck('pk')->toArray();
         $received_groups = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->exists();
-        $owner = app('db')->table('imports')->where('pk', $params['import_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
+        $owner = app('db')->table('imports')->where('pk', $params['import_pk'])->value('user_pk') == $params['user_pk'];
         return !$received_groups || !$owner;
     }
 
@@ -35,7 +35,7 @@ class ImportPrecondition
     {
         $imported_item_pks = app('db')->table('imported_items')->where('import_pk', $params['import_pk'])->pluck('pk')->toArray();
         $checked_or_counted = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->where([['counting_session_pk', '!=', Null], ['checking_session_pk', '!=', Null]])->exists();
-        $owner = app('db')->table('imports')->where('pk', $params['import_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
+        $owner = app('db')->table('imports')->where('pk', $params['import_pk'])->value('user_pk') == $params['user_pk'];
         $classified = app('db')->table('imported_items')->where([['import_pk', $params['import_pk']], ['classified_item_pk', '!=', Null]])->exists();
 
         return !$owner || $classified || $checked_or_counted;
@@ -44,7 +44,7 @@ class ImportPrecondition
     public function edit_receiving($params)
     {
         //If current user is its owner
-        $owner = app('db')->table('receiving_sessions')->where('pk', $params['importing_session_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
+        $owner = app('db')->table('receiving_sessions')->where('pk', $params['importing_session_pk'])->value('user_pk') == $params['user_pk'];
         //If all imported groups belong to an opened import
         $opened = false;
         $imported_item_pks = app('db')->table('received_groups')->where('receiving_session_pk', $params['importing_session_pk'])->distinct('received_item_pk')->pluck('received_item_pk')->toArray();
@@ -62,7 +62,7 @@ class ImportPrecondition
         $import_pks = app('db')->table('imported_items')->whereIn('pk', $imported_item_pks)->distinct('import_pk')->pluck('import_pk')->toArray(); //Expect only one import
         if (count($import_pks) == 1) $opened = app('db')->table('imports')->where('pk', $import_pks[0])->value('is_opened');
         //If current user is its owner
-        $owner = app('db')->table('receiving_sessions')->where('pk', $params['importing_session_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
+        $owner = app('db')->table('receiving_sessions')->where('pk', $params['importing_session_pk'])->value('user_pk') == $params['user_pk'];
         return !$opened || !$owner;
     }
 

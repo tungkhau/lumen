@@ -226,8 +226,8 @@ class DemandController extends Controller
             }
             default :
             {
-                $accessory_pk = app('db')->table('collected_items')->where('pk', $received_item_pk)
-                    ->join('in_distributed_items', 'collected_items.in_distributed_item_pk', '=', 'in_distributed_items.pk')->value('accessory_pk');
+                $accessory_pk = app('db')->table('in_transferred_items')->where('pk', $received_item_pk)
+                    ->join('in_distributed_items', 'in_transferred_items.in_distributed_item_pk', '=', 'in_distributed_items.pk')->value('accessory_pk');
                 break;
             }
         }
