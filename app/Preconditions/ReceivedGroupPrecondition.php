@@ -74,7 +74,7 @@ class ReceivedGroupPrecondition
         $imported_group = app('db')->table('received_groups')->where('checking_session_pk', $params['checking_session_pk'])->first();
         $stored = $imported_group->storing_session_pk == Null ? False : True;
         $classified = app('db')->table('imported_items')->where('pk', $imported_group->received_item_pk)->value('classified_item_pk') ? True : False;
-        $owner = app('db')->table('checking_sessions')->where('pk', $params['checking_session_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
+        $owner = app('db')->table('checking_sessions')->where('pk', $params['checking_session_pk'])->value('user_pk') == $params['user_pk'];
         return $stored || $classified || !$owner;
     }
 
@@ -82,9 +82,9 @@ class ReceivedGroupPrecondition
     {
         $received_group_pks = array();
         foreach ($params['received_groups'] as $received_group) {
-            array_push($received_group_pks, $received_group['pk']);
+            array_push($received_group_pks, $received_group['received_group_pk']);
         }
-        return app('db')->table('received_groups')->whereIn('pk', $received_group_pks)->where('storing_session_pk', '!=', Null)->exist();
+        return app('db')->table('received_groups')->whereIn('pk', $received_group_pks)->where('storing_session_pk', '!=', Null)->exists();
     }
 
     public function store($params)

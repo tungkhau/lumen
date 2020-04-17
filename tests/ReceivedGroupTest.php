@@ -170,10 +170,10 @@ class ReceivedGroupTest extends TestCase
             'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003'];
         $received_group_2 = ['pk' => '1bd2ae1c-758b-11ea-bc55-0242ac130003',
             'case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003'];
-        $this->seeInDatabase('arranging_sessions',$arranging_session);
-        $this->seeInDatabase('received_group_arranging_sessions',$received_groups_arranging_session_1);
-        $this->seeInDatabase('received_group_arranging_sessions',$received_groups_arranging_session_2);
-        $this->seeInDatabase('received_groups',$received_group_1);
-        $this->seeInDatabase('received_groups',$received_group_2);
+        $this->seeInDatabase('arranging_sessions', $arranging_session);
+        $this->seeInDatabase('received_groups_arranging_sessions', $received_groups_arranging_session_1);
+        $this->seeInDatabase('received_groups_arranging_sessions', $received_groups_arranging_session_2);
+        $this->seeInDatabase('received_groups', $received_group_1);
+        $this->seeInDatabase('received_groups', $received_group_2);
     }
 }

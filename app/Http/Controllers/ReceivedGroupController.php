@@ -153,16 +153,21 @@ class ReceivedGroupController extends Controller
         /* Map variables */
         $request['arranging_session_pk'] = (string)Str::uuid();
         $received_group_pks = array();
-        $request['received_groups_arranging_sessions'] = array();
+        $temp = array();
         foreach ($request['received_groups'] as $received_group) {
-            $request['received_groups_arranging_sessions'][]['received_group_pk'] = $received_group['received_group_pk'];
-            $request['received_groups_arranging_sessions'][]['arranging_session_pk'] = $request['arranging_session_pk'];
-            array_push($received_group_pks, $received_group['pk']);
+            $temp[] = [
+                'received_group_pk' => $received_group['received_group_pk'],
+                'arranging_session_pk' => $request['arranging_session_pk']
+            ];
+            array_push($received_group_pks, $received_group['received_group_pk']);
         }
+        $request['received_groups_arranging_sessions'] = $temp;
+        $request['received_group_pks'] = $received_group_pks;
+
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->arrange($request);
-        if ($unexpected) return $this->unexpected_response();
+        if ($unexpected) return $unexpected->getMessage();
         return response()->json(['success' => 'Sắp xếp cụm phụ liệu thành công'], 200);
     }
 
