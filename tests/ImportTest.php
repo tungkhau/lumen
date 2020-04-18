@@ -249,4 +249,25 @@ class ImportTest extends TestCase
         $this->notSeeInDatabase('classifying_sessions',$inputs);
         $this->notSeeInDatabase('classified_items',$data);
     }
+    public function testSendBack ()
+    {
+        $inputs = ['failed_item_pk' => '1cfd5cec-72a2-11ea-bc55-0242ac130003',
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+        $this->call('POST','sendback',$inputs);
+        $this->seeJsonEquals(['success' => 'Gửi trả phụ liệu thành công']);
+        $this->seeStatusCode(200);
+        $pk = app('db')->table('sendbacking_sessions')->orderBy('executed_date', 'desc')->first()->pk;
+        $sendbackingsession = ['pk' => $pk,
+            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+        $classified_item = ['pk' => '1cfd5cec-72a2-11ea-bc55-0242ac130003',
+            'sendbacking_session_pk' => $pk];
+        $received_group_4 = ['pk' => 'd05a25f6-811e-11ea-bc55-0242ac130003',
+            'case_pk' => null];
+        $received_group_7 = ['pk' => 'fc45d13c-8160-11ea-bc55-0242ac130003',
+            'case_pk' => null];
+        $this->seeInDatabase('sendbacking_sessions',$sendbackingsession);
+        $this->seeInDatabase('classified_items',$classified_item);
+        $this->seeInDatabase('received_groups',$received_group_4);
+        $this->seeInDatabase('received_groups',$received_group_7);
+    }
 }
