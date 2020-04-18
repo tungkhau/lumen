@@ -15,11 +15,6 @@ class Receiving extends ViewModel
         return $this->_translation($externality_filtered_object);
     }
 
-    public function find($params)
-    {
-        //TODO
-    }
-
     private function _kind_filter($kind)
     {
         $objects = array();
@@ -67,11 +62,40 @@ class Receiving extends ViewModel
         return $object;
     }
 
+    public static function status($receiving_pk, $kind)
+    {
+        if ($kind == 'import') {
+            $is_opened = app('db')->table('imports')->where('pk', $receiving_pk)->value('is_opened');
+            if ($is_opened == True) return 'opened';
+            $imported_item_pks = app('db')->table('imported_items')->where('import_pk', $receiving_pk)->pluck('pk');
+            foreach ($imported_item_pks as $imported_item_pk) {
+                if (ReceivedItem::status($imported_item_pk, 'imported') != 'done') return 'closed';
+            }
+            return 'done';
+        }
+        if ($kind == 'restoration') {
+            $restoration = app('db')->table('restorations')->where('pk', $receiving_pk)->select('is_confirmed', 'receiving_session_pk')->first();
+            if (!$restoration->is_confirmed) return 'unconfirmed';
+            if ($restoration->receiving_session_pk == Null) return 'confirmed';
+            return 'received';
+        }
+        return Null;
+    }
+
     private function _externality_filter($kind, $externality, $input_object)
     {
-        if ($externality != Null && array_key_exists('user_pk', $externality)) {
-            $table = $kind == 'import' ? 'imports' : 'restorations';
-            $pks = app('db')->table("$table")->whereIn('user_pk', $externality['user_pk'])->pluck('pk')->toArray();
+
+        if ($externality != Null && array_key_exists('user_pks', $externality)) {
+            if ($kind != Null) {
+                $table = $kind == 'import' ? 'imports' : 'restorations';
+                $pks = app('db')->table("$table")->whereIn('user_pk', $externality['user_pks'])->pluck('pk')->toArray();
+                foreach ($input_object as $key => $item) {
+                    if (!in_array($item['pk'], $pks)) unset($input_object[$key]);
+                }
+                return $input_object;
+            }
+            $pks = app('db')->table('imports')->whereIn('user_pk', $externality['user_pks'])->pluck('pk')->toArray();
+            $pks = array_merge(app('db')->table('restorations')->whereIn('user_pk', $externality['user_pks'])->pluck('pk')->toArray(), $pks);
             foreach ($input_object as $key => $item) {
                 if (!in_array($item['pk'], $pks)) unset($input_object[$key]);
             }
@@ -156,23 +180,8 @@ class Receiving extends ViewModel
         return Null;
     }
 
-    public static function status($receiving_pk, $kind)
+    public function find($params)
     {
-        if ($kind == 'import') {
-            $is_opened = app('db')->table('imports')->where('pk', $receiving_pk)->value('is_opened');
-            if ($is_opened == True) return 'opened';
-            $imported_item_pks = app('db')->table('imported_items')->where('import_pk', $receiving_pk)->pluck('pk');
-//        foreach ($imported_item_pks as $imported_item_pk) {
-//        if(ReceivedItem::imported_item_status($imported_item_pk) != 'done') return 'closed';
-//        }
-            return 'done';
-        }
-        if ($kind == 'restoration') {
-            $restoration = app('db')->table('restorations')->where('pk', $receiving_pk)->select('is_confirmed', 'receiving_session_pk')->first();
-            if (!$restoration->is_confirmed) return 'unconfirmed';
-            if ($restoration->receiving_session_pk == Null) return 'confirmed';
-            return 'received';
-        }
-        return Null;
+        //TODO
     }
 }
