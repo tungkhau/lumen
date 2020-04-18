@@ -194,7 +194,7 @@ class ImportRepository
                     'pk' => $params['sendbacking_session_pk'],
                     'user_pk' => $params['user_pk']
                 ]);
-                app('db')->table('classified_items')->where('pk', $params['classified_item_pk'])->update([
+                app('db')->table('classified_items')->where('pk', $params['failed_item_pk'])->update([
                     'sendbacking_session_pk' => $params['sendbacking_session_pk'],
                 ]);
                 app('db')->table('received_groups')->whereIn('pk', $params['received_group_pks'])->update([

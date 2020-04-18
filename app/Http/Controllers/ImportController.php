@@ -334,7 +334,7 @@ class ImportController extends Controller
         if ($precondition) return $this->conflict_response();
 
         /* Map variables */
-        $imported_item_pk = app('db')->table('imported_items')->where('classified_item_pk', $request['classified_item_pk'])->value('pk');
+        $imported_item_pk = app('db')->table('imported_items')->where('classified_item_pk', $request['failed_item_pk'])->value('pk');
         $request['received_group_pks'] = app('db')->table('received_groups')->where('received_item_pk', $imported_item_pk)->pluck('pk')->toArray();
         $request['sendbacking_session_pk'] = (string)Str::uuid();
 
