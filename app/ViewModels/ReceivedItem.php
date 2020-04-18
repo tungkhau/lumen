@@ -71,8 +71,8 @@ class ReceivedItem extends ViewModel
             $is_opened = app('db')->table('imports')->where('pk', $imported_item->import_pk)->value('is_opened');
             if ($is_opened == True) return 'receiving';
             if ($imported_item->classified_item_pk == Null) return 'inspecting';
-            if (app('db')->table('received_groups')->where('received_item_pk', $received_item_pk)->where('case_pk', Null)->exists()) return 'classified';
-            return 'done';
+            if (app('db')->table('received_groups')->where('received_item_pk', $received_item_pk)->where('case_pk', Null)->exists()) return 'done';
+            return 'classified';
         }
         if ($kind == 'restored') {
             $restoration_pk = app('db')->table('restored_items')->where('pk', $received_item_pk)->value('restoration_pk');
