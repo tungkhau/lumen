@@ -136,7 +136,8 @@ class ReceivedGroupRepository
                 ]);
                 app('db')->table('entries')->insert($params['entries']);
                 app('db')->table('received_groups')->whereIn('pk', array_values($params['received_groups']))->update([
-                    'case_pk' => Null
+                    'case_pk' => Null,
+                    'storing_session_pk' => $params['storing_session_pk'],
                 ]);
             });
         } catch (Exception $e) {

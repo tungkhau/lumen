@@ -157,13 +157,22 @@ $router->post('change_password', 'UserController@change_password');
 //$router->delete('', '');
 
 /* ANGULAR */
-$router->get('orders', 'AngularController@get_orders');
-$router->get('ordered_items', 'AngularController@get_ordered_items');
-$router->get('partners', 'AngularController@get_partners');
-$router->get('histories', 'AngularController@get_histories');
-$router->get('inventories', 'AngularController@get_inventories');
+//$router->get('orders', 'AngularController@get_orders');
+//$router->get('ordered_items', 'AngularController@get_ordered_items');
+//$router->get('partners', 'AngularController@get_partners');
+//$router->get('histories', 'AngularController@get_histories');
+//$router->get('inventories', 'AngularController@get_inventories');
+
 
 $router->get('receivings', 'AngularController@get_receiving');
+
+$router->get('accessories', 'AngularController@get_accessory');
+$router->get('received-items', 'AngularController@get_received_item');
+$router->get('received-groups', 'AngularController@get_received_group');
+
+$router->get('root-received-items', 'AngularController@get_root_received_item');
+
+
 
 
 
