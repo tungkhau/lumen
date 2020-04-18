@@ -6,6 +6,7 @@ use App\ViewModels\Accessory;
 use App\ViewModels\ReceivedGroup;
 use App\ViewModels\ReceivedItem;
 use App\ViewModels\Receiving;
+use App\ViewModels\RootReceivedItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,14 +16,17 @@ class AngularController extends Controller
     private $accessory;
     private $received_item;
     private $received_group;
+    private $root_received_item;
 
 
-    public function __construct(Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group)
+    public function __construct(Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item)
     {
         $this->receiving = $receiving;
         $this->accessory = $accessory;
         $this->received_item = $received_item;
         $this->received_group = $received_group;
+        $this->root_received_item = $root_received_item;
+
     }
 
     public function get_orders(Request $request)
@@ -272,6 +276,12 @@ class AngularController extends Controller
         return response()->json(['received_items' => $response], 201);
     }
 
+    public function get_root_received_item(Request $request)
+    {
+        $response = $this->root_received_item->get($request);
+        echo dd($response);
+//        return response()->json(['received_items' => $response], 201);
+    }
 
 }
 

@@ -165,11 +165,12 @@ $router->post('change_password', 'UserController@change_password');
 
 
 $router->get('receivings', 'AngularController@get_receiving');
-$router->get('receiving', 'AngularController@find_receiving');
 
 $router->get('accessories', 'AngularController@get_accessory');
 $router->get('received-items', 'AngularController@get_received_item');
 $router->get('received-groups', 'AngularController@get_received_group');
+
+$router->get('root-received-items', 'AngularController@get_root_received_item');
 
 
 
