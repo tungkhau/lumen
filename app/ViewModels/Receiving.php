@@ -84,22 +84,34 @@ class Receiving extends ViewModel
 
     private function _externality_filter($kind, $externality, $input_object)
     {
-
+        $pks = array();
+        foreach ($input_object as $item) {
+            array_push($pks, $item['pk']);
+        }
         if ($externality != Null && array_key_exists('user_pks', $externality)) {
             if ($kind != Null) {
                 $table = $kind == 'import' ? 'imports' : 'restorations';
-                $pks = app('db')->table("$table")->whereIn('user_pk', $externality['user_pks'])->pluck('pk')->toArray();
-                foreach ($input_object as $key => $item) {
-                    if (!in_array($item['pk'], $pks)) unset($input_object[$key]);
-                }
-                return $input_object;
+                $pks = array_intersect(app('db')->table("$table")->whereIn('user_pk', $externality['user_pks'])->pluck('pk')->toArray(), $pks);
+
+            } else {
+                $temp = array_merge(app('db')->table('imports')->whereIn('user_pk', $externality['user_pks'])->pluck('pk')->toArray(),
+                    app('db')->table('restorations')->whereIn('user_pk', $externality['user_pks'])->pluck('pk')->toArray());
+                $pks = array_intersect($temp, $pks);
             }
-            $pks = app('db')->table('imports')->whereIn('user_pk', $externality['user_pks'])->pluck('pk')->toArray();
-            $pks = array_merge(app('db')->table('restorations')->whereIn('user_pk', $externality['user_pks'])->pluck('pk')->toArray(), $pks);
-            foreach ($input_object as $key => $item) {
-                if (!in_array($item['pk'], $pks)) unset($input_object[$key]);
+        }
+        if ($externality != Null && array_key_exists('receiving_pks', $externality)) {
+            if ($kind != Null) {
+                $table = $kind == 'import' ? 'imports' : 'restorations';
+                $pks = array_intersect(app('db')->table("$table")->whereIn('pk', $externality['receiving_pks'])->pluck('pk')->toArray(), $pks);
+
+            } else {
+                $temp = array_merge(app('db')->table('imports')->whereIn('pk', $externality['receiving_pks'])->pluck('pk')->toArray(),
+                    app('db')->table('restorations')->whereIn('pk', $externality['receiving_pks'])->pluck('pk')->toArray());
+                $pks = array_intersect($temp, $pks);
             }
-            return $input_object;
+        }
+        foreach ($input_object as $key => $item) {
+            if (!in_array($item['pk'], $pks)) unset($input_object[$key]);
         }
         return $input_object;
     }

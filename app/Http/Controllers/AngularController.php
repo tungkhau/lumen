@@ -7,6 +7,7 @@ use App\ViewModels\ReceivedGroup;
 use App\ViewModels\ReceivedItem;
 use App\ViewModels\Receiving;
 use App\ViewModels\RootReceivedItem;
+use App\ViewModels\RootReceiving;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -17,16 +18,16 @@ class AngularController extends Controller
     private $received_item;
     private $received_group;
     private $root_received_item;
+    private $root_receiving;
 
-
-    public function __construct(Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item)
+    public function __construct(Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving)
     {
         $this->receiving = $receiving;
         $this->accessory = $accessory;
         $this->received_item = $received_item;
         $this->received_group = $received_group;
         $this->root_received_item = $root_received_item;
-
+        $this->root_receiving = $root_receiving;
     }
 
     public function get_orders(Request $request)
@@ -279,6 +280,13 @@ class AngularController extends Controller
     public function get_root_received_item(Request $request)
     {
         $response = $this->root_received_item->get($request);
+        echo dd($response);
+//        return response()->json(['received_items' => $response], 201);
+    }
+
+    public function get_root_receiving(Request $request)
+    {
+        $response = $this->root_receiving->get($request);
         echo dd($response);
 //        return response()->json(['received_items' => $response], 201);
     }

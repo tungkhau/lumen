@@ -102,7 +102,7 @@ class RootReceivedItem extends ViewModel
         return $this::accessory_translation($input_object);
     }
 
-    private function completed_percentage($root_received_item_pk, $kind)
+    public function completed_percentage($root_received_item_pk, $kind)
     {
         if ($kind == 'ordered') {
             $expected_quantity = app('db')->table('ordered_items')->where('pk', $root_received_item_pk)->value('ordered_quantity');

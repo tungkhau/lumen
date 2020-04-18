@@ -171,6 +171,7 @@ $router->get('received-items', 'AngularController@get_received_item');
 $router->get('received-groups', 'AngularController@get_received_group');
 
 $router->get('root-received-items', 'AngularController@get_root_received_item');
+$router->get('root-receivings', 'AngularController@get_root_receiving');
 
 
 
