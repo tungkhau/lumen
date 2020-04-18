@@ -44,7 +44,8 @@ class CaseRepository
                     app('db')->table('entries')->insert($params['entries']);
 
                     app('db')->table('received_groups')->whereIn('pk', $params['received_group_pks'])->update([
-                        'case_pk' => Null
+                        'case_pk' => Null,
+                        'storing_session_pk' => $params['storing_session_pk'],
                     ]);
                     app('db')->table('cases')->where('pk', $params['case_pk'])->update([
                         'shelf_pk' => $params['shelf_pk']
