@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\ViewModels\Accessory;
+use App\ViewModels\Conception;
+use App\ViewModels\Partner;
 use App\ViewModels\ReceivedGroup;
 use App\ViewModels\ReceivedItem;
 use App\ViewModels\Receiving;
+use App\ViewModels\RootIssuedItem;
+use App\ViewModels\RootIssuing;
 use App\ViewModels\RootReceivedItem;
 use App\ViewModels\RootReceiving;
 use Illuminate\Http\Request;
@@ -19,8 +23,12 @@ class AngularController extends Controller
     private $received_group;
     private $root_received_item;
     private $root_receiving;
+    private $partner;
+    private $root_issued_item;
+    private $conception;
+    private $root_issuing;
 
-    public function __construct(Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving)
+    public function __construct(RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
     {
         $this->receiving = $receiving;
         $this->accessory = $accessory;
@@ -28,92 +36,90 @@ class AngularController extends Controller
         $this->received_group = $received_group;
         $this->root_received_item = $root_received_item;
         $this->root_receiving = $root_receiving;
+        $this->conception = $conception;
+        $this->partner = $partner;
+        $this->root_issued_item = $root_issued_item;
+        $this->root_issuing = $root_issuing;
     }
 
-    public function get_orders(Request $request)
+    public function get_partner(Request $request)
     {
-        $orders = app('db')->table('orders')->where($request->all())->get();
+        $response = $this->partner->get($request);
+        $response = array_values($response);
+        return response()->json(['partners' => $response], 201);
+    }
+
+    public function get_receiving(Request $request)
+    {
+        $response = $this->receiving->get($request);
+        $response = array_values($response);
+        return response()->json(['receivings' => $response], 201);
+    }
+
+    public function get_accessory(Request $request)
+    {
+        $response = $this->accessory->get($request);
+        $response = array_values($response);
+        return response()->json(['accessories' => $response], 201);
+    }
+
+    public function get_received_item(Request $request)
+    {
+        $response = $this->received_item->get($request);
+        $response = array_values($response);
+        return response()->json(['received-items' => $response], 201);
+    }
+
+    public function get_received_group(Request $request)
+    {
+        $response = $this->received_group->get($request);
+        $response = array_values($response);
+        return response()->json(['received_groups' => $response], 201);
+    }
+
+    public function get_root_received_item(Request $request)
+    {
+        $response = $this->root_received_item->get($request);
+        $response = array_values($response);
+        return response()->json(['root-received-items' => $response], 201);
+    }
+
+    public function get_root_receiving(Request $request)
+    {
+        $response = $this->root_receiving->get($request);
+        $response = array_values($response);
+        return response()->json(['root-receivings' => $response], 201);
+    }
+
+    public function get_conception(Request $request)
+    {
+        $response = $this->conception->get($request);
+        $response = array_values($response);
+        return response()->json(['conceptions' => $response], 201);
+    }
+
+    public function get_root_issued_item(Request $request)
+    {
+        $response = $this->root_issued_item->get($request);
+        $response = array_values($response);
+        return response()->json(['root-received_items' => $response], 201);
+    }
+
+    public function get_root_issuing(Request $request)
+    {
+        $response = $this->root_issuing->get($request);
+        $response = array_values($response);
+        return response()->json(['root_issuings' => $response], 201);
+    }
+
+
+    public function get_activity_log()
+    {
+        $temp = app('db')->table('activity_logs')->orderBy('created_date', 'desc')->get();
         $response = array();
-        foreach ($orders as $order) {
-            $user = UserController::info($order->user_pk);
-            $supplier = SupplierController::info($order->supplier_pk);
-            $response[] = [
-                'pk' => $order->pk,
-                'id' => $order->id,
-                'userName' => $user['name'],
-                'userId' => $user['id'],
-                'createdDate' => $order->created_date,
-                'supplierName' => $supplier['name'],
-                'status' => $order->is_opened,
-                'isMutable' => OrderController::is_mutable($order->pk),
-                'isSwitchable' => OrderController::is_switchable($order->pk),
-            ];
-        }
-        return response()->json(['orders' => $response], 201);
-    }
-
-    public function get_ordered_items(Request $request)
-    {
-        $ordered_items = app('db')->table('ordered_items')->where($request->all())->get();
-        $response = array();
-        foreach ($ordered_items as $ordered_item) {
-            $accessory = AccessoryController::info($ordered_item->accessory_pk);
-            $response[] = [
-                'pk' => $ordered_item->pk,
-                'accessoryId' => $accessory['id'],
-                'accessoryName' => $accessory['name'],
-                'accessoryItem' => $accessory['item'],
-                'accessoryArt' => $accessory['art'],
-                'accessoryColor' => $accessory['color'],
-                'accessorySize' => $accessory['size'],
-                'accessoryUnit' => $accessory['unit'],
-                'comment' => $ordered_item->comment,
-                'orderedQuantity' => $ordered_item->ordered_quantity,
-                'sumImportedQuantity' => OrderController::sum_imported_quantity($ordered_item->pk),
-                'sumActualQuantity' => OrderController::sum_actual_quantity($ordered_item->pk),
-                'orderPk' => $request['order_pk'],
-            ];
-        }
-        return response()->json(['ordered_items' => $response], 201);
-    }
-
-    public function get_partners(Request $request)
-    {
-        $customers = app('db')->table('customers')->where($request->all())->get();
-        $suppliers = app('db')->table('suppliers')->where($request->all())->get();
-        $partners = array();
-        foreach ($customers as $customer) {
-            $partners[] = [
-                'kind' => 'Khách hàng',
-                'name' => $customer->name,
-                'id' => $customer->id,
-                'address' => $customer->address,
-                'phone' => $customer->phone,
-                'isActive' => $customer->is_active,
-                'pk' => $customer->pk,
-            ];
-        }
-        foreach ($suppliers as $supplier) {
-            $partners[] = [
-                'kind' => 'Nhà cung cấp',
-                'name' => $supplier->name,
-                'id' => $supplier->id,
-                'address' => $supplier->address,
-                'phone' => $supplier->phone,
-                'isActive' => $supplier->is_active,
-                'pk' => $supplier->pk,
-            ];
-        }
-        return response()->json(['partners' => $partners], 201);
-    }
-
-    public function get_histories(Request $request)
-    {
-        $temp = app('db')->table('activity_logs')->where($request->all())->get();
-        $histories = array();
         foreach ($temp as $item) {
             $user = UserController::info($item->user_pk);
-            $histories[] = [
+            $response[] = [
                 'type' => $this::translate_type($item->type),
                 'object' => $this::translate_object($item->object),
                 'createdDate' => $item->created_date,
@@ -122,7 +128,8 @@ class AngularController extends Controller
                 'id' => $item->id,
             ];
         }
-        return response()->json(['histories' => $histories], 201);
+        $response = array_values($response);
+        return response()->json(['activity-logs' => $response], 201);
     }
 
     private static function translate_type($type)
@@ -247,48 +254,6 @@ class AngularController extends Controller
             ];
         }
         return response()->json(['inventories' => $response], 201);
-    }
-
-
-    public function get_receiving(Request $request)
-    {
-        $response = $this->receiving->get($request);
-        echo dd($response);
-//        return response()->json(['receivings' => $response], 201);
-    }
-
-    public function get_accessory(Request $request)
-    {
-        $response = $this->accessory->get($request);
-        echo dd($response);
-//        return response()->json(['accessories' => $response], 201);
-    }
-
-    public function get_received_item(Request $request)
-    {
-        $response = $this->received_item->get($request);
-        echo dd($response);
-//        return response()->json(['received_items' => $response], 201);
-    }
-
-    public function get_received_group(Request $request)
-    {
-        $response = $this->received_group->get($request);
-        return response()->json(['received_items' => $response], 201);
-    }
-
-    public function get_root_received_item(Request $request)
-    {
-        $response = $this->root_received_item->get($request);
-        echo dd($response);
-//        return response()->json(['received_items' => $response], 201);
-    }
-
-    public function get_root_receiving(Request $request)
-    {
-        $response = $this->root_receiving->get($request);
-        echo dd($response);
-//        return response()->json(['received_items' => $response], 201);
     }
 
 }

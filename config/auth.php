@@ -1,6 +1,6 @@
 <?php
 
-use App\ViewModels\User;
+use App\Models\User;
 
 return [
 

@@ -2,13 +2,13 @@
 
 namespace App\ViewModels;
 
-class RootReceiving extends ViewModel
+class RootIssuing extends ViewModel
 {
-    private $root_received_item;
+    private $root_issued_item;
 
-    public function __construct(RootReceivedItem $root_received_item)
+    public function __construct(RootIssuedItem $root_issued_item)
     {
-        $this->root_received_item = $root_received_item;
+        $this->root_issued_item = $root_issued_item;
     }
 
     public function get($params)
@@ -26,12 +26,12 @@ class RootReceiving extends ViewModel
     private function _kind_filter($kind)
     {
         $objects = array();
-        if ($kind == 'order' || $kind == Null) {
-            $pks = app('db')->table('orders')->pluck('pk');
+        if ($kind == 'demand' || $kind == Null) {
+            $pks = app('db')->table('demands')->pluck('pk');
             foreach ($pks as $pk) {
                 $objects[] = [
                     'pk' => $pk,
-                    'kind' => 'order'
+                    'kind' => 'demand'
                 ];
             }
         }
@@ -61,22 +61,14 @@ class RootReceiving extends ViewModel
         return $object;
     }
 
-    public static function status($root_receiving_pk, $kind)
-    {
-        if ($kind == 'order') {
-            return $is_opened = app('db')->table('orders')->where('pk', $root_receiving_pk)->value('is_opened') ? 'opened' : 'closed';
-        }
-        return Null;
-    }
-
     private function _externality_filter($externality, $input_object)
     {
         $pks = array();
         foreach ($input_object as $item) {
             array_push($pks, $item['pk']);
         }
-        if ($externality != Null && array_key_exists('root_receiving_pks', $externality)) {
-            $pks = array_intersect($externality['root_receiving_pks'], $pks);
+        if ($externality != Null && array_key_exists('root_issuing_pks', $externality)) {
+            $pks = array_intersect($externality['root_issuing_pks'], $pks);
         }
 
         foreach ($input_object as $key => $item) {
@@ -85,18 +77,28 @@ class RootReceiving extends ViewModel
         return $input_object;
     }
 
+    public static function status($root_issuing_pk, $kind)
+    {
+        if ($kind == 'demand') {
+            return app('db')->table('demands')->where('pk', $root_issuing_pk)->value('is_opened') ? 'opened' : 'closed';
+        }
+        return Null;
+    }
+
     private function _translation($input_object)
     {
         foreach ($input_object as $key => $item) {
-            if ($item['kind'] == 'order') {
-                $order = app('db')->table('orders')->where('pk', $item['pk'])->first();
+            if ($item['kind'] == 'demand') {
+                $demand = app('db')->table('demands')->where('pk', $item['pk'])->first();
+                $conception_id = app('db')->table('conceptions')->where('pk', $demand->conception_pk)->value('id');
                 $input_object[$key] += [
-                    'id' => $order->id,
-                    'createdDate' => $order->created_date,
+                    'id' => $demand->id,
+                    'createdDate' => $demand->created_date,
+                    'conceptionId' => $conception_id,
                     'isMutable' => $this::is_mutable($item['pk'], $item['kind']),
                     'isSwitchable' => $this::is_switchable($item['pk'], $item['kind']),
-                    'sourceName' => $this::source_name($item['pk'], $item['kind']),
-                    'user_pk' => $order->user_pk,
+                    'destinationName' => $this::destination_name($item['pk'], $item['kind']),
+                    'user_pk' => $demand->user_pk,
                     'completedPercentage' => $this->completed_percentage($item['pk'], $item['kind'])
                 ];
             }
@@ -104,42 +106,42 @@ class RootReceiving extends ViewModel
         return $this::user_translation($input_object);
     }
 
-    private static function is_mutable($root_receiving_pk, $kind)
+    private static function is_mutable($root_issuing_pk, $kind)
     {
-        if ($kind == 'order') {
-            return !app('db')->table('imports')->where('order_pk', $root_receiving_pk)->exists();
+        if ($kind == 'demand') {
+            return !app('db')->table('issuing_sessions')->where('container_pk', $root_issuing_pk)->exists();
         }
         return Null;
     }
 
-    private static function is_switchable($root_receiving_pk, $kind)
+    private static function is_switchable($root_issuing_pk, $kind)
     {
-        if ($kind == 'order') {
-            $is_opened = app('db')->table('orders')->where('pk', $root_receiving_pk)->value('is_opened');
+        if ($kind == 'demand') {
+            $is_opened = app('db')->table('demands')->where('pk', $root_issuing_pk)->value('is_opened');
             if (!$is_opened) return True;
-            return app('db')->table('imports')->where('order_pk', $root_receiving_pk)->exists();
+            return app('db')->table('issuing_sessions')->where('container_pk', $root_issuing_pk)->exists();
         }
         return Null;
     }
 
-    private static function source_name($root_receiving_pk, $kind)
+    private function completed_percentage($root_issuing_pk, $kind)
     {
-        if ($kind == 'order') {
-            $supplier_pk = app('db')->table('orders')->where('pk', $root_receiving_pk)->value('supplier_pk');
-            return app('db')->table('suppliers')->where('pk', $supplier_pk)->value('name');
-        }
-        return Null;
-    }
-
-    private function completed_percentage($root_receiving_pk, $kind)
-    {
-        if ($kind == 'order') {
-            $ordered_item_pks = app('db')->table('ordered_items')->where('order_pk', $root_receiving_pk)->pluck('pk')->toArray();
+        if ($kind == 'demand') {
+            $demanded_item_pks = app('db')->table('demanded_items')->where('demand_pk', $root_issuing_pk)->pluck('pk')->toArray();
             $sum = 0;
-            foreach ($ordered_item_pks as $ordered_item_pk) {
-                $sum += $this->root_received_item->completed_percentage($ordered_item_pk, 'ordered');
+            foreach ($demanded_item_pks as $demanded_item_pk) {
+                $sum += $this->root_issued_item->completed_percentage($demanded_item_pk, 'demanded');
             }
-            return $sum / count($ordered_item_pks);
+            return $sum / count($demanded_item_pks);
+        }
+        return Null;
+    }
+
+    private static function destination_name($root_issuing_pk, $kind)
+    {
+        if ($kind == 'demand') {
+            $workplace_pk = app('db')->table('demands')->where('pk', $root_issuing_pk)->value('workplace_pk');
+            return app('db')->table('workplaces')->where('pk', $workplace_pk)->value('name');
         }
         return Null;
     }

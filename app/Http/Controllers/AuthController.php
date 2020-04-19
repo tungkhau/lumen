@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         $user = app('db')->table('users')->where('id', $request['user_id'])->whereIn('role', ['merchandiser', 'admin', 'manager'])->first();
         if (!$user) return response()->json(['invalid' => 'Tài khoản không có quyền truy cập'], 400);
-        if (!app('hash')->check($valid_request['password'], $user->password)) return response()->json(['invalid' => 'Mã nhân viên hoặc mật khẩu không đúng'], 400);
+        if (!app('hash')->check($valid_request['password'], $user->password)) return response()->json(['invalid' => 'Mật khẩu không đúng'], 400);
         $api_token = $this->api_token($user->pk);
 
         try {

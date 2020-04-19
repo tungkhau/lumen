@@ -14,13 +14,17 @@
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
 
-    $router->get('/', function () use ($router) {
+    $router->get('/inside', function () use ($router) {
         echo phpinfo();
     });
     $router->group(['middleware' => 'role:manager'], function () use ($router) {
     });
     $router->group(['middleware' => 'role:staff'], function () use ($router) {
     });
+});
+
+$router->get('/outside', function () use ($router) {
+    echo phpinfo();
 });
 
 //Group 0
@@ -157,24 +161,29 @@ $router->post('change_password', 'UserController@change_password');
 //$router->delete('', '');
 
 /* ANGULAR */
-//$router->get('orders', 'AngularController@get_orders');
-//$router->get('ordered_items', 'AngularController@get_ordered_items');
-//$router->get('partners', 'AngularController@get_partners');
-//$router->get('histories', 'AngularController@get_histories');
-//$router->get('inventories', 'AngularController@get_inventories');
 
-
-$router->get('receivings', 'AngularController@get_receiving');
-
-$router->get('accessories', 'AngularController@get_accessory');
-$router->get('received-items', 'AngularController@get_received_item');
-$router->get('received-groups', 'AngularController@get_received_group');
-
-$router->get('root-received-items', 'AngularController@get_root_received_item');
-$router->get('root-receivings', 'AngularController@get_root_receiving');
+$router->post('activity-logs', 'AngularController@get_activity_log');
+$router->post('histories', 'AngularController@get_history');
+$router->post('types', 'AngularController@get_type');
+$router->post('units', 'AngularController@get_');
 
 
 
 
+$router->post('receivings', 'AngularController@get_receiving');
+$router->post('partners', 'AngularController@get_partner');
 
+$router->post('accessories', 'AngularController@get_accessory');
+$router->post('received-items', 'AngularController@get_received_item');
+$router->post('received-groups', 'AngularController@get_received_group');
+
+$router->post('root-received-items', 'AngularController@get_root_received_item');
+$router->post('root-receivings', 'AngularController@get_root_receiving');
+
+$router->post('conceptions', 'AngularController@get_conception');
+$router->post('root-issued-items', 'AngularController@get_root_issued_item');
+$router->post('root-issuings', 'AngularController@get_root_issuing');
+
+
+$router->post('inventories', 'AngularController@get_inventories');
 

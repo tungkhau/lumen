@@ -18,6 +18,7 @@ class CreateIssuedItemsTable extends Migration
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
             $table->enum('kind', ['consumed', 'transferred']);
             $table->integer('issued_quantity');
+            $table->boolean('is_returned')->default(False);
             $table->uuid('end_item_pk'); // {consumed} demanded_item >< {transferred} out_distributed_item
             $table->uuid('issuing_session_pk');
 
