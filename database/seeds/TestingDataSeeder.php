@@ -1249,6 +1249,11 @@ class TestingDataSeeder extends Seeder
             'pk' => 'a561a838-8227-11ea-bc55-0242ac130003',
             'is_active' => True
         ]);
+        app('db')->table('cases')->insert([
+            'id' => '11',
+            'pk' => '82770a98-8254-11ea-bc55-0242ac130003',
+            'is_active' => True
+        ]);
         //// accessories
         app('db')->table('accessories')->insert([
             'pk' => '483ad4ae-79b2-11ea-bc55-0242ac130003',
@@ -1700,7 +1705,7 @@ class TestingDataSeeder extends Seeder
         app('db')->table('issued_items')->insert([
             'pk' => 'a561ab8a-8227-11ea-bc55-0242ac130003',
             'kind' => 'consumed',
-            'issued_quantity' => 50,
+            'issued_quantity' => 80,
             'end_item_pk' => '85e1741a-7a76-11ea-bc55-0242ac130003',
             'issuing_session_pk' => 'a561aa90-8227-11ea-bc55-0242ac130003'
         ]);
@@ -1709,7 +1714,7 @@ class TestingDataSeeder extends Seeder
             'received_item_pk' => '55296414-79b2-11ea-bc55-0242ac130003',
             'kind' => 'restored',
             'entry_kind' => 'issuing',
-            'quantity' => 50,
+            'quantity' => 80,
             'session_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003',
             'case_pk' => '3ce5aa5c-79b2-11ea-bc55-0242ac130003',
             'accessory_pk' => '483ad4ae-79b2-11ea-bc55-0242ac130003'
@@ -1717,11 +1722,20 @@ class TestingDataSeeder extends Seeder
         app('db')->table('issued_groups')->insert([
             'pk' => 'a561af72-8227-11ea-bc55-0242ac130003',
             'kind' => 'consumed',
-            'grouped_quantity' => 50,
+            'grouped_quantity' => 40,
             'received_item_pk' => '55296414-79b2-11ea-bc55-0242ac130003',
             'issuing_session_pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
             'issued_item_pk' => 'a561ab8a-8227-11ea-bc55-0242ac130003',
             'case_pk' => 'a561a838-8227-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('issued_groups')->insert([
+            'pk' => '82770cf0-8254-11ea-bc55-0242ac130003',
+            'kind' => 'consumed',
+            'grouped_quantity' => 40,
+            'received_item_pk' => '55296414-79b2-11ea-bc55-0242ac130003',
+            'issuing_session_pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
+            'issued_item_pk' => 'a561ab8a-8227-11ea-bc55-0242ac130003',
+            'case_pk' => '82770a98-8254-11ea-bc55-0242ac130003'
         ]);
 
     }

@@ -226,19 +226,87 @@ class DemandTest extends TestCase
             'case_pk' => 'a561a838-8227-11ea-bc55-0242ac130003',
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',];
         $this->call('PATCH','confirm_issuing',$inputs);
+        $this->seeStatusCode(200);
+        $this->seeJsonEquals(['success' => 'Nhận phụ liệu thành công']);
         $pk = app('db')->table('progressing_sessions')->orderBy('executed_date', 'desc')->first()->pk;
         $progression_session = ['pk' => $pk,
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',
             'kind' => 'confirming'];
         $issuing_session = ['pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
             'progressing_session_pk' => $pk];
-        $issuing_group = ['pk' => 'a561af72-8227-11ea-bc55-0242ac130003',
+        $issuing_group_1 = ['pk' => 'a561af72-8227-11ea-bc55-0242ac130003',
             'case_pk' => null];
-        $case = ['pk' => 'a561a838-8227-11ea-bc55-0242ac130003',
+        $issuing_group_2 = ['pk' => '82770cf0-8254-11ea-bc55-0242ac130003',
+            'case_pk' => null];
+        $case_10 = ['pk' => 'a561a838-8227-11ea-bc55-0242ac130003',
+            'is_active' => false];
+        $case_11 = ['pk' => '82770a98-8254-11ea-bc55-0242ac130003',
             'is_active' => false];
         $this->seeInDatabase('progressing_sessions',$progression_session);
         $this->seeInDatabase('issuing_sessions',$issuing_session);
-        $this->seeInDatabase('issuing_groups',$issuing_group);
-        $this->seeInDatabase('cases',$case);
+        $this->seeInDatabase('issuing_groups',$issuing_group_1);
+        $this->seeInDatabase('issuing_groups',$issuing_group_2);
+        $this->seeInDatabase('cases',$case_10);
+        $this->seeInDatabase('cases',$case_11);
+    }
+    public function testReturnIssuing ()
+    {
+        $inputs = ['consuming_session_pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003',
+            'pairs' => [
+                [
+                    'case_pk' => 'a561a838-8227-11ea-bc55-0242ac130003',
+                    'shelf_pk' => '311edb4e-79b2-11ea-bc55-0242ac130003',
+                ],
+                [
+                    'case_pk' => '82770a98-8254-11ea-bc55-0242ac130003',
+                    'shelf_pk' => '311edd56-79b2-11ea-bc55-0242ac130003',
+                ]
+            ]];
+        $this->call('PATCH','return_issuing',$inputs);
+        $this->seeStatusCode(200);
+        $this->seeJsonEquals(['success' => 'Hủy xuất phụ liệu thành công']);
+        $pk = app('db')->table('returning_sessions')->orderBy('executed_date', 'desc')->first()->pk;
+        $returning_session = ['pk' => $pk,
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'];
+        $entry_1 = [
+            'kind' => 'restored',
+            'received_item_pk' => '55296414-79b2-11ea-bc55-0242ac130003',
+            'entry_kind' => 'returning',
+            'quantity' => 40,
+            'session_pk' => $pk,
+            'case_pk' => 'a561a838-8227-11ea-bc55-0242ac130003',
+            'accessory_pk' => '483ad4ae-79b2-11ea-bc55-0242ac130003'
+        ];
+        $entry_2 = [
+            'kind' => 'restored',
+            'received_item_pk' => '55296414-79b2-11ea-bc55-0242ac130003',
+            'entry_kind' => 'returning',
+            'quantity' => 40,
+            'session_pk' => $pk,
+            'case_pk' => '82770a98-8254-11ea-bc55-0242ac130003',
+            'accessory_pk' => '483ad4ae-79b2-11ea-bc55-0242ac130003'
+        ];
+        $case_1 = ['pk' => 'a561a838-8227-11ea-bc55-0242ac130003',
+            'shelf_pk' => '311edb4e-79b2-11ea-bc55-0242ac130003'];
+        $case_2 = ['pk' => '82770a98-8254-11ea-bc55-0242ac130003',
+            'shelf_pk' => '311edd56-79b2-11ea-bc55-0242ac130003'];
+        $issued_group_1 = ['pk' => 'a561af72-8227-11ea-bc55-0242ac130003',
+            'case_pk' => null];
+        $issued_group_2 = ['pk' => '82770cf0-8254-11ea-bc55-0242ac130003',
+            'case_pk' => null];
+        $issued_item = ['pk' => 'a561ab8a-8227-11ea-bc55-0242ac130003',
+            'is_return' => true];
+        $issuing_session = ['pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
+            'returning_session_pk' => $pk];
+        $this->seeInDatabase('returning_sessions',$returning_session);
+        $this->seeInDatabase('entries',$entry_1);
+        $this->seeInDatabase('entries',$entry_2);
+        $this->seeInDatabase('cases',$case_1);
+        $this->seeInDatabase('cases',$case_2);
+        $this->seeInDatabase('issued_groups',$issued_group_1);
+        $this->seeInDatabase('issued_groups',$issued_group_2);
+        $this->seeInDatabase('issued_items',$issued_item);
+        $this->seeInDatabase('issuing_sessions',$issuing_session);
     }
 }
