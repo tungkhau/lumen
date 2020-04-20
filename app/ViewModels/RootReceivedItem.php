@@ -111,7 +111,7 @@ class RootReceivedItem extends ViewModel
         return 0;
     }
 
-    private static function sum_actual_received_quantity($root_received_item_pk, $kind)
+    public static function sum_actual_received_quantity($root_received_item_pk, $kind)
     {
         $sum = 0;
         if ($kind == 'ordered') {

@@ -87,16 +87,16 @@ class DemandTest extends TestCase
         }
     }
 
-//    public function testTurnOff() TODO Test after having consuming session
-//    {
-//        $inputs = ['demand_pk' => '5c010192-74b8-11ea-bc55-0242ac130003',
-//            'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
-//        $data = ['pk' => '5c010192-74b8-11ea-bc55-0242ac130003',
-//            'is_opened' => false];
-//        $this->call('PATCH', 'turn_off_demand', $inputs);
-//        $this->seeStatusCode(200);
-//        $this->seeInDatabase('demands', $data);
-//    }
+    public function testTurnOff()
+    {
+        $inputs = ['demand_pk' => 'b7e6cb50-7a6b-11ea-bc55-0242ac130003',
+            'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
+        $data = ['pk' => 'b7e6cb50-7a6b-11ea-bc55-0242ac130003',
+            'is_opened' => false];
+        $this->call('PATCH', 'turn_off_demand', $inputs);
+        $this->seeStatusCode(200);
+        $this->seeInDatabase('demands', $data);
+    }
 
     public function testTurnOn()
     {
@@ -108,7 +108,8 @@ class DemandTest extends TestCase
         $this->seeStatusCode(200);
         $this->seeInDatabase('demands', $data);
     }
-    public function testIssuing ()
+
+    public function testIssuing()
     {
         $inputs = ['demand_pk' => 'b7e6cfec-7a6b-11ea-bc55-0242ac130003',
             'issued_groups' => [
@@ -146,11 +147,11 @@ class DemandTest extends TestCase
                 ]
             ],
             'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'];
-        $this->call('POST','issue',$inputs);
+        $this->call('POST', 'issue', $inputs);
         $this->seeStatusCode(200);
-        $pk = app('db') -> table('issuing_sessions')->orderBy('executed_date', 'desc')->first()->pk;
-        $issued_items_2_pk = app('db')->table('issued_items')->where('issued_quantity',2)->value('pk');
-        $issued_items_3_pk = app('db')->table('issued_items')->where('issued_quantity',4)->value('pk');
+        $pk = app('db')->table('issuing_sessions')->orderBy('executed_date', 'desc')->first()->pk;
+        $issued_items_2_pk = app('db')->table('issued_items')->where('issued_quantity', 2)->value('pk');
+        $issued_items_3_pk = app('db')->table('issued_items')->where('issued_quantity', 4)->value('pk');
         $issuing_session = ['pk' => $pk,
             'kind' => 'consuming',
             'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003',
@@ -209,23 +210,24 @@ class DemandTest extends TestCase
             'issuing_session_pk' => $pk,
             'issued_item_pk' => $issued_items_3_pk,
             'case_pk' => '102c9726-821f-11ea-bc55-0242ac130003'];
-        $this->seeInDatabase('issuing_sessions',$issuing_session);
-        $this->seeInDatabase('cases',$case);
-        $this->seeInDatabase('issued_items',$issued_items_2);
-        $this->seeInDatabase('issued_items',$issued_items_3);
-        $this->seeInDatabase('entries',$entry_2_out);
-        $this->seeInDatabase('entries',$entry_3_out);
-        $this->seeInDatabase('issued_groups',$issued_group_2_5_1);
-        $this->seeInDatabase('issued_groups',$issued_group_2_9_1);
-        $this->seeInDatabase('issued_groups',$issued_group_3_5_2);
-        $this->seeInDatabase('issued_groups',$issued_group_3_9_2);
+        $this->seeInDatabase('issuing_sessions', $issuing_session);
+        $this->seeInDatabase('cases', $case);
+        $this->seeInDatabase('issued_items', $issued_items_2);
+        $this->seeInDatabase('issued_items', $issued_items_3);
+        $this->seeInDatabase('entries', $entry_2_out);
+        $this->seeInDatabase('entries', $entry_3_out);
+        $this->seeInDatabase('issued_groups', $issued_group_2_5_1);
+        $this->seeInDatabase('issued_groups', $issued_group_2_9_1);
+        $this->seeInDatabase('issued_groups', $issued_group_3_5_2);
+        $this->seeInDatabase('issued_groups', $issued_group_3_9_2);
     }
-    public function testConfirmIssuing ()
+
+    public function testConfirmIssuing()
     {
         $inputs = ['consuming_session_pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
             'case_pk' => 'a561a838-8227-11ea-bc55-0242ac130003',
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',];
-        $this->call('PATCH','confirm_issuing',$inputs);
+        $this->call('PATCH', 'confirm_issuing', $inputs);
         $this->seeStatusCode(200);
         $this->seeJsonEquals(['success' => 'Nhận phụ liệu thành công']);
         $pk = app('db')->table('progressing_sessions')->orderBy('executed_date', 'desc')->first()->pk;
@@ -242,14 +244,15 @@ class DemandTest extends TestCase
             'is_active' => false];
         $case_11 = ['pk' => '82770a98-8254-11ea-bc55-0242ac130003',
             'is_active' => false];
-        $this->seeInDatabase('progressing_sessions',$progression_session);
-        $this->seeInDatabase('issuing_sessions',$issuing_session);
-        $this->seeInDatabase('issuing_groups',$issuing_group_1);
-        $this->seeInDatabase('issuing_groups',$issuing_group_2);
-        $this->seeInDatabase('cases',$case_10);
-        $this->seeInDatabase('cases',$case_11);
+        $this->seeInDatabase('progressing_sessions', $progression_session);
+        $this->seeInDatabase('issuing_sessions', $issuing_session);
+        $this->seeInDatabase('issuing_groups', $issuing_group_1);
+        $this->seeInDatabase('issuing_groups', $issuing_group_2);
+        $this->seeInDatabase('cases', $case_10);
+        $this->seeInDatabase('cases', $case_11);
     }
-    public function testReturnIssuing ()
+
+    public function testReturnIssuing()
     {
         $inputs = ['consuming_session_pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
             'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003',
@@ -263,7 +266,7 @@ class DemandTest extends TestCase
                     'shelf_pk' => '311edd56-79b2-11ea-bc55-0242ac130003',
                 ]
             ]];
-        $this->call('PATCH','return_issuing',$inputs);
+        $this->call('PATCH', 'return_issuing', $inputs);
         $this->seeStatusCode(200);
         $this->seeJsonEquals(['success' => 'Hủy xuất phụ liệu thành công']);
         $pk = app('db')->table('returning_sessions')->orderBy('executed_date', 'desc')->first()->pk;
@@ -299,14 +302,14 @@ class DemandTest extends TestCase
             'is_return' => true];
         $issuing_session = ['pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
             'returning_session_pk' => $pk];
-        $this->seeInDatabase('returning_sessions',$returning_session);
-        $this->seeInDatabase('entries',$entry_1);
-        $this->seeInDatabase('entries',$entry_2);
-        $this->seeInDatabase('cases',$case_1);
-        $this->seeInDatabase('cases',$case_2);
-        $this->seeInDatabase('issued_groups',$issued_group_1);
-        $this->seeInDatabase('issued_groups',$issued_group_2);
-        $this->seeInDatabase('issued_items',$issued_item);
-        $this->seeInDatabase('issuing_sessions',$issuing_session);
+        $this->seeInDatabase('returning_sessions', $returning_session);
+        $this->seeInDatabase('entries', $entry_1);
+        $this->seeInDatabase('entries', $entry_2);
+        $this->seeInDatabase('cases', $case_1);
+        $this->seeInDatabase('cases', $case_2);
+        $this->seeInDatabase('issued_groups', $issued_group_1);
+        $this->seeInDatabase('issued_groups', $issued_group_2);
+        $this->seeInDatabase('issued_items', $issued_item);
+        $this->seeInDatabase('issuing_sessions', $issuing_session);
     }
 }

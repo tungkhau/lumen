@@ -16,7 +16,7 @@ class CreateDemandsTable extends Migration
     {
         Schema::create('demands', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
-            $table->string('id', 11)->unique();
+            $table->string('id', 17)->unique();
             $table->smallInteger('product_quantity');
             $table->boolean('is_opened')->default(true);
             $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));

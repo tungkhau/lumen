@@ -17,6 +17,10 @@ class ReceivedItem extends ViewModel
         return $this->_translation($externality_filtered_object);
     }
 
+    public function get_failed_item()
+    {
+    }
+
     private function _kind_filter($kind)
     {
         $objects = array();

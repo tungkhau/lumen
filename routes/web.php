@@ -161,29 +161,43 @@ $router->post('change_password', 'UserController@change_password');
 //$router->delete('', '');
 
 /* ANGULAR */
-
+$router->post('accessories', 'AngularController@get_accessory');
 $router->post('activity-logs', 'AngularController@get_activity_log');
+$router->post('arranging-sessions', 'AngularController@get_arranging_session');
 $router->post('histories', 'AngularController@get_history');
-$router->post('types', 'AngularController@get_type');
-$router->post('units', 'AngularController@get_');
-
-
-
-
+$router->post('verifying-sessions', 'AngularController@get_verifying_session');
+$router->post('reports', 'AngularController@get_report');
 $router->post('receivings', 'AngularController@get_receiving');
 $router->post('partners', 'AngularController@get_partner');
-
-$router->post('accessories', 'AngularController@get_accessory');
 $router->post('received-items', 'AngularController@get_received_item');
 $router->post('received-groups', 'AngularController@get_received_group');
-
 $router->post('root-received-items', 'AngularController@get_root_received_item');
 $router->post('root-receivings', 'AngularController@get_root_receiving');
-
 $router->post('conceptions', 'AngularController@get_conception');
 $router->post('root-issued-items', 'AngularController@get_root_issued_item');
 $router->post('root-issuings', 'AngularController@get_root_issuing');
-
-
-$router->post('inventories', 'AngularController@get_inventories');
-
+$router->post('inventories', 'AngularController@get_inventory');
+$router->post('blocks', 'AngularController@get_block');
+$router->post('checking-sessions', 'AngularController@get_checking_session');
+$router->post('classifying-sessions', 'AngularController@get_classifying_session');
+$router->post('confirming-sessions', 'AngularController@get_confirming_session');
+$router->post('counting-sessions', 'AngularController@counting-sessions');
+$router->post('in-blocked-items', 'AngularController@get_in_blocked_item');
+$router->post('in-cased-items', 'AngularController@get_in_cased_item');
+$router->post('in-shelved-items', 'AngularController@get_in_shelved_item');
+$router->post('issued-groups', 'AngularController@get_issued_group');
+$router->post('issued-items', 'AngularController@get_issued_item');
+$router->post('issuings', 'AngularController@get_issuing');
+$router->post('modifying-sessions', 'AngularController@get_modifying_session');
+$router->post('moving-sessions', 'AngularController@get_moving_session');
+$router->post('cased-received-groups', 'AngularController@get_cased_received_group');
+$router->post('failed-items', 'AngularController@get_failed_item');
+$router->post('receiving-sessions', 'AngularController@get_receiving_session');
+$router->post('replacing-sessions', 'AngularController@get_replacing_session');
+$router->post('sendbacking-sessions', 'AngularController@get_sendbacking_session');
+$router->post('shelves', 'AngularController@get_shelf');
+$router->post('storing-sessions', 'AngularController@get_storing_session');
+$router->post('types', 'AngularController@get_type');
+$router->post('units', 'AngularController@get_unit');
+$router->post('users', 'AngularController@get_user');
+$router->post('mediators', 'AngularController@get_mediator');
