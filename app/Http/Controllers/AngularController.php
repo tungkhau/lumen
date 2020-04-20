@@ -107,14 +107,14 @@ class AngularController extends Controller
     {
         $response = $this->root_issued_item->get($request);
         $response = array_values($response);
-        return response()->json(['root-received_items' => $response], 201);
+        return response()->json(['root-issued-items' => $response], 201);
     }
 
     public function get_root_issuing(Request $request)
     {
         $response = $this->root_issuing->get($request);
         $response = array_values($response);
-        return response()->json(['root_issuings' => $response], 201);
+        return response()->json(['root-issuings' => $response], 201);
     }
 
     public function get_activity_log()

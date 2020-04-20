@@ -152,7 +152,6 @@ class Report extends ViewModel
             $prestored_quantity = $this::prestoredQuantity($item['accessory_pk']);
             $stored_quantity = $this::storedQuantity($item['accessory_pk']);
             $object[] = [
-                'accessory_pk' => $item['accessory_pk'],
                 'sumOrderedQuantity' => $this::sumOrderedQuantity($item['accessory_pk']),
                 'sumInDistributedQuantity' => $this::sumInDistributedQuantity(),
                 'sumImportedQuantity' => $this::sumImportedQuantity($item['accessory_pk']),
@@ -173,6 +172,6 @@ class Report extends ViewModel
             ];
 
         }
-        return $this::accessory_translation($object);
+        return $object;
     }
 }
