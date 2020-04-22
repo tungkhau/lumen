@@ -2,7 +2,7 @@
 
 namespace App\ViewModels;
 
-class extends BaseModel
+class ReceivingSession extends ViewModel
 {
 
 

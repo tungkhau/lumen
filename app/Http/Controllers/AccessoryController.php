@@ -27,6 +27,7 @@ class AccessoryController extends Controller
         $customer_name = app('db')->table('customers')->where('pk', $accessory->customer_pk)->value('name');
         $supplier_name = app('db')->table('suppliers')->where('pk', $accessory->supplier_pk)->value('name');
         $unit = app('db')->table('units')->where('pk', $accessory->unit_pk)->value('name');
+        $type = app('db')->table('types')->where('pk', $accessory->type_pk)->value('name');
         return [
             'id' => $accessory->id,
             'name' => $accessory->name,
@@ -37,6 +38,7 @@ class AccessoryController extends Controller
             'unit' => $unit,
             'customer' => $customer_name,
             'supplier' => $supplier_name,
+            'type' => $type
         ];
     }
 

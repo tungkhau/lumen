@@ -3,17 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\ViewModels\Accessory;
+use App\ViewModels\CheckingSession;
+use App\ViewModels\ClassifyingSession;
 use App\ViewModels\Conception;
+use App\ViewModels\CountingSession;
 use App\ViewModels\Partner;
 use App\ViewModels\ReceivedGroup;
 use App\ViewModels\ReceivedItem;
 use App\ViewModels\Receiving;
+use App\ViewModels\ReceivingSession;
 use App\ViewModels\Report;
 use App\ViewModels\RootIssuedItem;
 use App\ViewModels\RootIssuing;
 use App\ViewModels\RootReceivedItem;
 use App\ViewModels\RootReceiving;
 use App\ViewModels\Shared;
+use App\ViewModels\StoringSession;
 use Illuminate\Http\Request;
 
 class AngularController extends Controller
@@ -30,8 +35,13 @@ class AngularController extends Controller
     private $root_issuing;
     private $shared;
     private $report;
+    private $checking_session;
+    private $counting_session;
+    private $storing_session;
+    private $receiving_session;
+    private $classifying_session;
 
-    public function __construct(Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
+    public function __construct(ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_seesion, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
     {
         $this->receiving = $receiving;
         $this->accessory = $accessory;
@@ -45,6 +55,11 @@ class AngularController extends Controller
         $this->root_issuing = $root_issuing;
         $this->shared = $shared;
         $this->report = $report;
+        $this->checking_session = $checking_session;
+        $this->counting_session = $counting_seesion;
+        $this->storing_session = $storing_session;
+        $this->receiving_session = $receiving_session;
+        $this->classifying_session = $classifying_session;
     }
 
     public function get_partner(Request $request)
@@ -185,6 +200,41 @@ class AngularController extends Controller
         $response = $this->shared->get_mediator();
         $response = array_values($response);
         return response()->json(['mediators' => $response], 201);
+    }
+
+    public function get_checking_session(Request $request)
+    {
+        $response = $this->checking_session->get($request);
+        $response = array_values($response);
+        return response()->json(['checking-sessions' => $response], 201);
+    }
+
+    public function get_counting_session(Request $request)
+    {
+        $response = $this->counting_session->get($request);
+        $response = array_values($response);
+        return response()->json(['counting-sessions' => $response], 201);
+    }
+
+    public function get_classifying_session(Request $request)
+    {
+        $response = $this->classifying_session->get($request);
+        $response = array_values($response);
+        return response()->json(['classifying-sessions' => $response], 201);
+    }
+
+    public function get_storing_session(Request $request)
+    {
+        $response = $this->storing_session->get($request);
+        $response = array_values($response);
+        return response()->json(['storing_sessions' => $response], 201);
+    }
+
+    public function get_receiving_session(Request $request)
+    {
+        $response = $this->receiving_session->get($request);
+        $response = array_values($response);
+        return response()->json(['receiving-sessions' => $response], 201);
     }
 
 }

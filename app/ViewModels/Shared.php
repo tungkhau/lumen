@@ -134,18 +134,20 @@ class Shared extends ViewModel
         foreach ($inventory as $accessory_pk => $value) {
             $info = AccessoryController::info($accessory_pk);
             $response[] = [
+                'accessoryPk' => $accessory_pk,
                 'accessoryId' => $info['id'],
                 'accessoryName' => $info['name'],
                 'accessoryItem' => $info['item'],
                 'accessoryArt' => $info['art'],
                 'accessoryColor' => $info['color'],
                 'accessorySize' => $info['size'],
-                'accessoryUnit' => $info['unit'],
+                'accessoryUnitName' => $info['unit'],
+                'accessoryTypeName' => $info['type'],
                 'accessoryCustomerName' => $info['customer'],
                 'accessorySupplierName' => $info['supplier'],
-                'inventoryPrestored' => $value['prestored_quantity'],
-                'inventoryStored' => $value['stored_quantity'],
-                'inventoryTotal' => $value['prestored_quantity'] + $value['stored_quantity'],
+                'prestoredQuantity' => $value['prestored_quantity'],
+                'storedQuantity' => $value['stored_quantity'],
+                'totalQuantity' => $value['prestored_quantity'] + $value['stored_quantity'],
             ];
         }
         return $response;

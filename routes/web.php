@@ -201,3 +201,8 @@ $router->post('types', 'AngularController@get_type');
 $router->post('units', 'AngularController@get_unit');
 $router->post('users', 'AngularController@get_user');
 $router->post('mediators', 'AngularController@get_mediator');
+$router->post('checking-sessions', 'AngularController@get_checking_session');
+$router->post('classifying-sessions', 'AngularController@get_classifying_session');
+$router->post('counting-sessions', 'AngularController@get_counting_session');
+$router->post('receiving-sessions', 'AngularController@get_receiving_session');
+$router->post('storing-sessions', 'AngularController@get_storing_session');
