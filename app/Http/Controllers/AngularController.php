@@ -94,7 +94,7 @@ class AngularController extends Controller
     {
         $response = $this->received_group->get($request);
         $response = array_values($response);
-        return response()->json(['received_groups' => $response], 201);
+        return response()->json(['received-groups' => $response], 201);
     }
 
     public function get_root_received_item(Request $request)
@@ -234,7 +234,6 @@ class AngularController extends Controller
     {
         $response = $this->receiving_session->get($request);
         $response = array_values($response);
-        echo dd($response);
         return response()->json(['receiving-sessions' => $response], 201);
     }
 

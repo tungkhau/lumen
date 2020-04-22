@@ -38,6 +38,14 @@ class TestingDataSeeder extends Seeder
         ]);
         app('db')->table('users')->insert([
             'is_active' => True,
+            'id' => '2',
+            'password' => app('hash')->make('2'),
+            'name' => 'Manager',
+            'role' => 'Manager',
+            'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('users')->insert([
+            'is_active' => True,
             'id' => '1',
             'password' => app('hash')->make('1'),
             'name' => 'Quản lý mặt hàng',
