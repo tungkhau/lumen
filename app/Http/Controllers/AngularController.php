@@ -234,6 +234,7 @@ class AngularController extends Controller
     {
         $response = $this->receiving_session->get($request);
         $response = array_values($response);
+        echo dd($response);
         return response()->json(['receiving-sessions' => $response], 201);
     }
 

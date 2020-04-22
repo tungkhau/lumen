@@ -840,7 +840,6 @@ class TestingDataSeeder extends Seeder
             'comment' => 'restoration 3',
             'receiving_session_pk' => '1bd2ac82-758b-11ea-bc55-0242ac130003',
             'user_pk' => 'cec3ab2a-7194-11ea-bc55-0242ac130003',
-            // receiving_session 3        1bd2ac82-758b-11ea-bc55-0242ac130003 null because foreign key law
         ]);
         app('db')->table('restored_items')->insert([
             'pk' => '1bd2aad4-758b-11ea-bc55-0242ac130003',
@@ -1432,12 +1431,18 @@ class TestingDataSeeder extends Seeder
             'accessory_pk' => '483ad7ce-79b2-11ea-bc55-0242ac130003'
         ]);
         ////restoration
+        app('db')->table('receiving_sessions')->insert([
+            'pk' => '5bd3c494-79b2-11ea-bc55-0242ac130003',
+            'kind' => 'restoring',
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
+        ]);
         app('db')->table('restorations')->insert([
             'pk' => '55296180-79b2-11ea-bc55-0242ac130003',
             'id' => 'RN-090420-A',
             'is_confirmed' => True,
             'comment' => '',
             'user_pk' => 'cec3ab2a-7194-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '5bd3c494-79b2-11ea-bc55-0242ac130003'
         ]);
         app('db')->table('restored_items')->insert([
             'pk' => '55296414-79b2-11ea-bc55-0242ac130003',
@@ -1457,11 +1462,6 @@ class TestingDataSeeder extends Seeder
             'restored_quantity' => 1200,
             'restoration_pk' => '55296180-79b2-11ea-bc55-0242ac130003',
             'accessory_pk' => '483ad7ce-79b2-11ea-bc55-0242ac130003'
-        ]);
-        app('db')->table('receiving_sessions')->insert([
-            'pk' => '5bd3c494-79b2-11ea-bc55-0242ac130003',
-            'kind' => 'restoring',
-            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
         ]);
         app('db')->table('storing_sessions')->insert([
             'pk' => '6c9359de-79b2-11ea-bc55-0242ac130003',
