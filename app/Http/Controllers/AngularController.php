@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\ViewModels\Accessory;
+use App\ViewModels\Box;
 use App\ViewModels\CheckingSession;
 use App\ViewModels\ClassifyingSession;
 use App\ViewModels\Conception;
 use App\ViewModels\CountingSession;
+use App\ViewModels\InCasedItem;
+use App\ViewModels\IssuedGroup;
+use App\ViewModels\IssuedItem;
+use App\ViewModels\Issuing;
 use App\ViewModels\Partner;
 use App\ViewModels\ReceivedGroup;
 use App\ViewModels\ReceivedItem;
@@ -17,6 +22,7 @@ use App\ViewModels\RootIssuedItem;
 use App\ViewModels\RootIssuing;
 use App\ViewModels\RootReceivedItem;
 use App\ViewModels\RootReceiving;
+use App\ViewModels\SendbackingSession;
 use App\ViewModels\Shared;
 use App\ViewModels\StoringSession;
 use Illuminate\Http\Request;
@@ -40,8 +46,15 @@ class AngularController extends Controller
     private $storing_session;
     private $receiving_session;
     private $classifying_session;
+    private $in_cased_item;
+    private $case;
+    private $sendbacking_session;
+    private $issuing;
+    private $issued_item;
+    private $issued_group;
 
-    public function __construct(ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_seesion, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
+
+    public function __construct(IssuedGroup $issued_group, IssuedItem $issued_item, Issuing $issuing, SendbackingSession $sendbacking_session, Box $case, InCasedItem $in_cased_item, ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_seesion, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
     {
         $this->receiving = $receiving;
         $this->accessory = $accessory;
@@ -60,6 +73,12 @@ class AngularController extends Controller
         $this->storing_session = $storing_session;
         $this->receiving_session = $receiving_session;
         $this->classifying_session = $classifying_session;
+        $this->in_cased_item = $in_cased_item;
+        $this->case = $case;
+        $this->sendbacking_session = $sendbacking_session;
+        $this->issuing = $issuing;
+        $this->issued_item = $issued_item;
+        $this->issued_group = $issued_group;
     }
 
     public function get_partner(Request $request)
@@ -167,9 +186,9 @@ class AngularController extends Controller
         return response()->json(['histories' => $response], 201);
     }
 
-    public function get_cased_received_group()
+    public function get_cased_received_group(Request $request)
     {
-        $response = $this->shared->get_cased_received_group();
+        $response = $this->received_group->get_cased_received_group($request);
         $response = array_values($response);
         return response()->json(['cased-received-groups' => $response], 201);
     }
@@ -235,6 +254,27 @@ class AngularController extends Controller
         $response = $this->receiving_session->get($request);
         $response = array_values($response);
         return response()->json(['receiving-sessions' => $response], 201);
+    }
+
+    public function get_in_cased_item(Request $request)
+    {
+        $response = $this->in_cased_item->get($request);
+        $response = array_values($response);
+        return response()->json(['in-cased-items' => $response], 201);
+    }
+
+    public function get_sendbacking_session(Request $request)
+    {
+        $response = $this->sendbacking_session->get($request);
+        $response = array_values($response);
+        return response()->json(['sendbacking-sessions' => $response], 201);
+    }
+
+    public function get_case(Request $request)
+    {
+        $response = $this->case->get($request);
+        $response = array_values($response);
+        return response()->json(['cases' => $response], 201);
     }
 
 }

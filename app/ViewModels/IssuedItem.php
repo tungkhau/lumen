@@ -2,8 +2,6 @@
 
 namespace App\ViewModels;
 
-class extends BaseModel
+class IssuedItem extends ViewModel
 {
-
-
 }

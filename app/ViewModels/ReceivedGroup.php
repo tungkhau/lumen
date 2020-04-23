@@ -4,37 +4,6 @@ namespace App\ViewModels;
 
 class ReceivedGroup extends ViewModel
 {
-    public static function actual_quantity($received_group_pk)
-    {
-        $received_group = app('db')->table('received_groups')->where('pk', $received_group_pk)->first();
-        if ($received_group->counting_session_pk == Null) return $received_group->grouped_quantity;
-        return app('db')->table('counting_sessions')->where('pk', $received_group->counting_session_pk)->value('counted_quantity');
-    }
-
-    private static function is_storable($received_group_pk)
-    {
-        $received_group = app('db')->table('received_groups')->where('pk', $received_group_pk)->first();
-        if ($received_group->kind == 'imported') {
-            if (ReceivedItem::imported_quality_state($received_group->received_item_pk) == 'passed') return True;
-            return False;
-        }
-        return True;
-    }
-
-    public static function imported_checking_quantity($imported_group_pk)
-    {
-        $checking_session_pk = app('db')->table('received_groups')->where('pk', $imported_group_pk)->value('checking_session_pk');
-        if ($checking_session_pk == Null) {
-            $checking_quantity['checked_quantity'] = null;
-            $checking_quantity['unqualified_quantity'] = null;
-        } else {
-            $checking_session = app('db')->table('checking_sessions')->where('pk', $checking_session_pk)->first();
-            $checking_quantity['checked_quantity'] = $checking_session->checked_quantity;
-            $checking_quantity['unqualified_quantity'] = $checking_session->unqualified_quantity;
-        }
-        return $checking_quantity;
-    }
-
     public function get($params)
     {
         $kind = $params['kind'];
@@ -140,5 +109,58 @@ class ReceivedGroup extends ViewModel
             }
         }
         return $this::received_item_translation($input_object);
+    }
+
+    public static function imported_checking_quantity($imported_group_pk)
+    {
+        $checking_session_pk = app('db')->table('received_groups')->where('pk', $imported_group_pk)->value('checking_session_pk');
+        if ($checking_session_pk == Null) {
+            $checking_quantity['checked_quantity'] = null;
+            $checking_quantity['unqualified_quantity'] = null;
+        } else {
+            $checking_session = app('db')->table('checking_sessions')->where('pk', $checking_session_pk)->first();
+            $checking_quantity['checked_quantity'] = $checking_session->checked_quantity;
+            $checking_quantity['unqualified_quantity'] = $checking_session->unqualified_quantity;
+        }
+        return $checking_quantity;
+    }
+
+    public static function actual_quantity($received_group_pk)
+    {
+        $received_group = app('db')->table('received_groups')->where('pk', $received_group_pk)->first();
+        if ($received_group->counting_session_pk == Null) return $received_group->grouped_quantity;
+        return app('db')->table('counting_sessions')->where('pk', $received_group->counting_session_pk)->value('counted_quantity');
+    }
+
+    private static function is_storable($received_group_pk)
+    {
+        $received_group = app('db')->table('received_groups')->where('pk', $received_group_pk)->first();
+        if ($received_group->kind == 'imported') {
+            if (ReceivedItem::imported_quality_state($received_group->received_item_pk) == 'passed') return True;
+            return False;
+        }
+        return True;
+    }
+
+    public function get_cased_received_group($params)
+    {
+        $accessory_pk = $params['externality']['accessory_pk'];
+        $ordered_item_pks = app('db')->table('ordered_items')->where('accessory_pk', $accessory_pk)->pluck('pk');
+        $imported_item_pks = app('db')->table('imported_items')->whereIn('ordered_item_pk', $ordered_item_pks)->pluck('pk');
+        $pks = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->where('case_pk', '!=', Null)->pluck('pk')->toArray();
+
+        $restored_item_pks = app('db')->table('restored_items')->where('accessory_pk', $accessory_pk)->pluck('pk');
+        $pks = array_merge($pks, app('db')->table('received_groups')->whereIn('received_item_pk', $restored_item_pks)->where('case_pk', '!=', Null)->pluck('pk')->toArray());
+
+        $cased_received_groups = app('db')->table('received_groups')->whereIn('pk', $pks)->select('pk', 'kind')->get();
+
+        $object = array();
+        foreach ($cased_received_groups as $cased_received_group) {
+            $object[] = [
+                'pk' => $cased_received_group->pk,
+                'kind' => $cased_received_group->kind
+            ];
+        }
+        return $this->_translation($object);
     }
 }

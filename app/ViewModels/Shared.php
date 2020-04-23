@@ -171,10 +171,7 @@ class Shared extends ViewModel
 
     public function get_history()
     {
-    }
 
-    public function get_cased_received_group()
-    {
     }
 
     public function get_type()

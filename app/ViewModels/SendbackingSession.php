@@ -2,8 +2,7 @@
 
 namespace App\ViewModels;
 
-class extends BaseModel
+class SendbackingSession extends ViewModel
 {
-
 
 }
