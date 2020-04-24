@@ -76,4 +76,12 @@ class ViewModel
         return $input_object;
     }
 
+    public static function sort_response($input_object, $field) {
+        $array_map = array_map(function ($element) use ($field) {
+            return $element[$field];
+        }, $input_object);
+        array_multisort($array_map, SORT_DESC, $input_object);
+        return $input_object;
+    }
+
 }

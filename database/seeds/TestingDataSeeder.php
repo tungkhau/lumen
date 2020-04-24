@@ -1722,7 +1722,7 @@ class TestingDataSeeder extends Seeder
             'received_item_pk' => '55296414-79b2-11ea-bc55-0242ac130003',
             'kind' => 'restored',
             'entry_kind' => 'issuing',
-            'quantity' => 80,
+            'quantity' => -80,
             'session_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003',
             'case_pk' => '3ce5aa5c-79b2-11ea-bc55-0242ac130003',
             'accessory_pk' => '483ad4ae-79b2-11ea-bc55-0242ac130003'

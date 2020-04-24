@@ -144,11 +144,11 @@ $router->post('replace', 'CaseController@replace');
 
 //Group 7
 //Demand
-$router->post('create_demand','DemandController@create');
-$router->patch('edit_demand','DemandController@edit');
-$router->delete('delete_demand','DemandController@delete');
-$router->patch('turn_off_demand','DemandController@turn_off');
-$router->patch('turn_on_demand','DemandController@turn_on');
+$router->post('create_demand', 'DemandController@create');
+$router->patch('edit_demand', 'DemandController@edit');
+$router->delete('delete_demand', 'DemandController@delete');
+$router->patch('turn_off_demand', 'DemandController@turn_off');
+$router->patch('turn_on_demand', 'DemandController@turn_on');
 
 ////Group 9
 $router->post('login_desktop', 'AuthController@login_desktop');
@@ -182,7 +182,7 @@ $router->post('blocks', 'AngularController@get_block');
 $router->post('checking-sessions', 'AngularController@get_checking_session');
 $router->post('classifying-sessions', 'AngularController@get_classifying_session');
 $router->post('confirming-sessions', 'AngularController@get_confirming_session');
-$router->post('counting-sessions', 'AngularController@counting-sessions');
+$router->post('counting-sessions', 'AngularController@get_counting_session');
 $router->post('in-blocked-items', 'AngularController@get_in_blocked_item');
 $router->post('in-cased-items', 'AngularController@get_in_cased_item');
 $router->post('in-shelved-items', 'AngularController@get_in_shelved_item');
@@ -202,3 +202,4 @@ $router->post('types', 'AngularController@get_type');
 $router->post('units', 'AngularController@get_unit');
 $router->post('users', 'AngularController@get_user');
 $router->post('mediators', 'AngularController@get_mediator');
+$router->post('nonshelf-cases', 'AngularController@get_nonshelf_case');

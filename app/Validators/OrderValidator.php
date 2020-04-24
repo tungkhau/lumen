@@ -14,7 +14,7 @@ class OrderValidator
         try {
             $this->validate($params, [
                 'supplier_pk' => 'required|uuid|exists:suppliers,pk,is_active,' . True,
-                'order_id' => 'required|string|max:25|unique:orders,id',
+                'order_id' => 'required|string|max:18|unique:orders,id',
                 'ordered_items.*.accessory_pk' => 'required|uuid|exists:accessories,pk,is_active,' . True,
                 'ordered_items.*.ordered_quantity' => 'required|integer|between:1,2000000000',
                 'ordered_items.*.comment' => 'nullable|string|max:20',

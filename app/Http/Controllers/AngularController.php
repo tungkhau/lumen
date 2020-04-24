@@ -24,6 +24,7 @@ use App\ViewModels\RootReceivedItem;
 use App\ViewModels\RootReceiving;
 use App\ViewModels\SendbackingSession;
 use App\ViewModels\Shared;
+use App\ViewModels\Shelf;
 use App\ViewModels\StoringSession;
 use Illuminate\Http\Request;
 
@@ -52,9 +53,10 @@ class AngularController extends Controller
     private $issuing;
     private $issued_item;
     private $issued_group;
+    private $shelf;
 
 
-    public function __construct(IssuedGroup $issued_group, IssuedItem $issued_item, Issuing $issuing, SendbackingSession $sendbacking_session, Box $case, InCasedItem $in_cased_item, ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_seesion, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
+    public function __construct(Shelf $shelf, IssuedGroup $issued_group, IssuedItem $issued_item, Issuing $issuing, SendbackingSession $sendbacking_session, Box $case, InCasedItem $in_cased_item, ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_seesion, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
     {
         $this->receiving = $receiving;
         $this->accessory = $accessory;
@@ -79,6 +81,7 @@ class AngularController extends Controller
         $this->issuing = $issuing;
         $this->issued_item = $issued_item;
         $this->issued_group = $issued_group;
+        $this->shelf = $shelf;
     }
 
     public function get_partner(Request $request)
@@ -195,7 +198,7 @@ class AngularController extends Controller
 
     public function get_failed_item()
     {
-        $response = $this->shared->get_failed_item();
+        $response = $this->received_item->get_failed_item();
         $response = array_values($response);
         return response()->json(['failed-items' => $response], 201);
     }
@@ -276,6 +279,43 @@ class AngularController extends Controller
         $response = array_values($response);
         return response()->json(['cases' => $response], 201);
     }
+
+    public function get_issued_group(Request $request)
+    {
+        $response = $this->issued_group->get($request);
+        $response = array_values($response);
+        return response()->json(['issued-groups' => $response], 201);
+    }
+
+    public function get_issued_item(Request $request)
+    {
+        $response = $this->issued_item->get($request);
+        $response = array_values($response);
+        return response()->json(['issued-items' => $response], 201);
+    }
+
+    public function get_issuing(Request $request)
+    {
+        $response = $this->issuing->get($request);
+        $response = array_values($response);
+        return response()->json(['issuings' => $response], 201);
+    }
+
+    public function get_shelf(Request $request)
+    {
+        $response = $this->shelf->get($request);
+        $response = array_values($response);
+        return response()->json(['shelves' => $response], 201);
+    }
+
+    public function get_nonshelf_case()
+    {
+        $response = $this->case->get_nonshelf_case();
+        $response = array_values($response);
+        return response()->json(['nonshelf-cases' => $response], 201);
+    }
+
+
 
 }
 

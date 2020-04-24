@@ -13,7 +13,7 @@ class Box extends ViewModel
 
     private function _externality_filter($externality)
     {
-        $pks = app('db')->table('cases')->pluck('pk')->toArray();
+        $pks = app('db')->table('cases')->where('is_active', True)->pluck('pk')->toArray();
         $object = array();
         foreach ($pks as $pk) {
             $object[] = [
@@ -53,6 +53,23 @@ class Box extends ViewModel
                 'id' => $case->id
             ];
 
+        }
+        return $object;
+    }
+
+    public function get_nonshelf_case()
+    {
+        $nonshelf_cases = app('db')->table('cases')->where('is_active', True)->where('shelf_pk', Null)->get();
+        $object = array();
+        foreach ($nonshelf_cases as $nonshelf_case) {
+            $received_groups = app('db')->table('received_groups')->where('case_pk', $nonshelf_case->pk)->exists();
+            $issued_groups = app('db')->table('issued_groups')->where('case_pk', $nonshelf_case->pk)->exists();
+            $is_empty = !$received_groups && !$issued_groups;
+            $object[] = [
+                'pk' => $nonshelf_case->pk,
+                'id' => $nonshelf_case->id,
+                'isEmpty' => $is_empty
+            ];
         }
         return $object;
     }

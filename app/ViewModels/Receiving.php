@@ -192,8 +192,4 @@ class Receiving extends ViewModel
         return Null;
     }
 
-    public function find($params)
-    {
-        //TODO
-    }
 }
