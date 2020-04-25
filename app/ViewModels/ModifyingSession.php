@@ -70,8 +70,8 @@ class ModifyingSession extends ViewModel
                         'status' => 'unverified',
                         'user_pk' => $adjusting_session->user_pk,
                         'executedDate' => $adjusting_session->executed_date,
-                        'modified_quantity' => $adjusting_session->quantity,
-                        'caseID' => $case_id,
+                        'modifiedQuantity' => $adjusting_session->quantity,
+                        'caseId' => $case_id,
                         'received_item_pk' => $entry->received_item_pk
                     ]; else {
                     $result = app('db')->table('verifying_sessions')->where('pk', $adjusting_session->verifying_session_pk)->value('result');
@@ -82,8 +82,8 @@ class ModifyingSession extends ViewModel
                         'status' => 'verified',
                         'user_pk' => $adjusting_session->user_pk,
                         'executedDate' => $adjusting_session->executed_date,
-                        'modified_quantity' => $adjusting_session->quantity,
-                        'caseID' => $case_id,
+                        'modifiedQuantity' => $adjusting_session->quantity,
+                        'caseId' => $case_id,
                         'received_item_pk' => $entry->received_item_pk
                     ];
                 }
@@ -100,8 +100,8 @@ class ModifyingSession extends ViewModel
                         'status' => 'unverified',
                         'user_pk' => $discarding_session->user_pk,
                         'executedDate' => $discarding_session->executed_date,
-                        'modified_quantity' => $discarding_session->quantity,
-                        'caseID' => $case_id,
+                        'modifiedQuantity' => $discarding_session->quantity,
+                        'caseId' => $case_id,
                         'received_item_pk' => $entry->received_item_pk
                     ]; else {
                     $result = app('db')->table('verifying_sessions')->where('pk', $discarding_session->verifying_session_pk)->value('result');
@@ -112,8 +112,8 @@ class ModifyingSession extends ViewModel
                         'status' => 'verified',
                         'user_pk' => $discarding_session->user_pk,
                         'executedDate' => $discarding_session->executed_date,
-                        'modified_quantity' => $discarding_session->quantity,
-                        'caseID' => $case_id,
+                        'modifiedQuantity' => $discarding_session->quantity,
+                        'caseId' => $case_id,
                         'received_item_pk' => $entry->received_item_pk
                     ];
                 }
@@ -122,5 +122,15 @@ class ModifyingSession extends ViewModel
         return $this::user_translation($this::received_item_translation($object));
     }
 
-
+    public function get_unverified_modifying_session($params)
+    {
+        $received_item_pk = $params['externality']['received_item_pk'];
+        $case_pk = $params['externality']['case_pk'];
+        $entry = app('db')->table('entries')->where([['case_pk', $case_pk], ['received_item_pk', $received_item_pk], ['quantity', Null]])->select('entry_kind', 'session_pk')->first();
+        $object[] = [
+            'pk' => $entry->session_pk,
+            'kind' => $entry->entry_kind,
+        ];
+        return $this::_translation($object);
+    }
 }

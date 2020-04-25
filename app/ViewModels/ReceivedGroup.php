@@ -163,4 +163,6 @@ class ReceivedGroup extends ViewModel
         }
         return $this->_translation($object);
     }
+
+
 }
