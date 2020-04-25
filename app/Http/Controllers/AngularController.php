@@ -12,6 +12,7 @@ use App\ViewModels\InCasedItem;
 use App\ViewModels\IssuedGroup;
 use App\ViewModels\IssuedItem;
 use App\ViewModels\Issuing;
+use App\ViewModels\ModifyingSession;
 use App\ViewModels\Partner;
 use App\ViewModels\ReceivedGroup;
 use App\ViewModels\ReceivedItem;
@@ -54,9 +55,10 @@ class AngularController extends Controller
     private $issued_item;
     private $issued_group;
     private $shelf;
+    private $modifying_session;
 
 
-    public function __construct(Shelf $shelf, IssuedGroup $issued_group, IssuedItem $issued_item, Issuing $issuing, SendbackingSession $sendbacking_session, Box $case, InCasedItem $in_cased_item, ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_seesion, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
+    public function __construct(ModifyingSession $modifying_session,Shelf $shelf, IssuedGroup $issued_group, IssuedItem $issued_item, Issuing $issuing, SendbackingSession $sendbacking_session, Box $case, InCasedItem $in_cased_item, ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_seesion, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
     {
         $this->receiving = $receiving;
         $this->accessory = $accessory;
@@ -82,6 +84,7 @@ class AngularController extends Controller
         $this->issued_item = $issued_item;
         $this->issued_group = $issued_group;
         $this->shelf = $shelf;
+        $this->modifying_session = $modifying_session;
     }
 
     public function get_partner(Request $request)
@@ -308,11 +311,18 @@ class AngularController extends Controller
         return response()->json(['shelves' => $response], 201);
     }
 
-    public function get_nonshelf_case()
+    public function get_unstored_case()
     {
-        $response = $this->case->get_nonshelf_case();
+        $response = $this->case->get_unstored_case();
         $response = array_values($response);
-        return response()->json(['nonshelf-cases' => $response], 201);
+        return response()->json(['unstored-cases' => $response], 201);
+    }
+
+    public function get_modifying_session(Request $request)
+    {
+        $response = $this->modifying_session->get($request);
+        $response = array_values($response);
+        return response()->json(['modifying-sessions' => $response], 201);
     }
 
 

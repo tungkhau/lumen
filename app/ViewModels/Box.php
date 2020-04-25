@@ -50,27 +50,42 @@ class Box extends ViewModel
             $case = app('db')->table('cases')->where('pk', $item['pk'])->first();
             $object[] = [
                 'pk' => $item['pk'],
-                'id' => $case->id
+                'id' => $case->id,
+                'isEmpty' => $this::is_empty($case->pk)
             ];
 
         }
         return $object;
     }
 
-    public function get_nonshelf_case()
+    public function get_unstored_case()
     {
-        $nonshelf_cases = app('db')->table('cases')->where('is_active', True)->where('shelf_pk', Null)->get();
+        $pks = app('db')->table('cases')->where('is_active', True)->where('shelf_pk', Null)->pluck('pk')->toArray();
+        $sealed_case_pks = app('db')->table('issued_groups')->distinct('case_pk')->pluck('case_pk')->toArray();
+        $pks = array_diff($pks, $sealed_case_pks);
+        $unstored_cases = app('db')->table('cases')->whereIn('pk', $pks)->get();
+
         $object = array();
-        foreach ($nonshelf_cases as $nonshelf_case) {
-            $received_groups = app('db')->table('received_groups')->where('case_pk', $nonshelf_case->pk)->exists();
-            $issued_groups = app('db')->table('issued_groups')->where('case_pk', $nonshelf_case->pk)->exists();
-            $is_empty = !$received_groups && !$issued_groups;
+        foreach ($unstored_cases as $unstored_case) {
             $object[] = [
-                'pk' => $nonshelf_case->pk,
-                'id' => $nonshelf_case->id,
-                'isEmpty' => $is_empty
+                'pk' => $unstored_case->pk,
+                'id' => $unstored_case->id,
+                'isEmpty' => $this::is_empty($unstored_case->pk),
             ];
         }
         return $object;
+    }
+
+    public static function is_empty($case_pk)
+    {
+        $issued_groups = app('db')->table('issued_groups')->where('case_pk', $case_pk)->exists();
+        if ($issued_groups) return False;
+        $received_groups = app('db')->table('received_groups')->where('case_pk', $case_pk)->exists();
+        if ($received_groups) return False;
+        $pending = app('db')->table('entries')->where('case_pk', $case_pk)->where('quantity', Null)->exists();
+        if ($pending) return False;
+        $sum = app('db')->table('entries')->where('case_pk', $case_pk)->where('quantity', '!=', Null)->sum('quantity');
+        if ($sum != 0) return False;
+        return True;
     }
 }
