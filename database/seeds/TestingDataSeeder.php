@@ -1746,5 +1746,32 @@ class TestingDataSeeder extends Seeder
             'case_pk' => '82770a98-8254-11ea-bc55-0242ac130003'
         ]);
 
+        app('db')->table('blocks')->insert([
+            'pk' => 'f9a3e2bc-86d2-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'J',
+            'row' => 2,
+            'col' => 2,
+        ]);
+        app('db')->table('shelves')->insert([
+            'pk' => 'f9a3e51e-86d2-11ea-bc55-0242ac130003',
+            'name' => 'J-01-01',
+            'block_pk' => 'f9a3e2bc-86d2-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('shelves')->insert([
+            'pk' => 'f9a3e834-86d2-11ea-bc55-0242ac130003',
+            'name' => 'J-01-02',
+            'block_pk' => 'f9a3e2bc-86d2-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('shelves')->insert([
+            'pk' => 'f9a3e942-86d2-11ea-bc55-0242ac130003',
+            'name' => 'J-02-01',
+            'block_pk' => 'f9a3e2bc-86d2-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('shelves')->insert([
+            'pk' => 'f9a3eb4a-86d2-11ea-bc55-0242ac130003',
+            'name' => 'J-02-02',
+            'block_pk' => 'f9a3e2bc-86d2-11ea-bc55-0242ac130003'
+        ]);
     }
 }
