@@ -1746,5 +1746,167 @@ class TestingDataSeeder extends Seeder
             'case_pk' => '82770a98-8254-11ea-bc55-0242ac130003'
         ]);
 
+        // dump for test UI
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130004',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130005',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130006',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130007',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130008',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130009',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130010',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac100011',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130012',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac300013',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac100014',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130015',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130016',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac100017',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130018',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac100019',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130020',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130021',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130022',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('received_groups')->insert([
+            'pk' => '7310c8d4-815d-11ea-bc55-0242ac130023',
+            'kind' => 'imported',
+            'grouped_quantity' => 600,
+            'received_item_pk' => '7310c708-815d-11ea-bc55-0242ac130003',
+            'case_pk' => '5b4ca804-7388-11ea-bc55-0242ac130003',
+            'receiving_session_pk' => '7310c7f8-815d-11ea-bc55-0242ac130003'
+        ]);
+
     }
 }
