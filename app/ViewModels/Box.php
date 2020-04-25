@@ -37,6 +37,11 @@ class Box extends ViewModel
             $pks = array_intersect(app('db')->table('cases')->whereIn('shelf_pk', $externality['shelves_pks'])->pluck('pk')->toArray(), $pks);
         }
 
+        if ($externality != Null && array_key_exists('shelf_ids', $externality)) {
+            $shelf_pks = app('db')->table('shelves')->whereIn('name', $externality['shelf_ids'])->pluck('pk');
+            $pks = array_intersect(app('db')->table('cases')->whereIn('shelf_pk', $shelf_pks)->pluck('pk')->toArray(), $pks);
+        }
+
         foreach ($object as $key => $item) {
             if (!in_array($item['pk'], $pks)) unset($object[$key]);
         }
@@ -58,6 +63,19 @@ class Box extends ViewModel
         return $object;
     }
 
+    public static function is_empty($case_pk)
+    {
+        $issued_groups = app('db')->table('issued_groups')->where('case_pk', $case_pk)->exists();
+        if ($issued_groups) return False;
+        $received_groups = app('db')->table('received_groups')->where('case_pk', $case_pk)->exists();
+        if ($received_groups) return False;
+        $pending = app('db')->table('entries')->where('case_pk', $case_pk)->where('quantity', Null)->exists();
+        if ($pending) return False;
+        $sum = app('db')->table('entries')->where('case_pk', $case_pk)->where('quantity', '!=', Null)->sum('quantity');
+        if ($sum != 0) return False;
+        return True;
+    }
+
     public function get_unstored_case()
     {
         $pks = app('db')->table('cases')->where('is_active', True)->where('shelf_pk', Null)->pluck('pk')->toArray();
@@ -74,18 +92,5 @@ class Box extends ViewModel
             ];
         }
         return $object;
-    }
-
-    public static function is_empty($case_pk)
-    {
-        $issued_groups = app('db')->table('issued_groups')->where('case_pk', $case_pk)->exists();
-        if ($issued_groups) return False;
-        $received_groups = app('db')->table('received_groups')->where('case_pk', $case_pk)->exists();
-        if ($received_groups) return False;
-        $pending = app('db')->table('entries')->where('case_pk', $case_pk)->where('quantity', Null)->exists();
-        if ($pending) return False;
-        $sum = app('db')->table('entries')->where('case_pk', $case_pk)->where('quantity', '!=', Null)->sum('quantity');
-        if ($sum != 0) return False;
-        return True;
     }
 }

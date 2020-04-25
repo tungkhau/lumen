@@ -153,22 +153,6 @@ class Shared extends ViewModel
         return $response;
     }
 
-    public function get_block()
-    {
-        $blocks = app('db')->table('blocks')->get();
-        $object = array();
-        foreach ($blocks as $block) {
-            $object[] = [
-                'pk' => $block->pk,
-                'id' => $block->id,
-                'col' => $block->col,
-                'row' => $block->row,
-                'status' => $block->is_active ? 'active' : 'inactive',
-            ];
-        }
-        return $object;
-    }
-
     public function get_history()
     {
         $history = array();

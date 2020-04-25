@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ViewModels\Accessory;
+use App\ViewModels\Block;
 use App\ViewModels\Box;
 use App\ViewModels\CheckingSession;
 use App\ViewModels\ClassifyingSession;
@@ -56,9 +57,10 @@ class AngularController extends Controller
     private $issued_group;
     private $shelf;
     private $modifying_session;
+    private $block;
 
 
-    public function __construct(ModifyingSession $modifying_session,Shelf $shelf, IssuedGroup $issued_group, IssuedItem $issued_item, Issuing $issuing, SendbackingSession $sendbacking_session, Box $case, InCasedItem $in_cased_item, ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_seesion, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
+    public function __construct(Block $block, ModifyingSession $modifying_session, Shelf $shelf, IssuedGroup $issued_group, IssuedItem $issued_item, Issuing $issuing, SendbackingSession $sendbacking_session, Box $case, InCasedItem $in_cased_item, ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_seesion, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
     {
         $this->receiving = $receiving;
         $this->accessory = $accessory;
@@ -85,6 +87,7 @@ class AngularController extends Controller
         $this->issued_group = $issued_group;
         $this->shelf = $shelf;
         $this->modifying_session = $modifying_session;
+        $this->block = $block;
     }
 
     public function get_partner(Request $request)
@@ -178,9 +181,9 @@ class AngularController extends Controller
         return response()->json(['reports' => $response], 201);
     }
 
-    public function get_block()
+    public function get_block(Request $request)
     {
-        $response = $this->shared->get_block();
+        $response = $this->block->get($request);
         $response = array_values($response);
         return response()->json(['blocks' => $response], 201);
     }
