@@ -20,7 +20,7 @@ class CaseTest extends TestCase
         $inputs = ['case_pk' => 'd993f450-7190-11ea-bc55-0242ac130003'];
         $data = ['pk' => 'd993f450-7190-11ea-bc55-0242ac130003',
             'is_active' => False];
-        $this->call('PATCH', 'disable_case', $inputs);
+        $this->call('POST', 'disable_case', $inputs);
 //        $this->seeStatusCode(200);
         $this->seeJson(['success' => 'Xóa đơn vị chứa thành công']);
         $this->seeInDatabase('cases', $data);

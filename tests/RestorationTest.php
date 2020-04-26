@@ -57,7 +57,7 @@ class RestorationTest extends TestCase
         }
         $inputs = ['restoration_pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003'];
         $data = ['pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003'];
-        $this->call('DELETE', 'delete_restoration', $inputs);
+        $this->call('POST', 'delete_restoration', $inputs);
         $this->seeJsonEquals(['success' => 'Hủy phiếu trả thành công']);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('restorations', $data);
@@ -74,7 +74,7 @@ class RestorationTest extends TestCase
         ];
         $data = ['pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003',
             'is_confirmed' => True];
-        $this->call('PATCH', 'confirm_restoration', $inputs);
+        $this->call('POST', 'confirm_restoration', $inputs);
         $this->seeJsonEquals(['success' => 'Xác nhận phiếu trả thành công']);
         $this->seeStatusCode(200);
         $this->seeInDatabase('restorations', $data);
@@ -95,7 +95,7 @@ class RestorationTest extends TestCase
                 'pk' => $item
             ];
         }
-        $this->call('DELETE', 'cancel_restoration', $inputs);
+        $this->call('POST', 'cancel_restoration', $inputs);
         $this->seeJsonEquals(['success' => 'Hủy phiếu trả thành công']);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('restorations', $data);

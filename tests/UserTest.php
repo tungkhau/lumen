@@ -28,7 +28,7 @@ class UserTest extends TestCase
         $inputs = ['user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
         $data = ['pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
             'is_active' => False];
-        $this->call('PATCH', 'deactivate_user', $inputs);
+        $this->call('POST', 'deactivate_user', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('users', $data);
     }
@@ -38,7 +38,7 @@ class UserTest extends TestCase
         $inputs = ['user_pk' => '59a67242-6dd8-11ea-bc55-0242ac130003'];
         $data = ['pk' => '59a67242-6dd8-11ea-bc55-0242ac130003',
             'is_active' => True];
-        $this->call('PATCH', 'reactivate_user', $inputs);
+        $this->call('POST', 'reactivate_user', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('users', $data);
     }
@@ -46,7 +46,7 @@ class UserTest extends TestCase
     public function testResetPassword()
     {
         $inputs = ['user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',];
-        $this->call('PATCH', 'reset_user_password', $inputs);
+        $this->call('POST', 'reset_user_password', $inputs);
         $password = app('db')->table('users')->where('pk', '511f4482-6dd8-11ea-bc55-0242ac130003')->value('password');
         $this->seeStatusCode(200);
         $this->assertTrue(app('hash')->check(env('DEFAULT_PASSWORD'), $password));
@@ -58,7 +58,7 @@ class UserTest extends TestCase
             'workplace_pk' => '07fc0a0c-719c-11ea-bc55-0242ac130003'];
         $data = ['pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
             'workplace_pk' => '07fc0a0c-719c-11ea-bc55-0242ac130003'];
-        $this->call('PATCH', 'change_user_workplace', $inputs);
+        $this->call('POST', 'change_user_workplace', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('users', $data);
     }

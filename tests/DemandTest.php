@@ -60,7 +60,7 @@ class DemandTest extends TestCase
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
         $data = ['demanded_quantity' => 300,
             'comment' => 'edit'];
-        $this->call('PATCH', 'edit_demand', $inputs);
+        $this->call('POST', 'edit_demand', $inputs);
         $this->seeJsonEquals(['success' => 'Sửa đơn cấp phát thành công']);
         $this->seeStatusCode(200);
         $this->seeInDatabase('demanded_items', $data);
@@ -78,7 +78,7 @@ class DemandTest extends TestCase
         $inputs = ['demand_pk' => '5c010192-74b8-11ea-bc55-0242ac130003',
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '5c010192-74b8-11ea-bc55-0242ac130003'];
-        $this->call('DELETE', 'delete_demand', $inputs);
+        $this->call('POST', 'delete_demand', $inputs);
         $this->seeJsonEquals(['success' => 'Xóa đơn cấp phát thành công']);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('demands', $data);
@@ -93,7 +93,7 @@ class DemandTest extends TestCase
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => 'b7e6cb50-7a6b-11ea-bc55-0242ac130003',
             'is_opened' => false];
-        $this->call('PATCH', 'turn_off_demand', $inputs);
+        $this->call('POST', 'turn_off_demand', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('demands', $data);
     }
@@ -104,7 +104,7 @@ class DemandTest extends TestCase
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '523c055c-74ff-11ea-bc55-0242ac130003',
             'is_opened' => true];
-        $this->call('PATCH', 'turn_on_demand', $inputs);
+        $this->call('POST', 'turn_on_demand', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('demands', $data);
     }
@@ -227,7 +227,7 @@ class DemandTest extends TestCase
         $inputs = ['consuming_session_pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
             'case_pk' => 'a561a838-8227-11ea-bc55-0242ac130003',
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',];
-        $this->call('PATCH', 'confirm_issuing', $inputs);
+        $this->call('POST', 'confirm_issuing', $inputs);
         $this->seeStatusCode(200);
         $this->seeJsonEquals(['success' => 'Nhận phụ liệu thành công']);
         $pk = app('db')->table('progressing_sessions')->orderBy('executed_date', 'desc')->first()->pk;
@@ -266,7 +266,7 @@ class DemandTest extends TestCase
                     'shelf_pk' => '311edd56-79b2-11ea-bc55-0242ac130003',
                 ]
             ]];
-        $this->call('PATCH', 'return_issuing', $inputs);
+        $this->call('POST', 'return_issuing', $inputs);
         $this->seeStatusCode(200);
         $this->seeJsonEquals(['success' => 'Hủy xuất phụ liệu thành công']);
         $pk = app('db')->table('returning_sessions')->orderBy('executed_date', 'desc')->first()->pk;

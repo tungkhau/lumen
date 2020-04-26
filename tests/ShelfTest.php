@@ -19,7 +19,7 @@ class ShelfTest extends TestCase
     {
         $inputs = ['shelf_pk' => '3ad6f1da-7688-11ea-bc55-0242ac130003'];
         $data = ['pk' => '3ad6f1da-7688-11ea-bc55-0242ac130003'];
-        $this->call('DELETE', 'delete_shelf', $inputs);
+        $this->call('POST', 'delete_shelf', $inputs);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('shelves', $data);
     }

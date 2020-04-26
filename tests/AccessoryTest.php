@@ -157,7 +157,7 @@ class AccessoryTest extends TestCase
             'type' => 'delete',
             'object' => 'accessory',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('DELETE', 'delete_accessory', $inputs);
+        $this->call('POST', 'delete_accessory', $inputs);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('accessories', $data);
         $this->seeInDatabase('activity_logs', $history);
@@ -174,7 +174,7 @@ class AccessoryTest extends TestCase
             'type' => 'deactivate',
             'object' => 'accessory',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('PATCH', 'deactivate_accessory', $inputs);
+        $this->call('POST', 'deactivate_accessory', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('accessories', $data);
         $this->seeInDatabase('activity_logs', $history);
@@ -191,7 +191,7 @@ class AccessoryTest extends TestCase
             'type' => 'reactivate',
             'object' => 'accessory',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('PATCH', 'reactivate_accessory', $inputs);
+        $this->call('POST', 'reactivate_accessory', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('accessories', $data);
         $this->seeInDatabase('activity_logs', $history);

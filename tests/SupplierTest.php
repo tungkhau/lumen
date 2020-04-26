@@ -41,7 +41,7 @@ class SupplierTest extends TestCase
             'type' => 'update',
             'object' => 'supplier',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('PATCH', 'edit_supplier', $inputs);
+        $this->call('POST', 'edit_supplier', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('suppliers', $data);
         $this->seeInDatabase('activity_logs', $history);
@@ -57,7 +57,7 @@ class SupplierTest extends TestCase
             'type' => 'delete',
             'object' => 'supplier',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('DELETE', 'delete_supplier', $inputs);
+        $this->call('POST', 'delete_supplier', $inputs);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('suppliers', $data);
         $this->seeInDatabase('activity_logs', $history);
@@ -74,7 +74,7 @@ class SupplierTest extends TestCase
             'type' => 'deactivate',
             'object' => 'supplier',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('PATCH', 'deactivate_supplier', $inputs);
+        $this->call('POST', 'deactivate_supplier', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('suppliers', $data);
         $this->seeInDatabase('activity_logs', $history);
@@ -91,7 +91,7 @@ class SupplierTest extends TestCase
             'type' => 'reactivate',
             'object' => 'supplier',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('PATCH', 'reactivate_supplier', $inputs);
+        $this->call('POST', 'reactivate_supplier', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('suppliers', $data);
         $this->seeInDatabase('activity_logs', $history);
