@@ -75,7 +75,7 @@ class ImportTest extends TestCase
         $inputs = ['import_pk' => '72774102-70df-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
         $data = ['pk' => '72774102-70df-11ea-bc55-0242ac130003'];
-        $this->call('DELETE', 'delete_import', $inputs);
+        $this->call('POST', 'delete_import', $inputs);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('imports', $data);
         foreach ($imported_item_pks as $imported_item_pk) {
@@ -89,7 +89,7 @@ class ImportTest extends TestCase
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
         $data = ['pk' => '72773c8e-70df-11ea-bc55-0242ac130003',
             'is_opened' => False];
-        $this->call('PATCH', 'turn_off_import', $inputs);
+        $this->call('POST', 'turn_off_import', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('imports', $data);
     }
@@ -100,7 +100,7 @@ class ImportTest extends TestCase
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
         $data = ['pk' => '72774102-70df-11ea-bc55-0242ac130003',
             'is_opened' => True];
-        $this->call('PATCH', 'turn_on_import', $inputs);
+        $this->call('POST', 'turn_on_import', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('imports', $data);
     }
@@ -190,7 +190,7 @@ class ImportTest extends TestCase
 
         $received_groups = ['727746b6-70df-11ea-bc55-0242ac130003', '727747ce-70df-11ea-bc55-0242ac130003'];
 
-        $this->call('DELETE', 'delete_imported_receiving', $inputs);
+        $this->call('POST', 'delete_imported_receiving', $inputs);
         $this->seeJsonEquals(['success' => 'Xóa phiên ghi nhận thành công']);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('receiving_sessions', ['pk' => '727745c6-70df-11ea-bc55-0242ac130003']);
@@ -227,7 +227,7 @@ class ImportTest extends TestCase
         $classified_item = ['pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003',
             'quality_state' => 'failed'];
 
-        $this->call('PATCH', 'reclassify', $inputs);
+        $this->call('POST', 'reclassify', $inputs);
         $classifying_session_pk = app('db')->table('classifying_sessions')->where('classified_item_pk', $inputs['classified_item_pk'])->value('pk');
         $classifying_session = [
             'pk' => $classifying_session_pk,
@@ -243,7 +243,7 @@ class ImportTest extends TestCase
         $data = ['pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003'];
         $imported_item = ['pk' => '72773d4c-70df-11ea-bc55-0242ac130003',
             'classified_item_pk' => null];
-        $this->call('DELETE','delete_classification',$inputs);
+        $this->call('POST', 'delete_classification', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('imported_items',$imported_item);
         $this->notSeeInDatabase('classifying_sessions',$inputs);

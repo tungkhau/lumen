@@ -20,7 +20,7 @@ class DeviceTest extends TestCase
     {
         $inputs = ['device_pk' => '59a67486-6dd8-11ea-bc55-0242ac130003'];
         $data = ['pk' => '59a67486-6dd8-11ea-bc55-0242ac130003'];
-        $this->call('DELETE','delete_device',$inputs);
+        $this->call('POST', 'delete_device', $inputs);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('devices',$data);
     }

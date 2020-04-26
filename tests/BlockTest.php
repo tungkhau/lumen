@@ -24,7 +24,7 @@ class BlockTest extends TestCase
         $block = ['col' => 10,
             'row' => 5,
             'is_active' => True];
-        $this->call('PATCH', 'open_block', $inputs);
+        $this->call('POST', 'open_block', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('blocks', $block);
 
@@ -46,7 +46,7 @@ class BlockTest extends TestCase
             ];
         }
         $inputs = ['block_pk' => '3ad6f2f2-7688-11ea-bc55-0242ac130003'];
-        $this->call('PATCH', 'close_block', $inputs);
+        $this->call('POST', 'close_block', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('blocks', $blocks);
         foreach ($shelves as $shelf) {

@@ -47,7 +47,7 @@ class ConceptionTest extends TestCase
             'type' => 'unlink',
             'object' => 'accessory',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('DELETE', 'unlink_conception_accessory', $inputs);
+        $this->call('POST', 'unlink_conception_accessory', $inputs);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('accessories_conceptions', $data);
         $this->seeInDatabase('activity_logs', $conception_history);
@@ -87,7 +87,7 @@ class ConceptionTest extends TestCase
             'type' => 'delete',
             'object' => 'conception',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('DELETE', 'delete_conception', $inputs);
+        $this->call('POST', 'delete_conception', $inputs);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('conceptions', $data);
         $this->seeInDatabase('activity_logs', $history);
@@ -104,7 +104,7 @@ class ConceptionTest extends TestCase
             'type' => 'deactivate',
             'object' => 'conception',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('PATCH', 'deactivate_conception', $inputs);
+        $this->call('POST', 'deactivate_conception', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('conceptions', $data);
         $this->seeInDatabase('activity_logs', $history);
@@ -121,7 +121,7 @@ class ConceptionTest extends TestCase
             'type' => 'reactivate',
             'object' => 'conception',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('PATCH', 'reactivate_conception', $inputs);
+        $this->call('POST', 'reactivate_conception', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('conceptions', $data);
         $this->seeInDatabase('activity_logs', $history);

@@ -72,8 +72,8 @@ class OrderTest extends TestCase
         }
         $inputs = ['order_pk' => 'b7d9aa28-70f8-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
-        $data   = ['pk' => 'b7d9aa28-70f8-11ea-bc55-0242ac130003'];
-        $this->call('DELETE','delete_order',$inputs);
+        $data = ['pk' => 'b7d9aa28-70f8-11ea-bc55-0242ac130003'];
+        $this->call('POST', 'delete_order', $inputs);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('orders',$data);
         foreach ($ordered_item_pks as $ordered_item_pk) {
@@ -85,8 +85,8 @@ class OrderTest extends TestCase
         $inputs = ['order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
         $data = ['pk' => '727734be-70df-11ea-bc55-0242ac130003',
-            'is_opened' => False ];
-        $this->call('PATCH','turn_off_order',$inputs);
+            'is_opened' => False];
+        $this->call('POST', 'turn_off_order', $inputs);
         $this->seeStatusCode(200);
         $this->SeeInDatabase('orders',$data);
     }
@@ -95,8 +95,8 @@ class OrderTest extends TestCase
         $inputs = ['order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
         $data = ['pk' => '72773900-70df-11ea-bc55-0242ac130003',
-            'is_opened' => True ];
-        $this->call('PATCH','turn_on_order',$inputs);
+            'is_opened' => True];
+        $this->call('POST', 'turn_on_order', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('orders',$data);
     }

@@ -31,7 +31,7 @@ class ReceivedGroupTest extends TestCase
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
         $data = ['pk' => '1cfd56fc-72a2-11ea-bc55-0242ac130003',
             'counted_quantity' => 499,];
-        $this->call('PATCH', 'edit_counting', $inputs);
+        $this->call('POST', 'edit_counting', $inputs);
         $this->seeJsonEquals(['success' => 'Sửa phiên kiểm số lượng thành công']);
         $this->seeStatusCode(200);
         $this->seeInDatabase('counting_sessions', $data);
@@ -44,7 +44,7 @@ class ReceivedGroupTest extends TestCase
         $data = ['pk' => '1cfd56fc-72a2-11ea-bc55-0242ac130003'];
         $received_group = ['pk' => '727747ce-70df-11ea-bc55-0242ac130003',
             'counting_session_pk' => null];
-        $this->call('DELETE', 'delete_counting', $inputs);
+        $this->call('POST', 'delete_counting', $inputs);
         $this->seeJsonEquals(['success' => 'Xóa phiên kiểm số lượng thành công']);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('counting_sessions', $data);
@@ -80,7 +80,7 @@ class ReceivedGroupTest extends TestCase
         $data = ['pk' => '1cfd592c-72a2-11ea-bc55-0242ac130003',
             'checked_quantity' => 1,
             'unqualified_quantity' => 0];
-        $this->call('PATCH', 'edit_checking', $inputs);
+        $this->call('POST', 'edit_checking', $inputs);
         $this->seeJsonEquals(['success' => 'Sửa phiên kiểm chất lượng thành công']);
         $this->seeStatusCode(200);
         $this->seeInDatabase('checking_sessions', $data);
@@ -93,7 +93,7 @@ class ReceivedGroupTest extends TestCase
         $data = ['pk' => '1cfd592c-72a2-11ea-bc55-0242ac130003'];
         $received_group = ['pk' => '727747ce-70df-11ea-bc55-0242ac130003',
             'checking_session_pk' => null];
-        $this->call('DELETE', 'delete_checking', $inputs);
+        $this->call('POST', 'delete_checking', $inputs);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('checking_sessions', $data);
         $this->seeInDatabase('received_groups', $received_group);

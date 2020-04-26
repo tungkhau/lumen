@@ -36,7 +36,7 @@ class CustomerTest extends TestCase
         $data = ['pk' => '59a6758a-6dd8-11ea-bc55-0242ac130003',
             'address' => 'HCM',
             'phone' => '0369764668'];
-        $this->call('PATCH', 'edit_customer', $inputs);
+        $this->call('POST', 'edit_customer', $inputs);
         $id = app('db')->table('customers')->where('pk', '59a6758a-6dd8-11ea-bc55-0242ac130003')->value('id');
         $history = ['id' => $id,
             'type' => 'update',
@@ -57,7 +57,7 @@ class CustomerTest extends TestCase
             'type' => 'delete',
             'object' => 'customer',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('DELETE', 'delete_customer', $inputs);
+        $this->call('POST', 'delete_customer', $inputs);
         $this->seeStatusCode(200);
         $this->notSeeInDatabase('customers', $data);
         $this->seeInDatabase('activity_logs', $history);
@@ -74,7 +74,7 @@ class CustomerTest extends TestCase
             'type' => 'deactivate',
             'object' => 'customer',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('PATCH', 'deactivate_customer', $inputs);
+        $this->call('POST', 'deactivate_customer', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('customers', $data);
         $this->seeInDatabase('activity_logs', $history);
@@ -90,7 +90,7 @@ class CustomerTest extends TestCase
             'type' => 'reactivate',
             'object' => 'customer',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $this->call('PATCH', 'reactivate_customer', $inputs);
+        $this->call('POST', 'reactivate_customer', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('customers', $data);
         $this->seeInDatabase('activity_logs', $history);
