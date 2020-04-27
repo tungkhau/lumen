@@ -332,7 +332,7 @@ class AngularController extends Controller
     {
         $response = $this->modifying_session->get_unverified_modifying_session($request);
         $response = array_values($response);
-        return response()->json(['modifying-sessions' => $response], 201);
+        return response()->json(['unverified-modifying-sessions' => $response], 201);
     }
 
 

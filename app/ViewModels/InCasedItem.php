@@ -36,14 +36,15 @@ class InCasedItem extends ViewModel
         }
         $object = array();
         foreach ($entries as $entry) {
-            $object[] = [
-                'received_item_pk' => $entry->received_item_pk,
-                'accessoryPk' => $entry->accessory_pk,
-                'case_pk' => $entry->case_pk,
-                'inCasedQuantity' => $entry->inCasedQuantity,
-                'receivedItemPk' => $entry->received_item_pk,
-                'casePk' => $entry->case_pk,
-            ];
+            if ($entry->inCasedQuantity != 0)
+                $object[] = [
+                    'received_item_pk' => $entry->received_item_pk,
+                    'accessoryPk' => $entry->accessory_pk,
+                    'case_pk' => $entry->case_pk,
+                    'inCasedQuantity' => $entry->inCasedQuantity,
+                    'receivedItemPk' => $entry->received_item_pk,
+                    'casePk' => $entry->case_pk,
+                ];
         }
         return $object;
     }

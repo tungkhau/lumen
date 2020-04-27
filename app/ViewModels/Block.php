@@ -43,10 +43,16 @@ class Block extends ViewModel
                 'id' => $block->id,
                 'col' => $block->col,
                 'row' => $block->row,
+                'isClosable' => $this::is_closable($block->pk),
                 'status' => $block->is_active ? 'active' : 'inactive',
             ];
-
         }
         return $object;
+    }
+
+    private static function is_closable($block_pk)
+    {
+        $shelf_pks = app('db')->table('shelves')->where('block_pk', $block_pk)->pluck('pk');
+        return !app('db')->table('cases')->whereIn('shelf_pk', $shelf_pks)->exists();
     }
 }
