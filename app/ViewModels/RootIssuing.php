@@ -2,6 +2,8 @@
 
 namespace App\ViewModels;
 
+use Illuminate\Support\Facades\Crypt;
+
 class RootIssuing extends ViewModel
 {
     private $root_issued_item;
@@ -13,13 +15,15 @@ class RootIssuing extends ViewModel
 
     public function get($params)
     {
+        $api = $params->header('api_token');
+        $user_pk = Crypt::decrypt($api)['pk'];
         $kind = $params['kind'];
         $status = $params['status'];
         $externality = $params['externality'];
         $kind_filtered_object = $this->_kind_filter($kind);
         $status_filtered_object = $this->_status_filter($status, $kind_filtered_object);
         $externality_filtered_object = $this->_externality_filter($externality, $status_filtered_object);
-        return $this->_translation($externality_filtered_object);
+        return $this->_translation($externality_filtered_object, $user_pk);
 
     }
 
@@ -61,6 +65,14 @@ class RootIssuing extends ViewModel
         return $object;
     }
 
+    public static function status($root_issuing_pk, $kind)
+    {
+        if ($kind == 'demand') {
+            return app('db')->table('demands')->where('pk', $root_issuing_pk)->value('is_opened') ? 'opened' : 'closed';
+        }
+        return Null;
+    }
+
     private function _externality_filter($externality, $input_object)
     {
         $pks = array();
@@ -77,15 +89,7 @@ class RootIssuing extends ViewModel
         return $input_object;
     }
 
-    public static function status($root_issuing_pk, $kind)
-    {
-        if ($kind == 'demand') {
-            return app('db')->table('demands')->where('pk', $root_issuing_pk)->value('is_opened') ? 'opened' : 'closed';
-        }
-        return Null;
-    }
-
-    private function _translation($input_object)
+    private function _translation($input_object, $user_pk)
     {
         foreach ($input_object as $key => $item) {
             if ($item['kind'] == 'demand') {
@@ -95,8 +99,8 @@ class RootIssuing extends ViewModel
                     'id' => $demand->id,
                     'createdDate' => $demand->created_date,
                     'conceptionId' => $conception_id,
-                    'isMutable' => $this::is_mutable($item['pk'], $item['kind']),
-                    'isSwitchable' => $this::is_switchable($item['pk'], $item['kind']),
+                    'isMutable' => $this::is_mutable($item['pk'], $item['kind'], $user_pk),
+                    'isSwitchable' => $this::is_switchable($item['pk'], $item['kind'], $user_pk),
                     'destinationName' => $this::destination_name($item['pk'], $item['kind']),
                     'user_pk' => $demand->user_pk,
                     'completedPercentage' => $this->completed_percentage($item['pk'], $item['kind'])
@@ -106,20 +110,32 @@ class RootIssuing extends ViewModel
         return $this::user_translation($input_object);
     }
 
-    private static function is_mutable($root_issuing_pk, $kind)
+    private static function is_mutable($root_issuing_pk, $kind, $user_pk)
     {
         if ($kind == 'demand') {
-            return !app('db')->table('issuing_sessions')->where('container_pk', $root_issuing_pk)->exists();
+            $owner = app('db')->table('demands')->where('pk', $root_issuing_pk)->value('user_pk') == $user_pk;
+            return $owner && !app('db')->table('issuing_sessions')->where('container_pk', $root_issuing_pk)->exists();
         }
         return Null;
     }
 
-    private static function is_switchable($root_issuing_pk, $kind)
+    private static function is_switchable($root_issuing_pk, $kind, $user_pk)
     {
         if ($kind == 'demand') {
-            $is_opened = app('db')->table('demands')->where('pk', $root_issuing_pk)->value('is_opened');
-            if (!$is_opened) return True;
+            $demand = app('db')->table('demands')->where('pk', $root_issuing_pk)->select('user_pk', 'is_opened')->first();
+            $owner = $demand->user_pk == $user_pk;
+            if (!$owner) return False;
+            if ($demand->is_opened == False) return True;
             return app('db')->table('issuing_sessions')->where('container_pk', $root_issuing_pk)->exists();
+        }
+        return Null;
+    }
+
+    private static function destination_name($root_issuing_pk, $kind)
+    {
+        if ($kind == 'demand') {
+            $workplace_pk = app('db')->table('demands')->where('pk', $root_issuing_pk)->value('workplace_pk');
+            return app('db')->table('workplaces')->where('pk', $workplace_pk)->value('name');
         }
         return Null;
     }
@@ -133,15 +149,6 @@ class RootIssuing extends ViewModel
                 $sum += $this->root_issued_item->completed_percentage($demanded_item_pk, 'demanded');
             }
             return $sum / count($demanded_item_pks);
-        }
-        return Null;
-    }
-
-    private static function destination_name($root_issuing_pk, $kind)
-    {
-        if ($kind == 'demand') {
-            $workplace_pk = app('db')->table('demands')->where('pk', $root_issuing_pk)->value('workplace_pk');
-            return app('db')->table('workplaces')->where('pk', $workplace_pk)->value('name');
         }
         return Null;
     }

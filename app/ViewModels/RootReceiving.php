@@ -2,6 +2,8 @@
 
 namespace App\ViewModels;
 
+use Illuminate\Support\Facades\Crypt;
+
 class RootReceiving extends ViewModel
 {
     private $root_received_item;
@@ -13,13 +15,15 @@ class RootReceiving extends ViewModel
 
     public function get($params)
     {
+        $api = $params->header('api_token');
+        $user_pk = Crypt::decrypt($api)['pk'];
         $kind = $params['kind'];
         $status = $params['status'];
         $externality = $params['externality'];
         $kind_filtered_object = $this->_kind_filter($kind);
         $status_filtered_object = $this->_status_filter($status, $kind_filtered_object);
         $externality_filtered_object = $this->_externality_filter($externality, $status_filtered_object);
-        return $this->_translation($externality_filtered_object);
+        return $this->_translation($externality_filtered_object, $user_pk);
 
     }
 
@@ -85,7 +89,7 @@ class RootReceiving extends ViewModel
         return $input_object;
     }
 
-    private function _translation($input_object)
+    private function _translation($input_object, $user_pk)
     {
         foreach ($input_object as $key => $item) {
             if ($item['kind'] == 'order') {
@@ -93,8 +97,8 @@ class RootReceiving extends ViewModel
                 $input_object[$key] += [
                     'id' => $order->id,
                     'createdDate' => $order->created_date,
-                    'isMutable' => $this::is_mutable($item['pk'], $item['kind']),
-                    'isSwitchable' => $this::is_switchable($item['pk'], $item['kind']),
+                    'isMutable' => $this::is_mutable($item['pk'], $item['kind'], $user_pk),
+                    'isSwitchable' => $this::is_switchable($item['pk'], $item['kind'], $user_pk),
                     'sourceName' => $this::source_name($item['pk'], $item['kind']),
                     'user_pk' => $order->user_pk,
                     'completedPercentage' => $this->completed_percentage($item['pk'], $item['kind'])
@@ -104,19 +108,22 @@ class RootReceiving extends ViewModel
         return $this::user_translation($input_object);
     }
 
-    private static function is_mutable($root_receiving_pk, $kind)
+    private static function is_mutable($root_receiving_pk, $kind, $user_pk)
     {
         if ($kind == 'order') {
-            return !app('db')->table('imports')->where('order_pk', $root_receiving_pk)->exists();
+            $owner = app('db')->table('orders')->where('pk', $root_receiving_pk)->value('user_pk') == $user_pk;
+            return !app('db')->table('imports')->where('order_pk', $root_receiving_pk)->exists() && $owner;
         }
         return Null;
     }
 
-    private static function is_switchable($root_receiving_pk, $kind)
+    private static function is_switchable($root_receiving_pk, $kind, $user_pk)
     {
         if ($kind == 'order') {
-            $is_opened = app('db')->table('orders')->where('pk', $root_receiving_pk)->value('is_opened');
-            if (!$is_opened) return True;
+            $order = app('db')->table('orders')->where('pk', $root_receiving_pk)->select('user_pk', 'is_opened')->first();
+            $owner = $order->user_pk == $user_pk;
+            if (!$owner) return False;
+            if ($order->is_opened == False) return True;
             return app('db')->table('imports')->where('order_pk', $root_receiving_pk)->exists();
         }
         return Null;

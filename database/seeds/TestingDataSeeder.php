@@ -45,14 +45,6 @@ class TestingDataSeeder extends Seeder
             'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
         ]);
         app('db')->table('users')->insert([
-            'is_active' => True,
-            'id' => '1',
-            'password' => app('hash')->make('1'),
-            'name' => 'Quản lý mặt hàng',
-            'role' => 'Merchandiser',
-            'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
-        ]);
-        app('db')->table('users')->insert([
             'pk' => '59a67242-6dd8-11ea-bc55-0242ac130003',
             'is_active' => False,
             'id' => '234567',
@@ -210,7 +202,15 @@ class TestingDataSeeder extends Seeder
         ]);
 
         //make for G4
-
+        app('db')->table('users')->insert([
+            'pk' => 'ce09946d-87d9-11ea-a4ee-305a3a8512c6',
+            'is_active' => True,
+            'id' => '1',
+            'password' => app('hash')->make('1'),
+            'name' => 'Quản lý mặt hàng',
+            'role' => 'Merchandiser',
+            'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
+        ]);
         app('db')->table('accessories')->insert([
             'pk' => '72773130-70df-11ea-bc55-0242ac130003',
             'is_active' => True,
@@ -248,7 +248,7 @@ class TestingDataSeeder extends Seeder
             'pk' => '727734be-70df-11ea-bc55-0242ac130003',
             'id' => 'ORDER 1 open',
             'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => 'ce09946d-87d9-11ea-a4ee-305a3a8512c6'
         ]);
         app('db')->table('ordered_items')->insert([
             'pk' => '72773612-70df-11ea-bc55-0242ac130003',
@@ -262,7 +262,7 @@ class TestingDataSeeder extends Seeder
             'pk' => 'a7d6665c-71a7-11ea-bc55-0242ac130003',
             'id' => '6666 66',
             'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => 'ce09946d-87d9-11ea-a4ee-305a3a8512c6'
         ]);
         app('db')->table('ordered_items')->insert([
             'pk' => '7043b34c-71a8-11ea-bc55-0242ac130003',
@@ -299,7 +299,7 @@ class TestingDataSeeder extends Seeder
             'id' => 'ORDER 2 close',
             'is_opened' => false,
             'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => 'ce09946d-87d9-11ea-a4ee-305a3a8512c6'
         ]);
         app('db')->table('ordered_items')->insert([
             'pk' => '727739be-70df-11ea-bc55-0242ac130003',
@@ -327,7 +327,7 @@ class TestingDataSeeder extends Seeder
             'pk' => 'b7d9aa28-70f8-11ea-bc55-0242ac130003',
             'id' => 'ORDER 3 open',
             'supplier_pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => 'ce09946d-87d9-11ea-a4ee-305a3a8512c6'
         ]);
         app('db')->table('ordered_items')->insert([
             'pk' => 'f521c1d6-70f8-11ea-bc55-0242ac130003',
@@ -773,7 +773,7 @@ class TestingDataSeeder extends Seeder
             'is_opened' => true,
             'workplace_pk' => 'c00516d6-7195-11ea-bc55-0242ac130003',
             'conception_pk' => '5c00fd64-74b8-11ea-bc55-0242ac130003',
-            'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'
+            'user_pk' => 'ce09946d-87d9-11ea-a4ee-305a3a8512c6'
         ]);
         app('db')->table('demanded_items')->insert([
             'pk' => '5c0102dc-74b8-11ea-bc55-0242ac130003',

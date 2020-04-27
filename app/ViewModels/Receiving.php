@@ -2,17 +2,21 @@
 
 namespace App\ViewModels;
 
+use Illuminate\Support\Facades\Crypt;
+
 class Receiving extends ViewModel
 {
     public function get($params)
     {
+        $api = $params->header('api_token');
+        $user_pk = Crypt::decrypt($api)['pk'];
         $kind = $params['kind'];
         $status = $params['status'];
         $externality = $params['externality'];
         $kind_filtered_object = $this->_kind_filter($kind);
         $status_filtered_object = $this->_status_filter($status, $kind_filtered_object);
         $externality_filtered_object = $this->_externality_filter($kind, $externality, $status_filtered_object);
-        return $this->_translation($externality_filtered_object);
+        return $this->_translation($externality_filtered_object, $user_pk);
     }
 
     private function _kind_filter($kind)
@@ -116,7 +120,7 @@ class Receiving extends ViewModel
         return $input_object;
     }
 
-    private function _translation($input_object)
+    private function _translation($input_object, $user_pk)
     {
         $object = array();
         foreach ($input_object as $item) {
@@ -126,7 +130,7 @@ class Receiving extends ViewModel
                     'pk' => $item['pk'],
                     'kind' => $item['kind'],
                     'status' => $item['status'],
-                    'isMutable' => $this::is_mutable($item['pk'], $item['kind']),
+                    'isMutable' => $this::is_mutable($item['pk'], $item['kind'], $user_pk, $item['status']),
                     'isSwitchable' => $this::is_switchable($item['pk'], $item['kind']),
                     'id' => $import->id,
                     'createdDate' => $import->created_date,
@@ -140,6 +144,7 @@ class Receiving extends ViewModel
                     'pk' => $item['pk'],
                     'kind' => $item['kind'],
                     'status' => $item['status'],
+                    'isMutable' => $this::is_mutable($item['pk'], $item['kind'], $user_pk, $item['status']),
                     'id' => $restoration->id,
                     'createdDate' => $restoration->created_date,
                     'sourceName' => $this::source_name($item['pk'], $item['kind']),
@@ -150,11 +155,24 @@ class Receiving extends ViewModel
         return $this::user_translation($object);
     }
 
-    public static function is_mutable($receiving_pk, $kind)
+    public static function is_mutable($receiving_pk, $kind, $user_pk, $status)
     {
         if ($kind == 'import') {
+            $owner = app('db')->table('imports')->where('pk', $receiving_pk)->value('user_pk') == $user_pk;
             $received_item_pks = app('db')->table('imported_items')->where('import_pk', $receiving_pk)->pluck('pk');
-            return app('db')->table('received_groups')->whereIn('received_item_pk', $received_item_pks)->doesntExist();
+            return $owner && app('db')->table('received_groups')->whereIn('received_item_pk', $received_item_pks)->doesntExist();
+        }
+        if ($kind == 'restoration') {
+            if ($status == 'received') return False;
+            $owner_pk = app('db')->table('restorations')->where('pk', $receiving_pk)->value('user_pk');
+            if ($status == 'unconfirmed') {
+                if ($user_pk == $owner_pk) return False;
+                else return True;
+            }
+            if ($status == 'confirmed') {
+                if ($user_pk == $owner_pk) return True;
+                else return False;
+            }
         }
         return Null;
     }
