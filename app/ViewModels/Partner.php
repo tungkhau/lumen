@@ -10,7 +10,7 @@ class Partner extends ViewModel
         $status = $params['status'];
         $kind_filtered_object = $this->_kind_filter($kind);
         $status_filtered_object = $this->_status_filter($status, $kind_filtered_object);
-        return $this->_translation($status_filtered_object);
+        return $this::sort_response($this->_translation($status_filtered_object), 'createdDate');
     }
 
     private function _kind_filter($kind)
@@ -80,7 +80,8 @@ class Partner extends ViewModel
                     'id' => $supplier->id,
                     'phone' => $supplier->phone,
                     'address' => $supplier->address,
-                    'name' => $supplier->name
+                    'name' => $supplier->name,
+                    'createdDate' => $supplier->created_date
                 ];
             }
             if ($item['kind'] == 'customer') {
@@ -89,7 +90,8 @@ class Partner extends ViewModel
                     'id' => $customer->id,
                     'phone' => $customer->phone,
                     'address' => $customer->address,
-                    'name' => $customer->name
+                    'name' => $customer->name,
+                    'createdDate' => $customer->created_date
                 ];
             }
         }

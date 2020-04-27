@@ -12,14 +12,14 @@ class SupplierRepository
         try {
             app('db')->transaction(function () use ($params) {
                 app('db')->table('activity_logs')->insert([
-                    'id' => $params['supplier_id'],
+                    'id' => strtoupper($params['supplier_id']),
                     'type' => 'create',
                     'object' => 'supplier',
                     'user_pk' => $params['user_pk']
                 ]);
                 app('db')->table('suppliers')->insert([
                     'name' => $params['supplier_name'],
-                    'id' => $params['supplier_id'],
+                    'id' => strtoupper($params['supplier_id']),
                     'address' => $params['address'],
                     'phone' => $params['phone']
                 ]);

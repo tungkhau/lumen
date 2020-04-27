@@ -12,14 +12,14 @@ class CustomerRepository
         try {
             app('db')->transaction(function () use ($params) {
                 app('db')->table('activity_logs')->insert([
-                    'id' => $params['customer_id'],
+                    'id' => strtoupper($params['customer_id']),
                     'type' => 'create',
                     'object' => 'customer',
                     'user_pk' => $params['user_pk']
                 ]);
                 app('db')->table('customers')->insert([
                     'name' => $params['customer_name'],
-                    'id' => $params['customer_id'],
+                    'id' => strtoupper($params['customer_id']),
                     'address' => $params['address'],
                     'phone' => $params['phone']
                 ]);
