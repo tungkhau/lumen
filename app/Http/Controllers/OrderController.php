@@ -128,7 +128,7 @@ class OrderController extends Controller
     public static function is_mutable($order_pk)
     {
         $imports = app('db')->table('imports')->where('order_pk', $order_pk)->exists();
-        $owner = app('db')->table('orders')->where('pk', $order_pk)->value('user_pk') == $order_pk ? True : False;
+        $owner = app('db')->table('orders')->where('pk', $order_pk)->value('user_pk') == $order_pk;
         return !$imports || $owner;
     }
 
