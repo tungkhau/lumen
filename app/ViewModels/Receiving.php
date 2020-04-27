@@ -131,7 +131,7 @@ class Receiving extends ViewModel
                     'kind' => $item['kind'],
                     'status' => $item['status'],
                     'isMutable' => $this::is_mutable($item['pk'], $item['kind'], $user_pk, $item['status']),
-                    'isSwitchable' => $this::is_switchable($item['pk'], $item['kind']),
+                    'isSwitchable' => $this::is_switchable($item['pk'], $item['kind'], $user_pk),
                     'id' => $import->id,
                     'createdDate' => $import->created_date,
                     'sourceName' => $this::source_name($item['pk'], $item['kind']),
@@ -177,10 +177,12 @@ class Receiving extends ViewModel
         return Null;
     }
 
-    public static function is_switchable($receiving_pk, $kind)
+    public static function is_switchable($receiving_pk, $kind, $user_pk)
     {
         if ($kind == 'import') {
-            $is_opened = app('db')->table('imports')->where('pk', $receiving_pk)->value('is_opened');
+            $import = app('db')->table('imports')->where('pk', $receiving_pk)->select('user_pk', 'is_opened')->first();
+            if ($import->user_pk != $user_pk) return False;
+            $is_opened = $import->is_opened;
             if ($is_opened) {
                 $imported_item_pks = app('db')->table('imported_items')->where('import_pk', $receiving_pk)->pluck('pk')->toArray();
                 return app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->exists();

@@ -37,6 +37,7 @@ class TestingDataSeeder extends Seeder
             'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'
         ]);
         app('db')->table('users')->insert([
+            'pk' => '4fb05f3f-8843-11ea-abd7-305a3a8512c6',
             'is_active' => True,
             'id' => '2',
             'password' => app('hash')->make('2'),
@@ -341,7 +342,7 @@ class TestingDataSeeder extends Seeder
             'id' => 'import_1',
             'is_opened' => true,
             'order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => '4fb05f3f-8843-11ea-abd7-305a3a8512c6'
         ]);
 
         app('db')->table('classified_items')->insert([
@@ -372,7 +373,7 @@ class TestingDataSeeder extends Seeder
             'id' => 'import_2',
             'is_opened' => false,
             'order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => '4fb05f3f-8843-11ea-abd7-305a3a8512c6'
         ]);
         app('db')->table('imported_items')->insert([
             'pk' => '727741ca-70df-11ea-bc55-0242ac130003',
@@ -397,7 +398,7 @@ class TestingDataSeeder extends Seeder
             'id' => 'import_3',
             'is_opened' => False,
             'order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => '4fb05f3f-8843-11ea-abd7-305a3a8512c6'
         ]);
         app('db')->table('imported_items')->insert([
             'pk' => '24f53a5e-7389-11ea-bc55-0242ac130003',
@@ -410,7 +411,7 @@ class TestingDataSeeder extends Seeder
             'id' => 'import_5',
             'is_opened' => false,
             'order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => '4fb05f3f-8843-11ea-abd7-305a3a8512c6'
         ]);
         app('db')->table('imported_items')->insert([
             'pk' => 'a4ce862a-8155-11ea-bc55-0242ac130003',
@@ -1353,7 +1354,7 @@ class TestingDataSeeder extends Seeder
             'is_opened' => true,
             'workplace_pk' => 'c00516d6-7195-11ea-bc55-0242ac130003',
             'conception_pk' => '05ed417c-7a6b-11ea-bc55-0242ac130003',
-            'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'
+            'user_pk' => 'ce09946d-87d9-11ea-a4ee-305a3a8512c6'
         ]);
         app('db')->table('demanded_items')->insert([
             'pk' => '85e1741a-7a76-11ea-bc55-0242ac130003',

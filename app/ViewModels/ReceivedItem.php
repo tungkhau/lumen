@@ -3,11 +3,14 @@
 namespace App\ViewModels;
 
 use App\Http\Controllers\ImportController;
+use Illuminate\Support\Facades\Crypt;
 
 class ReceivedItem extends ViewModel
 {
     public function get($params)
     {
+        $api = $params->header('api_token');
+        $user_pk = Crypt::decrypt($api)['pk'];
         $kind = $params['kind'];
         $status = $params['status'];
         $externality = $params['externality'];
