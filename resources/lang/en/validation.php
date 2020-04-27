@@ -23,7 +23,7 @@ return [
         'file' => 'The :attribute may not be greater than :max kilobytes.',
         'array' => 'The :attribute may not have more than :max items.',
     ],
-
+    'alpha' => ':attribute chỉ được chứa kí tự chữ',
     'in' => ':attribute không phù hợp.',
     'integer' => ':attribute phải là số nguyên.',
 
@@ -77,7 +77,7 @@ return [
     'active_url' => 'The :attribute is not a valid URL.',
     'after' => 'The :attribute must be a date after :date.',
     'after_or_equal' => 'The :attribute must be a date after or equal to :date.',
-    'alpha' => 'The :attribute may only contain letters.',
+
     'alpha_dash' => 'The :attribute may only contain letters, numbers, and dashes.',
     'alpha_num' => 'The :attribute may only contain letters and numbers.',
     'array' => 'The :attribute must be an array.',
@@ -150,7 +150,7 @@ return [
     'size' => [
         'numeric' => 'The :attribute must be :size.',
         'file' => 'The :attribute must be :size kilobytes.',
-        'string' => 'The :attribute must be :size characters.',
+        'string' => ':attribute phải có độ dài :size kí tự.',
         'array' => 'The :attribute must contain :size items.',
     ],
     'starts_with' => 'The :attribute must start with one of the following: :values',
