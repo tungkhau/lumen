@@ -43,6 +43,8 @@ return [
     'exists' => ':attribute vừa chọn không hợp lệ hoặc không tìm thấy.',
     'attributes' => [
         'ordered_items.*.ordered_quantity' => 'Số lượng đặt hàng',
+        'ordered_quantity' => 'Số lượng đặt hàng',
+        'comment' => 'Ghi chú',
         'user_pk' => 'Nhân viên',
         'device_pk' => 'Thiết bị',
         'block_pk' => 'Dãy kho',

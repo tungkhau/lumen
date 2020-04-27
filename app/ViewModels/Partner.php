@@ -81,7 +81,8 @@ class Partner extends ViewModel
                     'phone' => $supplier->phone,
                     'address' => $supplier->address,
                     'name' => $supplier->name,
-                    'createdDate' => $supplier->created_date
+                    'createdDate' => $supplier->created_date,
+                    'isMutable' => $this::is_mutable($supplier->pk, 'supplier')
                 ];
             }
             if ($item['kind'] == 'customer') {
@@ -91,10 +92,25 @@ class Partner extends ViewModel
                     'phone' => $customer->phone,
                     'address' => $customer->address,
                     'name' => $customer->name,
-                    'createdDate' => $customer->created_date
+                    'createdDate' => $customer->created_date,
+                    'isMutable' => $this::is_mutable($customer->pk, 'customer')
                 ];
             }
         }
         return $input_object;
+    }
+
+    private static function is_mutable($partner_pk, $kind)
+    {
+        if ($kind == 'customer') {
+            $accessories = app('db')->table('accessories')->where('customer_pk', $partner_pk)->exists();
+            $conceptions = app('db')->table('conceptions')->where('customer_pk', $partner_pk)->exists();
+            return !$accessories && !$conceptions;
+        }
+        if ($kind == 'supplier') {
+            $accessories = app('db')->table('accessories')->where('supplier_pk', $partner_pk)->exists();
+            return !$accessories;
+        }
+        return Null;
     }
 }
