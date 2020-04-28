@@ -24,7 +24,7 @@ class AuthTest extends TestCase
             'apiToken' => $user->api_token
         ];
         $this->seeStatusCode(200);
-        $this->seeJsonEquals(['success' => 'Đăng nhập thành công','user' => $response]);
+        $this->seeJsonEquals(['success' => 'Đăng nhập thành công', 'user' => $response]);
         $this->SeeInDatabase('users', $data);
     }
 }

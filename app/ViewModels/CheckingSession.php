@@ -4,12 +4,6 @@ namespace App\ViewModels;
 
 class CheckingSession extends ViewModel
 {
-    private static function is_mutable($checking_session_pk)
-    {
-        $imported_item_pk = app('db')->table('received_groups')->where('checking_session_pk', $checking_session_pk)->value('received_item_pk');
-        return app('db')->table('imported_items')->where('pk', $imported_item_pk)->value('classified_item_pk') == Null;
-    }
-
     public function get($params)
     {
         $externality = $params['externality'];
@@ -60,5 +54,11 @@ class CheckingSession extends ViewModel
 
         }
         return $this::received_item_translation($this::user_translation($object));
+    }
+
+    private static function is_mutable($checking_session_pk)
+    {
+        $imported_item_pk = app('db')->table('received_groups')->where('checking_session_pk', $checking_session_pk)->value('received_item_pk');
+        return app('db')->table('imported_items')->where('pk', $imported_item_pk)->value('classified_item_pk') == Null;
     }
 }

@@ -2,8 +2,6 @@
 
 namespace App\ViewModels;
 
-use App\Http\Controllers\ReceivedGroupController;
-
 class IssuedGroup extends ViewModel
 {
     public function get($params)

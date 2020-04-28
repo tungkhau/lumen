@@ -20,10 +20,6 @@ class ReceivedItem extends ViewModel
         return $this->_translation($externality_filtered_object);
     }
 
-    public function get_failed_item()
-    {
-    }
-
     private function _kind_filter($kind)
     {
         $objects = array();
@@ -198,12 +194,6 @@ class ReceivedItem extends ViewModel
         return $input_object;
     }
 
-    public static function imported_quality_state($imported_item_pk)
-    {
-        $classified_item_pk = app('db')->table('imported_items')->where('pk', $imported_item_pk)->value('classified_item_pk');
-        return $classified_item_pk == Null ? Null : app('db')->table('classified_items')->where('pk', $classified_item_pk)->value('quality_state');
-    }
-
     private static function imported_sum_checking_quantity($imported_item_pk)
     {
         $received_group_pks = app('db')->table('received_groups')->where('received_item_pk', $imported_item_pk)->pluck('pk');
@@ -215,6 +205,16 @@ class ReceivedItem extends ViewModel
             $sum['unqualified_quantity'] += $checking_quantity['unqualified_quantity'];
         }
         return $sum;
+    }
+
+    public static function imported_quality_state($imported_item_pk)
+    {
+        $classified_item_pk = app('db')->table('imported_items')->where('pk', $imported_item_pk)->value('classified_item_pk');
+        return $classified_item_pk == Null ? Null : app('db')->table('classified_items')->where('pk', $classified_item_pk)->value('quality_state');
+    }
+
+    public function get_failed_item()
+    {
     }
 
 

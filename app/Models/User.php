@@ -13,17 +13,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use Authenticatable, Authorizable;
 
     protected $table = 'users';
+    protected $hidden = [
+        'password', 'api_token'
+    ];
+    protected $fillable = ['id', 'name', 'role', 'password'];
     private $id;
     private $name;
     private $password;
     private $role;
     private $is_active;
-
-    protected $hidden = [
-        'password', 'api_token'
-    ];
-
-    protected $fillable = ['id', 'name', 'role', 'password'];
 
     public function workplace()
     {

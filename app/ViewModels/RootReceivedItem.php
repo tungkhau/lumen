@@ -4,44 +4,6 @@ namespace App\ViewModels;
 
 class RootReceivedItem extends ViewModel
 {
-    private static function sum_received_quantity($root_received_item_pk, $kind)
-    {
-        $sum = 0;
-        if ($kind == 'ordered') {
-            $imported_quantities = app('db')->table('imported_items')->where('ordered_item_pk', $root_received_item_pk)->pluck('imported_quantity');
-            foreach ($imported_quantities as $imported_quantity) {
-                $sum += $imported_quantity;
-            }
-        }
-        return $sum;
-    }
-
-    private static function sum_adjusted_quantity($root_received_item_pk, $kind)
-    {
-        $sum = 0;
-        if ($kind == 'ordered') {
-            $imported_item_pks = app('db')->table('imported_items')->where('ordered_item_pk', $root_received_item_pk)->pluck('pk');
-            $adjusted_entry_quantities = app('db')->table('entries')->whereIn('received_item_pk', $imported_item_pks)->pluck('quantity');
-            foreach ($adjusted_entry_quantities as $adjusted_entry_quantity) {
-                if ($adjusted_entry_quantity != Null) $sum += $adjusted_entry_quantity;
-            }
-        }
-        return $sum;
-    }
-
-    private static function sum_discarded_quantity($root_received_item_pk, $kind)
-    {
-        $sum = 0;
-        if ($kind == 'ordered') {
-            $imported_item_pks = app('db')->table('imported_items')->where('ordered_item_pk', $root_received_item_pk)->pluck('pk');
-            $discarded_entry_quantities = app('db')->table('entries')->whereIn('received_item_pk', $imported_item_pks)->pluck('quantity');
-            foreach ($discarded_entry_quantities as $discarded_entry_quantity) {
-                if ($discarded_entry_quantity != Null) $sum += $discarded_entry_quantity;
-            }
-        }
-        return $sum;
-    }
-
     public function get($params)
     {
         $kind = $params['kind'];
@@ -102,13 +64,16 @@ class RootReceivedItem extends ViewModel
         return $this::accessory_translation($input_object);
     }
 
-    public function completed_percentage($root_received_item_pk, $kind)
+    private static function sum_received_quantity($root_received_item_pk, $kind)
     {
+        $sum = 0;
         if ($kind == 'ordered') {
-            $expected_quantity = app('db')->table('ordered_items')->where('pk', $root_received_item_pk)->value('ordered_quantity');
-            return ($this::sum_actual_received_quantity($root_received_item_pk, $kind) / $expected_quantity) * 100;
+            $imported_quantities = app('db')->table('imported_items')->where('ordered_item_pk', $root_received_item_pk)->pluck('imported_quantity');
+            foreach ($imported_quantities as $imported_quantity) {
+                $sum += $imported_quantity;
+            }
         }
-        return 0;
+        return $sum;
     }
 
     public static function sum_actual_received_quantity($root_received_item_pk, $kind)
@@ -121,5 +86,40 @@ class RootReceivedItem extends ViewModel
             }
         }
         return $sum;
+    }
+
+    private static function sum_adjusted_quantity($root_received_item_pk, $kind)
+    {
+        $sum = 0;
+        if ($kind == 'ordered') {
+            $imported_item_pks = app('db')->table('imported_items')->where('ordered_item_pk', $root_received_item_pk)->pluck('pk');
+            $adjusted_entry_quantities = app('db')->table('entries')->whereIn('received_item_pk', $imported_item_pks)->pluck('quantity');
+            foreach ($adjusted_entry_quantities as $adjusted_entry_quantity) {
+                if ($adjusted_entry_quantity != Null) $sum += $adjusted_entry_quantity;
+            }
+        }
+        return $sum;
+    }
+
+    private static function sum_discarded_quantity($root_received_item_pk, $kind)
+    {
+        $sum = 0;
+        if ($kind == 'ordered') {
+            $imported_item_pks = app('db')->table('imported_items')->where('ordered_item_pk', $root_received_item_pk)->pluck('pk');
+            $discarded_entry_quantities = app('db')->table('entries')->whereIn('received_item_pk', $imported_item_pks)->pluck('quantity');
+            foreach ($discarded_entry_quantities as $discarded_entry_quantity) {
+                if ($discarded_entry_quantity != Null) $sum += $discarded_entry_quantity;
+            }
+        }
+        return $sum;
+    }
+
+    public function completed_percentage($root_received_item_pk, $kind)
+    {
+        if ($kind == 'ordered') {
+            $expected_quantity = app('db')->table('ordered_items')->where('pk', $root_received_item_pk)->value('ordered_quantity');
+            return ($this::sum_actual_received_quantity($root_received_item_pk, $kind) / $expected_quantity) * 100;
+        }
+        return 0;
     }
 }

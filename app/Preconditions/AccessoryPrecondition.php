@@ -15,7 +15,8 @@ class AccessoryPrecondition
         return $conceptions || $ordered_items || $in_distributed_items || $demanded_items || $restored_items || $out_distributed_item;
     }
 
-    public function delete_photo($params) {
-       return !app('db')->table('accessories')->where('pk', $params['accessory_pk'])->value('photo');
+    public function delete_photo($params)
+    {
+        return !app('db')->table('accessories')->where('pk', $params['accessory_pk'])->value('photo');
     }
 }
