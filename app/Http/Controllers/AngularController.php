@@ -167,6 +167,20 @@ class AngularController extends Controller
         return response()->json(['activity-logs' => $response], 201);
     }
 
+    public function get_received_workplace()
+    {
+        $response = $this->shared->get_received_workplace();
+        $response = array_values($response);
+        return response()->json(['received-workplaces' => $response], 201);
+    }
+
+    public function get_workplace()
+    {
+        $response = $this->shared->get_workplace();
+        $response = array_values($response);
+        return response()->json(['workplaces' => $response], 201);
+    }
+
     public function get_inventory()
     {
         $response = $this->shared->get_inventory();

@@ -205,3 +205,6 @@ $router->post('users', 'AngularController@get_user');
 $router->post('mediators', 'AngularController@get_mediator');
 $router->post('unstored-cases', 'AngularController@get_unstored_case');
 $router->post('unverified-modifying-sessions', 'AngularController@get_unverified_modifying_session');
+$router->post('received-workplaces', 'AngularController@get_received_workplace');
+$router->post('workplaces', 'AngularController@get_workplace');
+
