@@ -19,7 +19,7 @@ return [
     'unique' => ':attribute đã tồn tại.',
     'max' => [
         'string' => ':attribute không thể chứa nhiều hơn :max kí tự.',
-        'numeric' => 'The :attribute may not be greater than :max.',
+        'numeric' => ':attribute không thể lớn hơn :max.',
         'file' => 'The :attribute may not be greater than :max kilobytes.',
         'array' => 'The :attribute may not have more than :max items.',
     ],
@@ -42,7 +42,13 @@ return [
     ],
     'exists' => ':attribute vừa chọn không hợp lệ hoặc không tìm thấy.',
     'attributes' => [
+        'row' => 'Số tầng',
+        'col' => 'Số cột',
         'ordered_items.*.ordered_quantity' => 'Số lượng đặt hàng',
+        'ordered_quantity' => 'Số lượng đặt hàng',
+        'demanded_quantity' => 'Số lượng cấp phát',
+        'imported_quantity' => 'Số lượng nhập',
+        'comment' => 'Ghi chú',
         'user_pk' => 'Nhân viên',
         'device_pk' => 'Thiết bị',
         'block_pk' => 'Dãy kho',
@@ -63,14 +69,6 @@ return [
         'supplier_id' => 'Mã nhà cung cấp',
         'case_pk' => 'Đơn vị chứa'
     ],
-
-
-
-
-
-
-
-
 
 
     'accepted' => 'The :attribute must be accepted.',
@@ -99,7 +97,7 @@ return [
     'file' => 'The :attribute must be a file.',
     'filled' => 'The :attribute field is required.',
     'gt' => [
-        'numeric' => 'The :attribute must be greater than :value.',
+        'numeric' => ':attribute phải lớn hơn :value.',
         'file' => 'The :attribute must be greater than :value kilobytes.',
         'string' => 'The :attribute must be greater than :value characters.',
         'array' => 'The :attribute must have more than :value items.',
@@ -159,12 +157,6 @@ return [
     'uploaded' => 'The :attribute failed to upload.',
     'url' => 'The :attribute format is invalid.',
     'uuid' => 'The :attribute must be a valid UUID.',
-
-
-
-
-
-
 
 
 ];

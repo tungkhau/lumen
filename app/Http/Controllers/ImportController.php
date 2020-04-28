@@ -89,6 +89,13 @@ class ImportController extends Controller
         }
     }
 
+    public static function quality_state($imported_item_pk)
+    {
+        $classified_item_pk = app('db')->table('imported_items')->where('pk', $imported_item_pk)->value('classified_item_pk');
+        if ($classified_item_pk == Null) return 'inspecting';
+        return app('db')->table('classified_items')->where('pk', $classified_item_pk)->value('quality_state');
+    }
+
     public function create(Request $request)
     {
         /* Validate request, catch invalid errors(400) */
@@ -342,11 +349,5 @@ class ImportController extends Controller
         $unexpected = $this->repository->sendback($request);
         if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Gửi trả phụ liệu thành công'], 200);
-    }
-
-    public static function quality_state($imported_item_pk) {
-        $classified_item_pk = app('db')->table('imported_items')->where('pk', $imported_item_pk)->value('classified_item_pk');
-        if($classified_item_pk == Null) return 'inspecting';
-        return app('db')->table('classified_items')->where('pk', $classified_item_pk)->value('quality_state');
     }
 }

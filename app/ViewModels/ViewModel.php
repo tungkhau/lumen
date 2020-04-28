@@ -76,7 +76,8 @@ class ViewModel
         return $input_object;
     }
 
-    public static function sort_response($input_object, $field) {
+    public static function sort_response($input_object, $field)
+    {
         $array_map = array_map(function ($element) use ($field) {
             return $element[$field];
         }, $input_object);

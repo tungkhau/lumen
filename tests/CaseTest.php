@@ -8,7 +8,7 @@ class CaseTest extends TestCase
 
     public function testCreate()
     {
-        $id = 'QT-'.(string)date('dmy').'-AA';
+        $id = 'QT-' . (string)date('dmy') . '-AA';
         $data = ['id' => $id];
         $this->call('POST', 'create_case');
         $this->seeStatusCode(200);
@@ -52,8 +52,8 @@ class CaseTest extends TestCase
             'case_pk' => '1bd2a750-758b-11ea-bc55-0242ac130003',
             'accessory_pk' => '5c00fbde-74b8-11ea-bc55-0242ac130003'
         ];
-        $this->seeInDatabase('entries',$entry_A);
-        $this->seeInDatabase('entries',$entry_B);
+        $this->seeInDatabase('entries', $entry_A);
+        $this->seeInDatabase('entries', $entry_B);
         $receive_group_A = ['pk' => '1bd2ad54-758b-11ea-bc55-0242ac130003',
             'case_pk' => null];
         $receive_group_B = ['pk' => '1bd2ae1c-758b-11ea-bc55-0242ac130003',
@@ -76,7 +76,7 @@ class CaseTest extends TestCase
             'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'];
         $case = ['pk' => '1bd2b1be-758b-11ea-bc55-0242ac130003',
             'shelf_pk' => '3ad6f1da-7688-11ea-bc55-0242ac130003'];
-        $this->call('POST','replace',$inputs);
+        $this->call('POST', 'replace', $inputs);
         $this->seeStatusCode(200);
         $this->seeInDatabase('replacing_sessions', $data);
         $this->seeInDatabase('cases', $case);

@@ -145,16 +145,16 @@ class ReceivedGroupTest extends TestCase
         $inputs = ['start_case_pk' => '1bd2a750-758b-11ea-bc55-0242ac130003',
             'end_case_pk' => '59a68160-6dd8-11ea-bc55-0242ac130003',
             'received_groups' =>
-            [
                 [
-                    'received_group_pk' => '1bd2ad54-758b-11ea-bc55-0242ac130003'
+                    [
+                        'received_group_pk' => '1bd2ad54-758b-11ea-bc55-0242ac130003'
+                    ],
+                    [
+                        'received_group_pk' => '1bd2ae1c-758b-11ea-bc55-0242ac130003'
+                    ]
                 ],
-                [
-                    'received_group_pk' => '1bd2ae1c-758b-11ea-bc55-0242ac130003'
-                ]
-            ],
             'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'];
-        $this->call('POST','arrange',$inputs);
+        $this->call('POST', 'arrange', $inputs);
         $this->seeJsonEquals(['success' => 'Sắp xếp cụm phụ liệu thành công']);
         $this->seeStatusCode(200);
         $pk = app('db')->table('arranging_sessions')->orderBy('executed_date', 'desc')->first()->pk;

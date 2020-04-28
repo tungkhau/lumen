@@ -79,6 +79,7 @@ class CustomerTest extends TestCase
         $this->seeInDatabase('customers', $data);
         $this->seeInDatabase('activity_logs', $history);
     }
+
     public function testReactivate()
     {
         $inputs = ['customer_pk' => '59a6765c-6dd8-11ea-bc55-0242ac130003',

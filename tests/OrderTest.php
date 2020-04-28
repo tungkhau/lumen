@@ -48,7 +48,8 @@ class OrderTest extends TestCase
         $this->assertEquals(200, $response->status());
         $this->seeInDatabase('orders', $order);
     }
-    public function testEdit ()
+
+    public function testEdit()
     {
         $inputs = ['order_pk' => 'b7d9aa28-70f8-11ea-bc55-0242ac130003',
             'ordered_item_pk' => 'f521c1d6-70f8-11ea-bc55-0242ac130003',
@@ -57,11 +58,12 @@ class OrderTest extends TestCase
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
         $data = ['ordered_quantity' => 500,
             'comment' => 'bla'];
-        $this->call('POST','edit_order',$inputs);
+        $this->call('POST', 'edit_order', $inputs);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('ordered_items',$data);
+        $this->seeInDatabase('ordered_items', $data);
     }
-    public function testDelete ()
+
+    public function testDelete()
     {
         $temp = app('db')->table('ordered_items')->where('order_pk', 'b7d9aa28-70f8-11ea-bc55-0242ac130003')->pluck('pk')->toArray();
         $ordered_item_pks = array();
@@ -75,12 +77,13 @@ class OrderTest extends TestCase
         $data = ['pk' => 'b7d9aa28-70f8-11ea-bc55-0242ac130003'];
         $this->call('POST', 'delete_order', $inputs);
         $this->seeStatusCode(200);
-        $this->notSeeInDatabase('orders',$data);
+        $this->notSeeInDatabase('orders', $data);
         foreach ($ordered_item_pks as $ordered_item_pk) {
             $this->notSeeInDatabase('ordered_items', $ordered_item_pk);
         }
     }
-    public function testTurnOff ()
+
+    public function testTurnOff()
     {
         $inputs = ['order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
@@ -88,9 +91,10 @@ class OrderTest extends TestCase
             'is_opened' => False];
         $this->call('POST', 'turn_off_order', $inputs);
         $this->seeStatusCode(200);
-        $this->SeeInDatabase('orders',$data);
+        $this->SeeInDatabase('orders', $data);
     }
-    public function testTurnOn ()
+
+    public function testTurnOn()
     {
         $inputs = ['order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
@@ -98,6 +102,6 @@ class OrderTest extends TestCase
             'is_opened' => True];
         $this->call('POST', 'turn_on_order', $inputs);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('orders',$data);
+        $this->seeInDatabase('orders', $data);
     }
 }

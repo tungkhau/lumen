@@ -198,6 +198,7 @@ class ImportTest extends TestCase
             $this->notSeeInDatabase('received_groups', ['pk' => $item]);
         }
     }
+
     public function testClassify()
     {
         $inputs = ['imported_item_pk' => '72774396-70df-11ea-bc55-0242ac130003', //imported_item 1 (1) -> import_1 -> is_opened = true ??? (không phải) t lấy lại cái imported_item 3.2
@@ -218,6 +219,7 @@ class ImportTest extends TestCase
         $this->seeInDatabase('classifying_sessions', $classifying_session);
         $this->seeInDatabase('imported_items', $imported_item);
     }
+
     public function testReclassify()
     {
         $inputs = ['classified_item_pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003',
@@ -237,7 +239,8 @@ class ImportTest extends TestCase
         $this->seeInDatabase('classified_items', $classified_item);
         $this->seeInDatabase('classifying_sessions', $classifying_session);
     }
-    public function testDeleteClassification ()
+
+    public function testDeleteClassification()
     {
         $inputs = ['classified_item_pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003'];
         $data = ['pk' => '1cfd5bfc-72a2-11ea-bc55-0242ac130003'];
@@ -245,15 +248,16 @@ class ImportTest extends TestCase
             'classified_item_pk' => null];
         $this->call('POST', 'delete_classification', $inputs);
         $this->seeStatusCode(200);
-        $this->seeInDatabase('imported_items',$imported_item);
-        $this->notSeeInDatabase('classifying_sessions',$inputs);
-        $this->notSeeInDatabase('classified_items',$data);
+        $this->seeInDatabase('imported_items', $imported_item);
+        $this->notSeeInDatabase('classifying_sessions', $inputs);
+        $this->notSeeInDatabase('classified_items', $data);
     }
-    public function testSendBack ()
+
+    public function testSendBack()
     {
         $inputs = ['failed_item_pk' => '1cfd5cec-72a2-11ea-bc55-0242ac130003',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
-        $this->call('POST','sendback',$inputs);
+        $this->call('POST', 'sendback', $inputs);
         $this->seeJsonEquals(['success' => 'Gửi trả phụ liệu thành công']);
         $this->seeStatusCode(200);
         $pk = app('db')->table('sendbacking_sessions')->orderBy('executed_date', 'desc')->first()->pk;

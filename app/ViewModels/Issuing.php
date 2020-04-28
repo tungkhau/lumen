@@ -19,7 +19,7 @@ class Issuing extends ViewModel
     {
         $objects = array();
         if ($kind == 'consuming' || $kind == Null) {
-            $pks = app('db')->table('issuing_sessions')->where('kind','consuming')->pluck('pk');
+            $pks = app('db')->table('issuing_sessions')->where('kind', 'consuming')->pluck('pk');
             foreach ($pks as $pk) {
                 $objects[] = [
                     'pk' => $pk,
@@ -57,9 +57,9 @@ class Issuing extends ViewModel
     {
         if ($kind == 'consuming' || $kind == 'outTransferring') {
             $issuing = app('db')->table('issuing_sessions')->where('pk', $issuing_pk)->first();
-            if($issuing->progressing_session_pk == Null && $issuing->returning_session_pk == Null) return 'ready';
-            if($issuing->progressing_session_pk != Null) return 'delivered';
-            if($issuing->returning_session_pk != Null) return 'returned';
+            if ($issuing->progressing_session_pk == Null && $issuing->returning_session_pk == Null) return 'ready';
+            if ($issuing->progressing_session_pk != Null) return 'delivered';
+            if ($issuing->returning_session_pk != Null) return 'returned';
         }
         return Null;
     }
@@ -99,7 +99,7 @@ class Issuing extends ViewModel
                     'rootIssuingId' => $demand->id,
                     'destinationName' => $destination_name,
                     'createdDate' => $issuing->executed_date,
-                    'conceptionId'=> $conception_id,
+                    'conceptionId' => $conception_id,
                     'user_pk' => $issuing->user_pk,
                 ];
             }

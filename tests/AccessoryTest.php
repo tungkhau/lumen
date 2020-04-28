@@ -19,7 +19,7 @@ class AccessoryTest extends TestCase
             'color' => 'M',
             'size' => 'M',
             'accessory_name' => 'M',
-            'comment' => 'M' ,
+            'comment' => 'M',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
         $data = ['id' => 'BB-BBB-00001-BBB',
             'customer_pk' => '1b4a1594-771a-11ea-bc55-0242ac130003',
@@ -54,8 +54,8 @@ class AccessoryTest extends TestCase
             'color' => 'F',
             'size' => 'F',
             'accessory_name' => 'F',
-        'comment' => 'F' ,
-        'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
+            'comment' => 'F',
+            'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
         $data = ['id' => 'AA-AAA-00002-AAA',
             'customer_pk' => '1b49c742-771a-11ea-bc55-0242ac130003',
             'supplier_pk' => '1b4a1706-771a-11ea-bc55-0242ac130003',
@@ -141,12 +141,13 @@ class AccessoryTest extends TestCase
             'color' => '',
             'size' => '',
             'accessory_name' => 'E',
-            'comment' => '' ,
+            'comment' => '',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
         $this->call('POST', 'create_accessory', $inputs);
         $this->seeJsonEquals(['invalid' => 'Phụ liệu đã tồn tại']);
         $this->seeStatusCode(400);
     }
+
     public function testDelete()
     {
         $inputs = ['accessory_pk' => '59a67c4c-6dd8-11ea-bc55-0242ac130003',

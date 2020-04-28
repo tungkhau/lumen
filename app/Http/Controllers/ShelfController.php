@@ -32,7 +32,7 @@ class ShelfController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->create($request);
-        if($unexpected) return $this->unexpected_response();
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Tạo ô kệ tạm thời thành công'], 200);
     }
 
@@ -44,13 +44,13 @@ class ShelfController extends Controller
 
         /* Check preconditions, return conflict errors(409) */
         $precondition = $this->precondition->delete($request);
-        if ($precondition)  return $this->conflict_response();
+        if ($precondition) return $this->conflict_response();
 
         /* Map variables */
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->delete($request);
-        if($unexpected) return $this->unexpected_response();
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Xóa ô kệ tạm thời thành công'], 200);
     }
 

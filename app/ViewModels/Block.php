@@ -26,7 +26,6 @@ class Block extends ViewModel
         }
 
 
-
         foreach ($object as $key => $item) {
             if (!in_array($item['pk'], $pks)) unset($object[$key]);
         }

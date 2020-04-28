@@ -33,7 +33,7 @@ class DemandRepository
                 app('db')->table('demands')->where('pk', $params['demand_pk'])->update([
                     'created_date' => date('Y-m-d H:i:s')
                 ]);
-                app('db')->table('demanded_items')->where('demand_pk', $params['demand_pk'])->update([
+                app('db')->table('demanded_items')->where('pk', $params['demanded_item_pk'])->update([
                     'demanded_quantity' => $params['demanded_quantity'],
                     'comment' => $params['comment']
                 ]);

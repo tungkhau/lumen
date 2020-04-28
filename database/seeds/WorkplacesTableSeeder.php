@@ -14,8 +14,8 @@ class WorkplacesTableSeeder extends Seeder
     public function run()
     {
         DB::table('workplaces')->insert([
-                'pk' => (string)Str::uuid(),
-                'name' => 'warehouse'
+            'pk' => (string)Str::uuid(),
+            'name' => 'warehouse'
         ]);
         DB::table('workplaces')->insert([
             'pk' => (string)Str::uuid(),

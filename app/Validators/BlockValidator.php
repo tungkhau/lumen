@@ -14,8 +14,8 @@ class BlockValidator
         try {
             $this->validate($params, [
                 'block_pk' => 'required|uuid|exists:blocks,pk,is_active,' . False,
-                'row' => 'required|integer|max:15|gt:0',
-                'col' => 'required|integer|max:50|gt:0'
+                'row' => 'required|integer|max:10|gt:0',
+                'col' => 'required|integer|max:15|gt:0'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

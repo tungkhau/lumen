@@ -22,6 +22,41 @@ class OrderController extends Controller
         $this->precondition = $precondition;
     }
 
+    public static function is_mutable($order_pk)
+    {
+        $imports = app('db')->table('imports')->where('order_pk', $order_pk)->exists();
+        $owner = app('db')->table('orders')->where('pk', $order_pk)->value('user_pk') == $order_pk;
+        return !$imports || $owner;
+    }
+
+    public static function is_switchable($order_pk)
+    {
+        $status = app('db')->table('orders')->where('pk', $order_pk)->value('is_opened');
+        if ($status) return app('db')->table('imports')->where('order_pk', $order_pk)->exists();
+        return True;
+    }
+
+    public static function sum_imported_quantity($ordered_item_pk)
+    {
+        return app('db')->table('imported_items')->where('ordered_item_pk', $ordered_item_pk)->sum('imported_quantity');
+    }
+
+    public static function sum_actual_quantity($order_item_pk)
+    {
+        $temp = app('db')->table('imported_items')->where('ordered_item_pk', $order_item_pk)->pluck('pk');
+        $imported_item_pks = array();
+        foreach ($temp as $item) {
+            if (ImportController::quality_state($item) == 'failed') continue;
+            array_push($imported_item_pks, $item);
+        }
+        $imported_group_pks = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->pluck('pk');
+        $sum = 0;
+        foreach ($imported_group_pks as $imported_group_pk) {
+            $sum += ReceivedGroupController::actual_quantity($imported_group_pk);
+        }
+        return $sum;
+    }
+
     public function create(Request $request)
     {
         /* Validate request, catch invalid errors(400) */
@@ -69,6 +104,8 @@ class OrderController extends Controller
         if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Sửa đơn đặt thành công'], 200);
     }
+
+    //For Angular app only (doesn't check ownership)
 
     public function delete(Request $request)
     {
@@ -122,40 +159,5 @@ class OrderController extends Controller
         $unexpected = $this->repository->turn_on($request);
         if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Mở đơn đặt thành công'], 200);
-    }
-
-
-    public static function is_mutable($order_pk)
-    {
-        $imports = app('db')->table('imports')->where('order_pk', $order_pk)->exists();
-        $owner = app('db')->table('orders')->where('pk', $order_pk)->value('user_pk') == $order_pk;
-        return !$imports || $owner;
-    }
-
-    //For Angular app only (doesn't check ownership)
-    public static function is_switchable($order_pk)
-    {
-        $status = app('db')->table('orders')->where('pk', $order_pk)->value('is_opened');
-        if ($status) return app('db')->table('imports')->where('order_pk', $order_pk)->exists();
-        return True;
-    }
-
-    public static function sum_imported_quantity($ordered_item_pk) {
-        return app('db')->table('imported_items')->where('ordered_item_pk', $ordered_item_pk)->sum('imported_quantity');
-    }
-
-    public static function sum_actual_quantity($order_item_pk) {
-        $temp = app('db')->table('imported_items')->where('ordered_item_pk', $order_item_pk)->pluck('pk');
-        $imported_item_pks = array();
-        foreach ($temp as $item) {
-            if(ImportController::quality_state($item) == 'failed') continue;
-            array_push($imported_item_pks, $item);
-        }
-        $imported_group_pks = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->pluck('pk');
-        $sum = 0;
-        foreach ($imported_group_pks as $imported_group_pk) {
-            $sum += ReceivedGroupController::actual_quantity($imported_group_pk);
-        }
-        return $sum;
     }
 }
