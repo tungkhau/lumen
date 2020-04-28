@@ -72,7 +72,7 @@ class CustomerController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->delete($request);
-        if ($unexpected )return $this->unexpected_response();
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Xóa khách hàng thành công'], 200);
     }
 
