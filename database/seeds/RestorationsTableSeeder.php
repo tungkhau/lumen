@@ -49,7 +49,7 @@ class RestorationsTableSeeder extends Seeder
             'is_confirmed' => True,
             'comment' => '',
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',
-            'receiving_session_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'
+            'receiving_session_pk' => '5bd3c494-79b2-11ea-bc55-0242ac130003'
         ]);
 
     }

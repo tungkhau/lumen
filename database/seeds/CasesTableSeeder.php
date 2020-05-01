@@ -48,7 +48,7 @@ class CasesTableSeeder extends Seeder
             'is_active' => True
         ]);
         app('db')->table('cases')->insert([
-            'id' => 'QT-090120-AA',
+            'id' => 'QT-091120-AA',
             'pk' => '3ad6ef14-7688-11ea-bc55-0242ac130003',
             'is_active' => True
         ]);

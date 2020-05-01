@@ -63,7 +63,7 @@ class UsersTableSeeder extends Seeder
             'pk' => 'cec3ab2a-7194-11ea-bc55-0242ac130003',
             'is_active' => True,
             'id' => '2',
-            'password' => app('hash')->make(env('2')),
+            'password' => app('hash')->make('2'),
             'name' => 'user manager',
             'role' => 'Manager',
             'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'
@@ -72,7 +72,7 @@ class UsersTableSeeder extends Seeder
             'pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',
             'is_active' => True,
             'id' => '3',
-            'password' => app('hash')->make(env('3')),
+            'password' => app('hash')->make('3'),
             'name' => 'user mediator 1',
             'role' => 'Mediator',
             'workplace_pk' => 'c00516d6-7195-11ea-bc55-0242ac130003'
@@ -81,7 +81,7 @@ class UsersTableSeeder extends Seeder
             'pk' => '4aa81136-7a73-11ea-bc55-0242ac130003',
             'is_active' => True,
             'id' => '4',
-            'password' => app('hash')->make(env('4')),
+            'password' => app('hash')->make('4'),
             'name' => 'user mediator 2',
             'role' => 'Mediator',
             'workplace_pk' => '4aa80ee8-7a73-11ea-bc55-0242ac130003'
@@ -90,7 +90,7 @@ class UsersTableSeeder extends Seeder
             'pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003',
             'is_active' => True,
             'id' => '5',
-            'password' => app('hash')->make(env('5')),
+            'password' => app('hash')->make('5'),
             'name' => 'user staff',
             'role' => 'Staff',
             'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'
@@ -99,7 +99,7 @@ class UsersTableSeeder extends Seeder
             'pk' => 'cec3adbe-7194-11ea-bc55-0242ac130003',
             'is_active' => True,
             'id' => '6',
-            'password' => app('hash')->make(env('6')),
+            'password' => app('hash')->make('6'),
             'name' => 'user inspector',
             'role' => 'Inspector',
             'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'
@@ -108,7 +108,7 @@ class UsersTableSeeder extends Seeder
             'pk' => 'cec3afc6-7194-11ea-bc55-0242ac130003',
             'is_active' => True,
             'id' => '7',
-            'password' => app('hash')->make(env('7')),
+            'password' => app('hash')->make('7'),
             'name' => 'user admin',
             'role' => 'Admin',
             'workplace_pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003'

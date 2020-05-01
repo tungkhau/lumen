@@ -23,7 +23,7 @@ class ImportsTableSeeder extends Seeder
         app('db')->table('imports')->insert([
             'pk' => '72774102-70df-11ea-bc55-0242ac130003',
             'id' => 'import_2',
-            'is_opened' => false,
+            'is_opened' => true,
             'order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
             'user_pk' => 'cec3ab2a-7194-11ea-bc55-0242ac130003'
         ]);
