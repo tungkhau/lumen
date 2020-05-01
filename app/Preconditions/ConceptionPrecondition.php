@@ -8,7 +8,7 @@ class ConceptionPrecondition
     {
         return app('db')->table('conceptions')
             ->where('customer_pk', $params['customer_pk'])
-            ->where('id', $params['id'])
+            ->where('id', $params['conception_id'])
             ->where('year', $params['year'])->exists();
     }
 
