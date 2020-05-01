@@ -20,7 +20,7 @@ class DemandsTableSeeder extends Seeder
             'is_opened' => true,
             'workplace_pk' => 'c00516d6-7195-11ea-bc55-0242ac130003',
             'conception_pk' => '5c00fd64-74b8-11ea-bc55-0242ac130003',
-            'user_pk' => 'ce09946d-87d9-11ea-a4ee-305a3a8512c6'
+            'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'
         ]);
         app('db')->table('demands')->insert([
             'pk' => '523c055c-74ff-11ea-bc55-0242ac130003',
@@ -38,7 +38,7 @@ class DemandsTableSeeder extends Seeder
             'is_opened' => true,
             'workplace_pk' => 'c00516d6-7195-11ea-bc55-0242ac130003',
             'conception_pk' => '05ed417c-7a6b-11ea-bc55-0242ac130003',
-            'user_pk' => 'ce09946d-87d9-11ea-a4ee-305a3a8512c6'
+            'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'
         ]);
         app('db')->table('demands')->insert([
             'pk' => 'b7e6ceca-7a6b-11ea-bc55-0242ac130003',

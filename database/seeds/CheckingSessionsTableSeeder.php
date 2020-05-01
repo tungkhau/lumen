@@ -17,7 +17,7 @@ class CheckingSessionsTableSeeder extends Seeder
             'pk' => '1cfd592c-72a2-11ea-bc55-0242ac130003',
             'checked_quantity' => 500,
             'unqualified_quantity' => 10,
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => 'cec3adbe-7194-11ea-bc55-0242ac130003'
         ]);
 
     }
