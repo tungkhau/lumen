@@ -21,18 +21,7 @@ class WorkplacesTableSeeder extends Seeder
             'pk' => (string)Str::uuid(),
             'name' => 'office'
         ]);
-        DB::table('workplaces')->insert([
-            'pk' => (string)Str::uuid(),
-            'name' => 'factory 1'
-        ]);
-        DB::table('workplaces')->insert([
-            'pk' => (string)Str::uuid(),
-            'name' => 'factory 2'
-        ]);
-        DB::table('workplaces')->insert([
-            'pk' => (string)Str::uuid(),
-            'name' => 'factory 3'
-        ]);
+
         app('db')->table('workplaces')->insert([
             'pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003',
             'name' => 'Văn phòng',

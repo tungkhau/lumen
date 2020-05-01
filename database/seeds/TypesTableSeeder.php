@@ -135,7 +135,7 @@ class TypesTableSeeder extends Seeder
         ]);
         app('db')->table('types')->insert([
             'pk' => '1b49c620-771a-11ea-bc55-0242ac130003',
-            'id' => 'BB',
+            'id' => 'BA',
             'name' => 'B TYPE',
         ]);
     }

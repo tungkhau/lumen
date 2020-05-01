@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 
-class ConceptionTableSeeder extends Seeder
+class ConceptionsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

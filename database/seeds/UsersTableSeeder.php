@@ -11,7 +11,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\ViewModels\User::class, 10)->create();
+//        factory(App\ViewModels\User::class, 10)->create();
         app('db')->table('users')->insert([
             'pk' => '511f4482-6dd8-11ea-bc55-0242ac130003',
             'is_active' => True,
