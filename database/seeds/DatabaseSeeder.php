@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call('TestingDataSeeder');
         $this->call('WorkplacesTableSeeder');
         $this->call('DevicesTableSeeder');
         $this->call('TypesTableSeeder');
@@ -61,6 +62,5 @@ class DatabaseSeeder extends Seeder
         $this->call('EntriesTableSeeder');
         $this->call('ReceivedGroupsArrangingSessionsTableSeeder');
         $this->call('AccessoriesConceptionsTableSeeder');
-        $this->call('TestingDataSeeder');
     }
 }

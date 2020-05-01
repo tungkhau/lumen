@@ -27,5 +27,29 @@ class SuppliersTableSeeder extends Seeder
             'name' => 'CTY Cổ phần chỉ may Phong Việt',
             'address' => '127 Lê Văn Chí, KP.1, Phường Linh Trung, Q.Thủ Đức, TP. HCM, Việt Nam',
         ]);
+        app('db')->table('suppliers')->insert([
+            'pk' => '59a67724-6dd8-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'ABC',
+            'name' => 'ABC',
+        ]);
+        app('db')->table('suppliers')->insert([
+            'pk' => '59a677ec-6dd8-11ea-bc55-0242ac130003',
+            'is_active' => False,
+            'id' => 'XYZ',
+            'name' => 'XYZ',
+        ]);
+        app('db')->table('suppliers')->insert([
+            'pk' => '1b4a1706-771a-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'AAA',
+            'name' => 'SUPPLIER A',
+        ]);
+        app('db')->table('suppliers')->insert([
+            'pk' => '1b4a17ec-771a-11ea-bc55-0242ac130003',
+            'is_active' => True,
+            'id' => 'BBB',
+            'name' => 'SUPPLIER B',
+        ]);
     }
 }
