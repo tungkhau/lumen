@@ -73,7 +73,7 @@ class ConceptionValidator
     {
         try {
             $this->validate($params, [
-                'accessory_pk' => 'required|uuid|exists:accessories,pk,is_active,' . True,
+                'accessory_pks.*.accessory_pk' => 'required|uuid|exists:accessories,pk,is_active,' . True,
                 'conception_pk' => 'required|uuid|exists:conceptions,pk,is_active,' . True,
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);

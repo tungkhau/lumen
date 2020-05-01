@@ -90,265 +90,283 @@ class AngularController extends Controller
         $this->block = $block;
     }
 
+    private static function add_no($input_object)
+    {
+        $i = 1;
+        foreach ($input_object as $key => $item) {
+            $input_object[$key] += [
+                'no' => $i,
+            ];
+            $i++;
+        }
+        return $input_object;
+    }
+
     public function get_partner(Request $request)
     {
         $response = $this->partner->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['partners' => $response], 201);
     }
 
     public function get_receiving(Request $request)
     {
         $response = $this->receiving->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['receivings' => $response], 201);
     }
 
     public function get_accessory(Request $request)
     {
         $response = $this->accessory->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['accessories' => $response], 201);
     }
 
     public function get_received_item(Request $request)
     {
         $response = $this->received_item->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['received-items' => $response], 201);
     }
 
     public function get_received_group(Request $request)
     {
         $response = $this->received_group->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['received-groups' => $response], 201);
     }
 
     public function get_root_received_item(Request $request)
     {
         $response = $this->root_received_item->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['root-received-items' => $response], 201);
     }
 
     public function get_root_receiving(Request $request)
     {
         $response = $this->root_receiving->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['root-receivings' => $response], 201);
     }
 
     public function get_conception(Request $request)
     {
         $response = $this->conception->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['conceptions' => $response], 201);
     }
 
     public function get_root_issued_item(Request $request)
     {
         $response = $this->root_issued_item->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['root-issued-items' => $response], 201);
     }
 
     public function get_root_issuing(Request $request)
     {
         $response = $this->root_issuing->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['root-issuings' => $response], 201);
     }
 
     public function get_activity_log()
     {
         $response = $this->shared->get_activity_log();
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['activity-logs' => $response], 201);
     }
 
     public function get_received_workplace()
     {
         $response = $this->shared->get_received_workplace();
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['received-workplaces' => $response], 201);
     }
 
     public function get_workplace()
     {
         $response = $this->shared->get_workplace();
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['workplaces' => $response], 201);
     }
 
     public function get_inventory()
     {
         $response = $this->shared->get_inventory();
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['inventories' => $response], 201);
     }
 
     public function get_report(Request $request)
     {
         $response = $this->report->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['reports' => $response], 201);
     }
 
     public function get_block(Request $request)
     {
         $response = $this->block->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['blocks' => $response], 201);
     }
 
     public function get_history()
     {
         $response = $this->shared->get_history();
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['histories' => $response], 201);
     }
 
     public function get_cased_received_group(Request $request)
     {
         $response = $this->received_group->get_cased_received_group($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['cased-received-groups' => $response], 201);
     }
 
     public function get_failed_item()
     {
         $response = $this->received_item->get_failed_item();
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['failed-items' => $response], 201);
     }
 
     public function get_type()
     {
         $response = $this->shared->get_type();
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['types' => $response], 201);
     }
 
     public function get_unit()
     {
         $response = $this->shared->get_unit();
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['units' => $response], 201);
     }
 
     public function get_mediator()
     {
         $response = $this->shared->get_mediator();
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['mediators' => $response], 201);
     }
 
     public function get_checking_session(Request $request)
     {
         $response = $this->checking_session->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['checking-sessions' => $response], 201);
     }
 
     public function get_counting_session(Request $request)
     {
         $response = $this->counting_session->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['counting-sessions' => $response], 201);
     }
 
     public function get_classifying_session(Request $request)
     {
         $response = $this->classifying_session->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['classifying-sessions' => $response], 201);
     }
 
     public function get_storing_session(Request $request)
     {
         $response = $this->storing_session->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['storing_sessions' => $response], 201);
     }
 
     public function get_receiving_session(Request $request)
     {
         $response = $this->receiving_session->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['receiving-sessions' => $response], 201);
     }
 
     public function get_in_cased_item(Request $request)
     {
         $response = $this->in_cased_item->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['in-cased-items' => $response], 201);
     }
 
     public function get_sendbacking_session(Request $request)
     {
         $response = $this->sendbacking_session->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['sendbacking-sessions' => $response], 201);
     }
 
     public function get_case(Request $request)
     {
         $response = $this->case->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['cases' => $response], 201);
     }
 
     public function get_issued_group(Request $request)
     {
         $response = $this->issued_group->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['issued-groups' => $response], 201);
     }
 
     public function get_issued_item(Request $request)
     {
         $response = $this->issued_item->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['issued-items' => $response], 201);
     }
 
     public function get_issuing(Request $request)
     {
         $response = $this->issuing->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['issuings' => $response], 201);
     }
 
     public function get_shelf(Request $request)
     {
         $response = $this->shelf->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['shelves' => $response], 201);
     }
 
     public function get_unstored_case()
     {
         $response = $this->case->get_unstored_case();
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['unstored-cases' => $response], 201);
     }
 
     public function get_modifying_session(Request $request)
     {
         $response = $this->modifying_session->get($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['modifying-sessions' => $response], 201);
     }
 
     public function get_unverified_modifying_session(Request $request)
     {
         $response = $this->modifying_session->get_unverified_modifying_session($request);
-        $response = array_values($response);
+        $response = array_values($this::add_no($response));
         return response()->json(['unverified-modifying-sessions' => $response], 201);
     }
 
+    public function get_linkable_accessory(Request $request)
+    {
+        $response = $this->accessory->get_linkable_accessory($request);
+        $response = array_values($this::add_no($response));
+        return response()->json(['linkable-accessories' => $response], 201);
+    }
 
 }
 

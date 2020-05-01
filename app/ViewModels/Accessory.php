@@ -113,7 +113,8 @@ class Accessory extends ViewModel
                 'supplierName' => $supplier_name,
                 'comment' => $accessory->comment,
                 'isMutable' => $this::is_mutable($item['pk']),
-                'photo' => $accessory->photo
+                'photo' => $accessory->photo,
+                'createdDate' => $accessory->created_date,
             ];
         }
         return array_values($input_object);
@@ -128,5 +129,22 @@ class Accessory extends ViewModel
         if (app('db')->table('restored_items')->where('accessory_pk', $accessory_pk)->exists()) return False;
         if (app('db')->table('out_distributed_items')->where('accessory_pk', $accessory_pk)->exists()) return False;
         return True;
+    }
+
+    public function get_linkable_accessory($params)
+    {
+        $object = array();
+        if ($params['externality'] == Null) return $object;
+        $conception_pk = $params['externality']['conception_pk'];
+        $customer_pk = app('db')->table('conceptions')->where('pk', $conception_pk)->value('customer_pk');
+        $pks = app('db')->table('accessories')->where('customer_pk', $customer_pk)->where('is_active', True)->pluck('pk')->toArray();
+        $pks = array_diff($pks, app('db')->table('accessories_conceptions')->where('conception_pk', $conception_pk)->pluck('accessory_pk')->toArray());
+        foreach ($pks as $pk) {
+            $object[] = [
+                'pk' => $pk,
+                'status' => 'active'
+            ];
+        }
+        return $this->_translation($object);
     }
 }
