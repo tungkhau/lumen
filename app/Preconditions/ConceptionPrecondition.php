@@ -21,9 +21,10 @@ class ConceptionPrecondition
 
     public function link_accessory($params)
     {
-        $accessory_customer = app('db')->table('accessories')->where('pk', $params['accessory_pk'])->value('customer_pk');
+        $accessory_customer = app('db')->table('accessories')->whereIn('pk', $params['accessory_pks'])->distinct('customer_pk')->pluck('customer_pk');
+        if (count($accessory_customer) != 1) return true;
         $conception_customer = app('db')->table('conceptions')->where('pk', $params['conception_pk'])->value('customer_pk');
-        $equal = $accessory_customer == $conception_customer ? True : False;
+        $equal = $accessory_customer->customer_pk == $conception_customer;
         return !$equal;
     }
 

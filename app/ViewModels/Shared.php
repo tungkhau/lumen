@@ -467,4 +467,34 @@ class Shared extends ViewModel
         return $object;
     }
 
+    public function get_received_workplace()
+    {
+        $received_workplaces = app('db')->table('workplaces')->where([['name', '!=', 'Kho phụ liệu'], ['name', '!=', 'Văn phòng']])->get();
+        $object = array();
+        foreach ($received_workplaces as $received_workplace) {
+            $user = app('db')->table('users')->where('workplace_pk', $received_workplace->pk)->exists();
+            $object[] = [
+                'pk' => $received_workplace->pk,
+                'name' => $received_workplace->name,
+                'isMutable' => !$user
+            ];
+        }
+        return $object;
+    }
+
+    public function get_workplace()
+    {
+        $received_workplaces = app('db')->table('workplaces')->get();
+        $object = array();
+        foreach ($received_workplaces as $received_workplace) {
+            $user = app('db')->table('users')->where('workplace_pk', $received_workplace->pk)->exists();
+            $object[] = [
+                'pk' => $received_workplace->pk,
+                'name' => $received_workplace->name,
+                'isMutable' => !$user
+            ];
+        }
+        return $object;
+    }
+
 }

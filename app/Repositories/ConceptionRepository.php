@@ -106,16 +106,18 @@ class ConceptionRepository
                     'object' => 'conception',
                     'user_pk' => $params['user_pk']
                 ]);
-                app('db')->table('activity_logs')->insert([
-                    'id' => $params['accessory_id'],
-                    'type' => 'link',
-                    'object' => 'accessory',
-                    'user_pk' => $params['user_pk']
-                ]);
-                app('db')->table('accessories_conceptions')->insert([
-                    'accessory_pk' => $params['accessory_pk'],
-                    'conception_pk' => $params['conception_pk']
-                ]);
+                foreach ($params['accessories'] as $accessory) {
+                    app('db')->table('activity_logs')->insert([
+                        'id' => $accessory->id,
+                        'type' => 'link',
+                        'object' => 'accessory',
+                        'user_pk' => $params['user_pk']
+                    ]);
+                    app('db')->table('accessories_conceptions')->insert([
+                        'accessory_pk' => $accessory->pk,
+                        'conception_pk' => $params['conception_pk']
+                    ]);
+                }
             });
 
         } catch (Exception $e) {

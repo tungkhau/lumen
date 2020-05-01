@@ -104,7 +104,15 @@ class ConceptionController extends Controller
 
         /* Map variables */
         $request['conception_id'] = app('db')->table('conceptions')->where('pk', $request['conception_pk'])->value('id');
-        $request['accessory_id'] = app('db')->table('accessories')->where('pk', $request['accessory_pk'])->value('id');
+        $accessories = app('db')->table('accessories')->whereIn('pk', $request['accessory_pks'])->select('pk', 'id')->get();
+        $temp = array();
+        foreach ($accessories as $accessory) {
+            $temp[] = [
+                'pk' => $accessory->pk,
+                'id' => $accessory->id,
+            ];
+        }
+        $request['accessories'] = $temp;
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->link_accessory($request);
