@@ -117,7 +117,7 @@ class Accessory extends ViewModel
                 'createdDate' => $accessory->created_date,
             ];
         }
-        return array_values($input_object);
+        return array_values($this::sort_response($input_object, 'createdDate'));
     }
 
     public static function is_mutable($accessory_pk)
