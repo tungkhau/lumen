@@ -42,7 +42,6 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->post('delete_conception', 'ConceptionController@delete');
         $router->post('deactivate_conception', 'ConceptionController@deactivate');
         $router->post('reactivate_conception', 'ConceptionController@reactivate');
-        $router->post('link_conception_accessory', 'ConceptionController@link_accessory');
         $router->post('unlink_conception_accessory', 'ConceptionController@unlink_accessory');
         //Group 4
         //Order
@@ -205,6 +204,7 @@ $router->post('change_password', 'UserController@change_password');
 //$router->post('', '');
 //$router->post('', '');
 //$router->post('', '');
+$router->post('link_conception_accessory', 'ConceptionController@link_accessory');
 
 
 

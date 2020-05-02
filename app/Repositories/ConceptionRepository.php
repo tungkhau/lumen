@@ -108,13 +108,13 @@ class ConceptionRepository
                 ]);
                 foreach ($params['accessories'] as $accessory) {
                     app('db')->table('activity_logs')->insert([
-                        'id' => $accessory->id,
+                        'id' => $accessory['id'],
                         'type' => 'link',
                         'object' => 'accessory',
                         'user_pk' => $params['user_pk']
                     ]);
                     app('db')->table('accessories_conceptions')->insert([
-                        'accessory_pk' => $accessory->pk,
+                        'accessory_pk' => $accessory['pk'],
                         'conception_pk' => $params['conception_pk']
                     ]);
                 }

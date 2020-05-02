@@ -24,7 +24,7 @@ class ConceptionPrecondition
         $accessory_customer = app('db')->table('accessories')->whereIn('pk', $params['accessory_pks'])->distinct('customer_pk')->pluck('customer_pk');
         if (count($accessory_customer) != 1) return true;
         $conception_customer = app('db')->table('conceptions')->where('pk', $params['conception_pk'])->value('customer_pk');
-        $equal = $accessory_customer->customer_pk == $conception_customer;
+        $equal = $accessory_customer[0] == $conception_customer;
         return !$equal;
     }
 
