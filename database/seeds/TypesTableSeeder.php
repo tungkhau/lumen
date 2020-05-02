@@ -123,7 +123,20 @@ class TypesTableSeeder extends Seeder
             'id' => 'DD',
             'name' => 'Dây đai'
         ]);
-
-
+        app('db')->table('types')->insert([
+            'pk' => '59a679fe-6dd8-11ea-bc55-0242ac130003',
+            'id' => 'AB',
+            'name' => 'ABC',
+        ]);
+        app('db')->table('types')->insert([
+            'pk' => '1b49c36e-771a-11ea-bc55-0242ac130003',
+            'id' => 'AA',
+            'name' => 'A TYPE',
+        ]);
+        app('db')->table('types')->insert([
+            'pk' => '1b49c620-771a-11ea-bc55-0242ac130003',
+            'id' => 'BA',
+            'name' => 'B TYPE',
+        ]);
     }
 }
