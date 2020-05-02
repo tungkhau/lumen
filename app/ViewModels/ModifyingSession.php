@@ -45,7 +45,7 @@ class ModifyingSession extends ViewModel
         }
         if ($externality != Null && array_key_exists('modifying_session_pks', $externality)) {
             $temp = app('db')->table('adjusting_sessions')->whereIn('pk', $externality['modifying_session_pks'])->pluck('pk')->toArray();
-            $temp = array_merge(app('db')->table('adjusting_sessions')->whereIn('pk', $externality['modifying_session_pks'])->pluck('pk')->toArray(), $temp);
+            $temp = array_merge(app('db')->table('discarding_sessions')->whereIn('pk', $externality['modifying_session_pks'])->pluck('pk')->toArray(), $temp);
             $pks = array_intersect($temp, $pks);
         }
         foreach ($input_object as $key => $item) {

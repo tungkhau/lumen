@@ -33,6 +33,7 @@ return [
         'string' => 'The :attribute must be between :min and :max characters.',
         'array' => 'The :attribute must have between :min and :max items.',
     ],
+    'confirmed' => 'Nhập lại :attribute không trùng khớp',
 
 
     'custom' => [
@@ -68,7 +69,9 @@ return [
         'supplier_name' => 'Tên nhà cung cấp',
         'supplier_id' => 'Mã nhà cung cấp',
         'case_pk' => 'Đơn vị chứa',
-        'year' => 'Năm sản xuất'
+        'year' => 'Năm sản xuất',
+        'current_password'=>'Mật khẩu hiện tại',
+        'new_password' => 'Mật khẩu mới',
     ],
 
 
@@ -84,7 +87,6 @@ return [
     'before_or_equal' => 'The :attribute must be a date before or equal to :date.',
 
     'boolean' => 'The :attribute field must be true or false.',
-    'confirmed' => 'The :attribute confirmation does not match.',
     'date' => 'The :attribute is not a valid date.',
     'date_equals' => 'The :attribute must be a date equal to :date.',
     'date_format' => 'The :attribute does not match the format :format.',

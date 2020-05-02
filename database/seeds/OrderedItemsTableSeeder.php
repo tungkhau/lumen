@@ -15,7 +15,7 @@ class OrderedItemsTableSeeder extends Seeder
     {
         app('db')->table('ordered_items')->insert([
             'pk' => '72773612-70df-11ea-bc55-0242ac130003',
-            'ordered_quantity' => 1111,
+            'ordered_quantity' => 3114123,
             'comment' => 'od item 1-1',
             'order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
             'accessory_pk' => '72773130-70df-11ea-bc55-0242ac130003'
