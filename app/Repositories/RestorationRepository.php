@@ -14,7 +14,7 @@ class RestorationRepository
                     'id' => $params['id'],
                     'pk' => $params['restoration_pk'],
                     'comment' => $params['comment'],
-                    'user_pk' => $params['user_pk']
+                    'user_pk' => $params['mediator_pk']
                 ]);
                 app('db')->table('restored_items')->insert($params['restored_items']);
             });

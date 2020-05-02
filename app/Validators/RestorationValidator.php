@@ -13,7 +13,7 @@ class RestorationValidator
     {
         try {
             $this->validate($params, [
-                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
+                'mediator_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
                 'comment' => 'nullable|string|max:20',
                 'restored_items.*.accessory_pk' => 'required|uuid|exists:accessories,pk,is_active,' . True,
                 'restored_items.*.restored_quantity' => 'required|integer|between:1,2000000000'

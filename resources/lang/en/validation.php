@@ -67,7 +67,8 @@ return [
         'supplier_pk' => 'Nhà cung cấp',
         'supplier_name' => 'Tên nhà cung cấp',
         'supplier_id' => 'Mã nhà cung cấp',
-        'case_pk' => 'Đơn vị chứa'
+        'case_pk' => 'Đơn vị chứa',
+        'year' => 'Năm sản xuất'
     ],
 
 

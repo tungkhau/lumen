@@ -17,6 +17,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         echo phpinfo();
     });
     $router->group(['middleware' => 'role:manager'], function () use ($router) {
+        
     });
     $router->group(['middleware' => 'role:staff'], function () use ($router) {
     });

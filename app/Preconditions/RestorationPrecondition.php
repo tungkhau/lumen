@@ -6,19 +6,19 @@ class RestorationPrecondition
 {
     public function register($params)
     {
-        $mediator = app('db')->table('users')->where('pk', $params['user_pk'])->value('role') == 'mediator' ? True : False;
+        $mediator = app('db')->table('users')->where('pk', $params['mediator_pk'])->value('role') == 'mediator';
         return !$mediator;
     }
 
     public function confirm($params)
     {
-        $owner = app('db')->table('restorations')->where('pk', $params['restoration_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
+        $owner = app('db')->table('restorations')->where('pk', $params['restoration_pk'])->value('user_pk') == $params['user_pk'];
         return !$owner;
     }
 
     public function cancel($params)
     {
-        $owner = app('db')->table('restorations')->where('pk', $params['restoration_pk'])->value('user_pk') == $params['user_pk'] ? True : False;
+        $owner = app('db')->table('restorations')->where('pk', $params['restoration_pk'])->value('user_pk') == $params['user_pk'];
         return !$owner;
     }
 
