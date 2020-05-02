@@ -118,7 +118,7 @@ class RootReceivedItem extends ViewModel
     {
         if ($kind == 'ordered') {
             $expected_quantity = app('db')->table('ordered_items')->where('pk', $root_received_item_pk)->value('ordered_quantity');
-            return ($this::sum_actual_received_quantity($root_received_item_pk, $kind) / $expected_quantity) * 100;
+            return ($this::sum_actual_received_quantity($root_received_item_pk, $kind) / $expected_quantity);
         }
         return 0;
     }
