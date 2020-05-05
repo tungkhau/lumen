@@ -187,7 +187,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('linkable-accessories', 'AngularController@get_linkable_accessory');
 });
 
-$router->get('/outside', function () use ($router) {
+$router->get('/', function () use ($router) {
     echo phpinfo();
 });
 
