@@ -8,7 +8,7 @@ class Box extends ViewModel
     {
         $externality = $params['externality'];
         $externality_filtered_object = $this->_externality_filter($externality);
-        return $this->_translation($externality_filtered_object);
+        return $this::sort_response($this->_translation($externality_filtered_object), 'createdDate');
     }
 
     private function _externality_filter($externality)
@@ -56,7 +56,8 @@ class Box extends ViewModel
             $object[] = [
                 'pk' => $item['pk'],
                 'id' => $case->id,
-                'isEmpty' => $this::is_empty($case->pk)
+                'isEmpty' => $this::is_empty($case->pk),
+                'createdDate' => $case->created_at,
             ];
 
         }

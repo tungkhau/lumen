@@ -453,7 +453,7 @@ class Shared extends ViewModel
 
     public function get_mediator()
     {
-        $mediators = app('db')->table('users')->where('role', 'mediator')->get();
+        $mediators = app('db')->table('users')->where('role', 'mediator')->where('is_active', true)->get();
         $object = array();
         foreach ($mediators as $mediator) {
             $workplace_name = app('db')->table('workplaces')->where('pk', $mediator->workplace_pk)->value('name');

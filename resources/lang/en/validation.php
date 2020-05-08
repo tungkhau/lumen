@@ -72,6 +72,7 @@ return [
         'year' => 'Năm sản xuất',
         'current_password'=>'Mật khẩu hiện tại',
         'new_password' => 'Mật khẩu mới',
+        'mediator_pk' => 'Nhân viên nhận'
     ],
 
 
