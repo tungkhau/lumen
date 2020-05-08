@@ -55,7 +55,8 @@ class DemandController extends Controller
     private function id($conception_pk)
     {
         $conception_id = app('db')->table('conceptions')->where('pk', $conception_pk)->value('id');
-        $latest_demand = app('db')->table('demands')->where('id', 'like', $conception_id)->orderBy('created_date', 'desc')->first();
+        $tmp = '%' . $conception_id . '%';
+        $latest_demand = app('db')->table('demands')->where('id', 'like', $tmp)->orderBy('created_date', 'desc')->first();
         if ($latest_demand) {
             $key = substr($latest_demand->id, -1, 1);
             $key++;
