@@ -1,10 +1,12 @@
 <?php
 
 use Laravel\Lumen\Testing\DatabaseTransactions;
+use Laravel\Lumen\Testing\WithoutMiddleware;
 
 class OrderTest extends TestCase
 {
     use DatabaseTransactions;
+    use WithoutMiddleware;
 
     public function testCreate()
     {

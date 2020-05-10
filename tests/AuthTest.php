@@ -1,10 +1,13 @@
 <?php
 
 use Laravel\Lumen\Testing\DatabaseTransactions;
+use Laravel\Lumen\Testing\WithoutMiddleware;
 
 class AuthTest extends TestCase
 {
     use DatabaseTransactions;
+    use WithoutMiddleware;
+
 
     public function testLoginDesktop()
     {

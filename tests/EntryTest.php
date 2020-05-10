@@ -1,10 +1,12 @@
 <?php
 
 use Laravel\Lumen\Testing\DatabaseTransactions;
+use Laravel\Lumen\Testing\WithoutMiddleware;
 
 class EntryTest extends TestCase
 {
     use DatabaseTransactions;
+    use WithoutMiddleware;
 
     public function testAdjustFail() // adjust when have a discarding session not confirm
     {

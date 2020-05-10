@@ -3,10 +3,13 @@
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Lumen\Testing\DatabaseTransactions;
+use Laravel\Lumen\Testing\WithoutMiddleware;
 
 class AccessoryTest extends TestCase
 {
     use DatabaseTransactions;
+    use WithoutMiddleware;
+
 
     public function testCreateNew()
     {
