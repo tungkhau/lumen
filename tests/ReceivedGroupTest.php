@@ -30,7 +30,7 @@ class ReceivedGroupTest extends TestCase
     {
         $inputs = ['counting_session_pk' => '1cfd56fc-72a2-11ea-bc55-0242ac130003',
             'counted_quantity' => 499,
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '1cfd56fc-72a2-11ea-bc55-0242ac130003',
             'counted_quantity' => 499,];
         $this->call('POST', 'edit_counting', $inputs);
@@ -42,7 +42,7 @@ class ReceivedGroupTest extends TestCase
     public function testDeleteCounting()
     {
         $inputs = ['counting_session_pk' => '1cfd56fc-72a2-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '1cfd56fc-72a2-11ea-bc55-0242ac130003'];
         $received_group = ['pk' => '727747ce-70df-11ea-bc55-0242ac130003',
             'counting_session_pk' => null];
@@ -78,7 +78,7 @@ class ReceivedGroupTest extends TestCase
         $inputs = ['checking_session_pk' => '1cfd592c-72a2-11ea-bc55-0242ac130003',
             'checked_quantity' => 1,
             'unqualified_quantity' => 0,
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3adbe-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '1cfd592c-72a2-11ea-bc55-0242ac130003',
             'checked_quantity' => 1,
             'unqualified_quantity' => 0];
@@ -91,7 +91,7 @@ class ReceivedGroupTest extends TestCase
     public function testDeleteChecking()
     {
         $inputs = ['checking_session_pk' => '1cfd592c-72a2-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3adbe-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '1cfd592c-72a2-11ea-bc55-0242ac130003'];
         $received_group = ['pk' => '727747ce-70df-11ea-bc55-0242ac130003',
             'checking_session_pk' => null];

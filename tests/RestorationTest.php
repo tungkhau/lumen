@@ -72,7 +72,7 @@ class RestorationTest extends TestCase
     {
         $inputs = [
             'restoration_pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'
         ];
         $data = ['pk' => '0756cd6e-71d6-11ea-bc55-0242ac130003',
             'is_confirmed' => True];
@@ -86,7 +86,7 @@ class RestorationTest extends TestCase
     {
         $inputs = [
             'restoration_pk' => '0756c72e-71d6-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'
         ];
         $data = ['pk' => '0756c72e-71d6-11ea-bc55-0242ac130003',
             'is_confirmed' => False];

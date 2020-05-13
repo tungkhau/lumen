@@ -57,7 +57,7 @@ class OrderTest extends TestCase
             'ordered_item_pk' => 'f521c1d6-70f8-11ea-bc55-0242ac130003',
             'ordered_quantity' => 500,
             'comment' => 'bla',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
         $data = ['ordered_quantity' => 500,
             'comment' => 'bla'];
         $this->call('POST', 'edit_order', $inputs);
@@ -88,7 +88,7 @@ class OrderTest extends TestCase
     public function testTurnOff()
     {
         $inputs = ['order_pk' => '727734be-70df-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '727734be-70df-11ea-bc55-0242ac130003',
             'is_opened' => False];
         $this->call('POST', 'turn_off_order', $inputs);
@@ -99,7 +99,7 @@ class OrderTest extends TestCase
     public function testTurnOn()
     {
         $inputs = ['order_pk' => '72773900-70df-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '72773900-70df-11ea-bc55-0242ac130003',
             'is_opened' => True];
         $this->call('POST', 'turn_on_order', $inputs);
