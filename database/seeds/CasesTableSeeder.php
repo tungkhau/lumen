@@ -130,5 +130,161 @@ class CasesTableSeeder extends Seeder
             'pk' => 'd993f450-7190-11ea-bc55-0242ac130003',
             'is_active' => True
         ]);
+        // emty case in store
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-DA',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-CA',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-CB',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AC',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AD',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AE',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AF',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AG',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AH',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AI',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AJ',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AK',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AL',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AM',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AN',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AO',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AP',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AQ',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AR',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AS',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AT',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AU',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AV',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AW',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AX',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AY',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-AZ',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-BA',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-BB',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-BC',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
+        app('db')->table('cases')->insert([
+            'id' => 'QT-020120-BE',
+            'is_active' => True,
+            'shelf_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004'
+        ]);
     }
 }
