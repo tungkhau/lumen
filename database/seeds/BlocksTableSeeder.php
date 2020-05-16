@@ -43,10 +43,10 @@ class BlocksTableSeeder extends Seeder
         ]);
         app('db')->table('blocks')->insert([        //Add chơi cho đủ từ G - J -)
             'pk' => '25c6ea26-79b2-11ea-bc55-0242ac130003',
-            'is_active' => False,
+            'is_active' => true,
             'id' => 'I',
-            'row' => 2,
-            'col' => 1
+            'row' => 10,
+            'col' => 15
         ]);
         app('db')->table('blocks')->insert([
             'pk' => 'f9a3e2bc-86d2-11ea-bc55-0242ac130003',

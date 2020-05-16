@@ -59,7 +59,7 @@ class DemandTest extends TestCase
             'demanded_item_pk' => '5c0102dc-74b8-11ea-bc55-0242ac130003',
             'demanded_quantity' => 300,
             'comment' => 'edit',
-            'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
         $data = ['demanded_quantity' => 300,
             'comment' => 'edit'];
         $this->call('POST', 'edit_demand', $inputs);
@@ -78,7 +78,7 @@ class DemandTest extends TestCase
             ];
         }
         $inputs = ['demand_pk' => '5c010192-74b8-11ea-bc55-0242ac130003',
-            'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '5c010192-74b8-11ea-bc55-0242ac130003'];
         $this->call('POST', 'delete_demand', $inputs);
         $this->seeJsonEquals(['success' => 'Xóa đơn cấp phát thành công']);

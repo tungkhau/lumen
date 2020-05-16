@@ -28,6 +28,7 @@ class ConceptionTest extends TestCase
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
         $this->call('POST', 'link_conception_accessory', $inputs);
         $this->seeStatusCode(200);
+        $this->seeJsonEquals(['success' => 'Kết nối mã hàng và phụ liệu thành công']);
         $this->seeInDatabase('accessories_conceptions', $data);
         $this->seeInDatabase('activity_logs', $conception_history);
         $this->seeInDatabase('activity_logs', $accessory_history);

@@ -24,7 +24,7 @@ class AccessoryTest extends TestCase
             'accessory_name' => 'M',
             'comment' => 'M',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];
-        $data = ['id' => 'BB-BBB-00001-BBB',
+        $data = ['id' => 'BA-BBB-00001-BBB',
             'customer_pk' => '1b4a1594-771a-11ea-bc55-0242ac130003',
             'supplier_pk' => '1b4a17ec-771a-11ea-bc55-0242ac130003',
             'type_pk' => '1b49c620-771a-11ea-bc55-0242ac130003',
@@ -35,7 +35,7 @@ class AccessoryTest extends TestCase
             'size' => 'M',
             'name' => 'M',
             'comment' => 'M'];
-        $activity_log = ['id' => 'BB-BBB-00001-BBB',
+        $activity_log = ['id' => 'BA-BBB-00001-BBB',
             'type' => 'create',
             'object' => 'accessory',
             'user_pk' => 'cec3a882-7194-11ea-bc55-0242ac130003'];

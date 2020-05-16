@@ -95,5 +95,10 @@ class ShelvesTableSeeder extends Seeder
             'name' => 'H-03-02',
             'block_pk' => '24c6ea26-79b2-11ea-bc55-0242ac130003'
         ]);
+        app('db')->table('shelves')->insert([
+            'pk' => '25c6ea26-79b2-11ea-bc55-0242ac130004',
+            'name' => 'I-01-01',
+            'block_pk' => '25c6ea26-79b2-11ea-bc55-0242ac130003'
+        ]);
     }
 }

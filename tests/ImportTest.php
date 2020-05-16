@@ -57,7 +57,7 @@ class ImportTest extends TestCase
             'imported_item_pk' => '727741ca-70df-11ea-bc55-0242ac130003',
             'imported_quantity' => 3000,
             'comment' => 'bla bla',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3ab2a-7194-11ea-bc55-0242ac130003'];
         $data = ['imported_quantity' => 3000,
             'comment' => 'bla bla'];
         $this->call('POST', 'edit_import', $inputs);
@@ -75,7 +75,7 @@ class ImportTest extends TestCase
             ];
         }
         $inputs = ['import_pk' => '72774102-70df-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3ab2a-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '72774102-70df-11ea-bc55-0242ac130003'];
         $this->call('POST', 'delete_import', $inputs);
         $this->seeStatusCode(200);
@@ -88,7 +88,7 @@ class ImportTest extends TestCase
     public function testTurnOff()
     {
         $inputs = ['import_pk' => '72773c8e-70df-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
+            'user_pk' => 'cec3ab2a-7194-11ea-bc55-0242ac130003'];
         $data = ['pk' => '72773c8e-70df-11ea-bc55-0242ac130003',
             'is_opened' => False];
         $this->call('POST', 'turn_off_import', $inputs);
@@ -98,9 +98,9 @@ class ImportTest extends TestCase
 
     public function testTurnOn()
     {
-        $inputs = ['import_pk' => '72774102-70df-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
-        $data = ['pk' => '72774102-70df-11ea-bc55-0242ac130003',
+        $inputs = ['import_pk' => '178ef7ba-7389-11ea-bc55-0242ac130003',
+            'user_pk' => 'cec3ab2a-7194-11ea-bc55-0242ac130003'];
+        $data = ['pk' => '178ef7ba-7389-11ea-bc55-0242ac130003',
             'is_opened' => True];
         $this->call('POST', 'turn_on_import', $inputs);
         $this->seeStatusCode(200);
@@ -163,7 +163,7 @@ class ImportTest extends TestCase
                     'grouped_quantity' => 500
                 ]
             ],
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
         ];
 
         $data = [
@@ -187,7 +187,7 @@ class ImportTest extends TestCase
     public function testDeleteReceiving()
     {
         $inputs = ['importing_session_pk' => '727745c6-70df-11ea-bc55-0242ac130003',
-            'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'
+            'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
         ];
 
         $received_groups = ['727746b6-70df-11ea-bc55-0242ac130003', '727747ce-70df-11ea-bc55-0242ac130003'];
@@ -203,17 +203,17 @@ class ImportTest extends TestCase
 
     public function testClassify()
     {
-        $inputs = ['imported_item_pk' => '72774396-70df-11ea-bc55-0242ac130003', //imported_item 1 (1) -> import_1 -> is_opened = true ??? (không phải) t lấy lại cái imported_item 3.2
+        $inputs = ['imported_item_pk' => '24f53a5e-7389-11ea-bc55-0242ac130003', //imported_item 1 (1) -> import_1 -> is_opened = true ??? (không phải) t lấy lại cái imported_item 3.2
             'quality_state' => 'pending',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
         $this->call('POST', 'classify', $inputs);
-        $classified_item_pk = app('db')->table('imported_items')->where('pk', '72774396-70df-11ea-bc55-0242ac130003')->value('classified_item_pk');
+        $classified_item_pk = app('db')->table('imported_items')->where('pk', '24f53a5e-7389-11ea-bc55-0242ac130003')->value('classified_item_pk');
         $classified_item = ['quality_state' => 'pending',
             'pk' => $classified_item_pk];
         $classifying_session = ['classified_item_pk' => $classified_item_pk,
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
         $imported_item = ['classified_item_pk' => $classified_item_pk,
-            'pk' => '72774396-70df-11ea-bc55-0242ac130003'];
+            'pk' => '24f53a5e-7389-11ea-bc55-0242ac130003'];
         $this->seeJsonEquals(['success' => 'Đánh giá phụ liệu nhập thành công']);
         $this->seeStatusCode(200);
         $this->seeInDatabase('classified_items', $classified_item);
