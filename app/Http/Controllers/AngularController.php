@@ -368,5 +368,11 @@ class AngularController extends Controller
         return response()->json(['linkable-accessories' => $response], 201);
     }
 
+    public function get_scanner(Request $request)
+    {
+        $response = $this->shared->get_scanner($request);
+        return response()->json(['scanner' => $response], 201);
+    }
+
 }
 

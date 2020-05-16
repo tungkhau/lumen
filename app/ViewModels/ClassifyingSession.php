@@ -31,6 +31,11 @@ class ClassifyingSession extends ViewModel
             $pks = array_intersect(app('db')->table('classifying_sessions')->whereIn('classified_item_pk', $classified_item_pks)->pluck('pk')->toArray(), $pks);
         }
 
+        if ($externality != Null && array_key_exists('received_item_pks', $externality)) {
+            $classified_item_pks = app('db')->table('imported_items')->whereIn('pk', $externality['received_item_pks'])->where('classified_item_pk', '!=', Null)->pluck('classified_item_pk');
+            $pks = array_intersect(app('db')->table('classifying_sessions')->whereIn('classified_item_pk', $classified_item_pks)->pluck('pk')->toArray(), $pks);
+        }
+
         foreach ($object as $key => $item) {
             if (!in_array($item['pk'], $pks)) unset($object[$key]);
         }
@@ -50,6 +55,7 @@ class ClassifyingSession extends ViewModel
                 'executedDate' => $classifying_session->executed_date,
                 'qualityState' => $classified_item->quality_state,
                 'user_pk' => $classifying_session->user_pk,
+                'classifiedItemPk' => $classified_item->pk,
                 'received_item_pk' => $received_item_pk,
             ];
 

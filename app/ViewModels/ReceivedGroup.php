@@ -89,6 +89,8 @@ class ReceivedGroup extends ViewModel
                     'groupedQuantity' => $imported_group->grouped_quantity,
                     'actualQuantity' => $this::actual_quantity($imported_group->pk),
                     'isCounted' => $imported_group->counting_session_pk == Null ? False : True,
+                    'isCountable' => $this::is_countable($imported_group->pk),
+                    'isCheckable' => $this::is_checkable($imported_group->pk),
                     'isStorable' => $this::is_storable($imported_group->pk),
                     'checkedQuantity' => $checking_quantity['checked_quantity'],
                     'unqualifiedQuantity' => $checking_quantity['unqualified_quantity'],
@@ -103,6 +105,7 @@ class ReceivedGroup extends ViewModel
                     'groupedQuantity' => $restored_group->grouped_quantity,
                     'actualQuantity' => $this::actual_quantity($restored_group->pk),
                     'isCounted' => $restored_group->counting_session_pk == Null ? False : True,
+                    'isCountable' => $this::is_countable($restored_group->pk),
                     'isStorable' => $this::is_storable($restored_group->pk),
                     'received_item_pk' => $restored_group->received_item_pk,
                 ];
@@ -130,6 +133,38 @@ class ReceivedGroup extends ViewModel
         $received_group = app('db')->table('received_groups')->where('pk', $received_group_pk)->first();
         if ($received_group->counting_session_pk == Null) return $received_group->grouped_quantity;
         return app('db')->table('counting_sessions')->where('pk', $received_group->counting_session_pk)->value('counted_quantity');
+    }
+
+    public static function is_countable($received_group_pk)
+    {
+        $received_group = app('db')->table('received_groups')->where('pk', $received_group_pk)->first();
+        $opened = False;
+        $classified = False;
+        $imported = $received_group->kind == 'imported';
+        if ($imported) {
+            $imported_item_pk = $received_group->received_item_pk;
+            $imported_item = app('db')->table('imported_items')->where('pk', $imported_item_pk)->select('import_pk', 'classified_item_pk')->first();
+            $opened = app('db')->table('imports')->where('pk', $imported_item->import_pk)->value('is_opened');
+
+            $classified = $imported_item->classified_item_pk == Null ? False : True;
+        }
+        $counted = $received_group->counting_session_pk == Null ? False : True;
+        $stored = $received_group->storing_session_pk == Null ? False : True;
+
+        return !$opened && !$classified && !$counted && !$stored;
+    }
+
+    public static function is_checkable($received_group_pk)
+    {
+        $imported_group = app('db')->table('received_groups')->where('pk', $received_group_pk)->first();
+        if ($imported_group == Null) return False;
+        $stored = $imported_group->storing_session_pk == Null ? False : True;
+        $checked = $imported_group->checking_session_pk == Null ? False : True;
+
+        $imported_item = app('db')->table('imported_items')->where('pk', $imported_group->received_item_pk)->select('import_pk', 'classified_item_pk')->first();
+        $opened = app('db')->table('imports')->where('pk', $imported_item->import_pk)->value('is_opened');
+        $classified = $imported_item->classified_item_pk == Null ? False : True;
+        return !$opened && !$classified && !$checked && !$stored;
     }
 
     private static function is_storable($received_group_pk)

@@ -78,15 +78,9 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->post('delete_import', 'ImportController@delete');
         $router->post('turn_off_import', 'ImportController@turn_off');
         $router->post('turn_on_import', 'ImportController@turn_on');
-        $router->post('receive_import', 'ImportController@receive');
-        $router->post('edit_imported_receiving', 'ImportController@edit_receiving');
-        $router->post('delete_imported_receiving', 'ImportController@delete_receiving');
         //Restoration
         $router->post('register_restoration', 'RestorationController@register');
         $router->post('delete_restoration', 'RestorationController@delete');
-        $router->post('confirm_restoration', 'RestorationController@confirm');
-        $router->post('cancel_restoration', 'RestorationController@cancel');
-        $router->post('receive_restoration', 'RestorationController@receive');
         //Group 6
         $router->post('verify_adjusting', 'EntryController@verify_adjusting');
         $router->post('verify_discarding', 'EntryController@verify_discarding');
@@ -100,6 +94,10 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->post('delete_counting', 'ReceivedGroupController@delete_counting');
         $router->post('arrange', 'ReceivedGroupController@arrange');
         //Group 6
+        //Import
+        $router->post('receive_import', 'ImportController@receive');
+        $router->post('edit_imported_receiving', 'ImportController@edit_receiving');
+        $router->post('delete_imported_receiving', 'ImportController@delete_receiving');
         //Received Group
         $router->post('store_received_groups', 'ReceivedGroupController@store');
         //Entry
@@ -109,6 +107,9 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         //Case
         $router->post('store_case', 'CaseController@store');
         $router->post('replace', 'CaseController@replace');
+
+        $router->post('receive_restoration', 'RestorationController@receive');
+
 
     });
     $router->group(['middleware' => 'role:inspector'], function () use ($router) {
@@ -122,6 +123,11 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->post('reclassify', 'ImportController@reclassify');
         $router->post('delete_classification', 'ImportController@delete_classification');
         $router->post('sendback', 'ImportController@sendback');
+    });
+    $router->group(['middleware' => 'role:mediator'], function () use ($router) {
+        $router->post('confirm_restoration', 'RestorationController@confirm');
+        $router->post('cancel_restoration', 'RestorationController@cancel');
+        $router->post('confirm_issuing', 'RestorationController@cancel');
     });
     $router->group(['middleware' => 'role:admin'], function () use ($router) {
         //Group 1
@@ -185,6 +191,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('received-workplaces', 'AngularController@get_received_workplace');
     $router->post('workplaces', 'AngularController@get_workplace');
     $router->post('linkable-accessories', 'AngularController@get_linkable_accessory');
+    $router->post('scanner', 'AngularController@get_scanner');
 });
 
 $router->get('/', function () use ($router) {

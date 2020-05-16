@@ -16,7 +16,7 @@ class ImportValidator
                 'order_pk' => 'required|uuid|exists:orders,pk,is_opened,' . True,
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
                 'imported_items.*.ordered_item_pk' => 'required|uuid|exists:ordered_items,pk,order_pk,' . $params['order_pk'],
-                'imported_items.*.imported_quantity' => 'required|integer|between:1,2000000000',
+                'imported_items.*.imported_quantity' => 'required|integer|between:1,99999999',
                 'imported_items.*.comment' => 'nullable|string|max:20'
             ]);
         } catch (ValidationException $e) {
@@ -33,7 +33,7 @@ class ImportValidator
                 'import_pk' => 'required|uuid|exists:imports,pk',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
                 'imported_item_pk' => 'required|uuid|exists:imported_items,pk',
-                'imported_quantity' => 'required|integer|between:1,2000000000',
+                'imported_quantity' => 'required|integer|between:1,99999999',
                 'comment' => 'nullable|string|max:20'
             ]);
         } catch (ValidationException $e) {
@@ -93,7 +93,7 @@ class ImportValidator
                 'case_pk' => 'required|uuid|exists:cases,pk|unstored_case',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
                 'imported_groups.*.imported_item_pk' => 'required|uuid|exists:imported_items,pk,import_pk,' . $params['import_pk'],
-                'imported_groups.*.grouped_quantity' => 'required|integer|between:1,2000000000'
+                'imported_groups.*.grouped_quantity' => 'required|integer|between:1,99999999'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -109,7 +109,7 @@ class ImportValidator
                 'importing_session_pk' => 'required|uuid|exists:receiving_sessions,pk,kind,' . 'importing',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
                 'imported_groups.*.imported_group_pk' => 'required|uuid|exists:received_groups,pk,kind,imported|exists:received_groups,pk,receiving_session_pk,' . $params['importing_session_pk'],
-                'imported_groups.*.grouped_quantity' => 'required|integer|between:1,2000000000'
+                'imported_groups.*.grouped_quantity' => 'required|integer|between:1,99999999'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

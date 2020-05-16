@@ -13,10 +13,10 @@ class CasePrecondition
         $inCased_quantity = 0;
         if (count($entries) > 0) {
             foreach ($entries as $entry) {
-                if ($entry->quantity == Null) {
+                if ($entry == Null) {
                     break;
                 }
-                $inCased_quantity += $entry->quantity;
+                $inCased_quantity += $entry;
             }
         }
         $contained = $inCased_quantity == 0 ? False : True;
@@ -43,7 +43,7 @@ class CasePrecondition
     public function replace($params)
     {
         $start_shelf_pk = app('db')->table('cases')->where('pk', $params['case_pk'])->value('shelf_pk');
-        return $start_shelf_pk == $params['end_shelf_pk'] ? True : False;
+        return $start_shelf_pk == $params['end_shelf_pk'];
     }
 
 }

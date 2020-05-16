@@ -16,6 +16,7 @@ class IssuingSessionsTableSeeder extends Seeder
         app('db')->table('issuing_sessions')->insert([
             'pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
             'kind' => 'consuming',
+            'id' => 'DN-000012-A#01',
             'container_pk' => 'b7e6cb50-7a6b-11ea-bc55-0242ac130003',
             'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003'
         ]);

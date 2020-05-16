@@ -14,7 +14,7 @@ class ReceivedGroupValidator
         try {
             $this->validate($params, [
                 'received_group_pk' => 'required|uuid|exists:received_groups,pk',
-                'counted_quantity' => 'required|integer|between:1,2000000000',
+                'counted_quantity' => 'required|integer|between:1,99999999',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {
@@ -29,7 +29,7 @@ class ReceivedGroupValidator
         try {
             $this->validate($params, [
                 'counting_session_pk' => 'required|uuid|exists:counting_sessions,pk',
-                'counted_quantity' => 'required|integer|between:1,2000000000',
+                'counted_quantity' => 'required|integer|between:1,99999999',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
             ]);
         } catch (ValidationException $e) {
@@ -61,6 +61,8 @@ class ReceivedGroupValidator
                 'checked_quantity' => 'integer|checked_quantity:' . $params['imported_group_pk'],
                 'unqualified_quantity' => 'required|integer|gte:0|lte:' . $params['checked_quantity'],
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
+            ], [
+                'checked_quantity.checked_quantity' => 'Số lượng kiểm mỗi cụm phụ liệu không thể vượt quá cỡ mẫu',
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();

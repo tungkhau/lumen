@@ -5,6 +5,7 @@ namespace App\ViewModels;
 use App\Http\Controllers\AccessoryController;
 use App\Http\Controllers\ReceivedGroupController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class Shared extends ViewModel
@@ -348,9 +349,9 @@ class Shared extends ViewModel
             $accessory_id = app('db')->table('imports')->where('pk', $accessory_pk)->value('id');
             $history[] = [
                 'pk' => $classifying_session->pk,
-                'type' => 'Gửi trả phụ liệu',
+                'type' => 'Đánh giá chất lượng',
                 'executedDate' => $classifying_session->executed_date,
-                'content' => "Gửi trả phụ liệu $accessory_id không đạt chất lượng từ phiếu nhập $import_id ",
+                'content' => "Đánh giá chất lượng phụ liệu $accessory_id thuộc phiếu nhập $import_id ",
                 'user_pk' => $classifying_session->user_pk
             ];
         }
@@ -412,7 +413,7 @@ class Shared extends ViewModel
         foreach ($replacing_sessions as $replacing_session) {
             $start_shelf_id = app('db')->table('shelves')->where('pk', $replacing_session->start_shelf_pk)->value('name');
             $end_shelf_id = app('db')->table('shelves')->where('pk', $replacing_session->end_shelf_pk)->value('name');
-            $case_id = app('cases')->where('pk', $replacing_session->case_pk)->value('id');
+            $case_id = app('db')->table('cases')->where('pk', $replacing_session->case_pk)->value('id');
             $history[] = [
                 'pk' => $replacing_session->pk,
                 'type' => 'Chuyển đơn vị chứa',
@@ -497,4 +498,129 @@ class Shared extends ViewModel
         return $object;
     }
 
+    public function get_scanner($params)
+    {
+        $externality = $params['externality'];
+        $tmp = $externality['pk'][0];
+        $kind = substr($tmp, -1, 1);
+        $pk = substr($tmp, 0, 36);
+        $object = array();
+        switch ($kind) {
+            case 1 :
+            {
+                $case = app('db')->table('cases')->where('pk', $pk)->where('is_active', True)->first();
+                if (!$case) {
+                    return $object;
+                };
+                $hasShelf = $case->shelf_pk != Null;
+                $issued_groups = app('db')->table('issued_groups')->where('case_pk', $pk)->exists();
+                if ($issued_groups) {
+                    return $object[] = [
+                        'kind' => 'sealedCase',
+                        'pk' => $pk,
+                        'id' => $case->id
+                    ];
+                }
+                $received_groups = app('db')->table('received_groups')->where('case_pk', $pk)->exists();
+                if ($received_groups) {
+                    return $object[] = [
+                        'kind' => 'unstoredCase',
+                        'pk' => $pk,
+                        'id' => $case->id
+                    ];
+                }
+                $entries = app('db')->table('entries')->where('case_pk', $pk)->pluck('quantity');
+                if (count($entries) == 0) {
+                    return $object[] = [
+                        'kind' => $hasShelf ? 'emptyInCase' : 'emptyOutCase',
+                        'pk' => $pk,
+                        'id' => $case->id
+                    ];
+                };
+                $inCased_quantity = 0;
+                foreach ($entries as $entry) {
+                    if ($entry == Null) {
+                        return $object[] = [
+                            'kind' => 'storedCase',
+                            'pk' => $pk,
+                            'id' => $case->id
+                        ];
+                    };
+                    $inCased_quantity += $entry;
+                }
+                if ($inCased_quantity != 0) {
+                    return $object[] = [
+                        'kind' => 'storedCase',
+                        'pk' => $pk,
+                        'id' => $case->id
+                    ];
+                } else {
+                    return $object[] = [
+                        'kind' => $hasShelf ? 'emptyInCase' : 'emptyOutCase',
+                        'pk' => $pk,
+                        'id' => $case->id
+                    ];
+                }
+            }
+            case 2 :
+            {
+                $shelf = app('db')->table('shelves')->where('pk', $pk)->first();
+                if (!$shelf) {
+                    return $object;
+                };
+                return $object[] = [
+                    'kind' => 'shelf',
+                    'pk' => $pk,
+                    'id' => $shelf->name
+                ];
+            }
+            case 3 :
+            {
+                $block = app('db')->table('blocks')->where('pk', $pk)->where('is_active', True)->first();
+                if (!$block) {
+                    return $object;
+                };
+                return $object[] = [
+                    'kind' => 'block',
+                    'pk' => $pk,
+                    'id' => $block->id
+                ];
+            }
+            case 4 :
+            {
+                $api = $params->header('api_token');
+                $user_pk = Crypt::decrypt($api)['pk'];
+                $restoration = app('db')->table('restorations')->where('pk', $pk)->where('user_pk', $user_pk)->first();
+                if (!$restoration) {
+                    return $object;
+                }
+                return $object[] = [
+                    'kind' => 'restoration',
+                    'pk' => $pk,
+                    'id' => $restoration->id
+                ];
+            }
+            case 5 :
+            {
+                $issuing = app('db')->table('issuing_sessions')->where('pk', $pk)->first();
+                if (!$issuing) {
+                    return $object;
+                }
+                $api = $params->header('api_token');
+                $user_pk = Crypt::decrypt($api)['pk'];
+                $tmp = app('db')->table('users')->where('pk', $user_pk)->value('workplace_pk');
+                $workplace_pk = app('db')->table('demands')->where('pk', $issuing->container_pk)->value('workplace_pk');
+                if ($tmp != $workplace_pk) {
+                    return $object;
+                }
+                return $object[] = [
+                    'kind' => 'issuing',
+                    'pk' => $pk,
+                    'id' => $issuing->id
+                ];
+            }
+            default :
+                return $object;
+        }
+    }
 }

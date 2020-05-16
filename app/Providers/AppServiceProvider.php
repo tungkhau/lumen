@@ -50,8 +50,8 @@ class AppServiceProvider extends ServiceProvider
             $inCased_quantity = 0;
             if (count($entries) == 0) return True;
             foreach ($entries as $entry) {
-                if ($entry->quantity == Null) return False;
-                $inCased_quantity += $entry->quantity;
+                if ($entry == Null) return False;
+                $inCased_quantity += $entry;
             }
             if ($inCased_quantity != 0) return False;
             return True;
@@ -68,8 +68,8 @@ class AppServiceProvider extends ServiceProvider
             $inCased_quantity = 0;
             if (count($entries) == 0) return True;
             foreach ($entries as $entry) {
-                if ($entry->quantity == Null) return False;
-                $inCased_quantity += $entry->quantity;
+                if ($entry == Null) return False;
+                $inCased_quantity += $entry;
             }
             if ($inCased_quantity != 0) return False;
             return True;

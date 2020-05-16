@@ -16,7 +16,7 @@ class RestorationValidator
                 'mediator_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
                 'comment' => 'nullable|string|max:20',
                 'restored_items.*.accessory_pk' => 'required|uuid|exists:accessories,pk,is_active,' . True,
-                'restored_items.*.restored_quantity' => 'required|integer|between:1,2000000000'
+                'restored_items.*.restored_quantity' => 'required|integer|between:1,99999999'
             ]);
         } catch (ValidationException $e) {
             $error_messages = $e->errors();
@@ -73,7 +73,7 @@ class RestorationValidator
                 'restoration_pk' => 'required|uuid|exists:restorations,pk,is_confirmed,' . True,
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True,
                 'restored_groups.*.restored_item_pk' => 'required|uuid|exists:restored_items,pk,restoration_pk,' . $params['restoration_pk'],
-                'restored_groups.*.grouped_quantity' => 'required|integer|between:1,2000000000',
+                'restored_groups.*.grouped_quantity' => 'required|integer|between:1,99999999',
                 'restored_groups.*.case_pk' => 'required|uuid|exists:cases,pk|unstored_case'
             ]);
         } catch (ValidationException $e) {

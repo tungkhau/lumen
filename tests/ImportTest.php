@@ -150,7 +150,7 @@ class ImportTest extends TestCase
         }
     }
 
-    public function testEditReceving()
+    public function testEditReceiving()
     {
         $inputs = ['importing_session_pk' => '727745c6-70df-11ea-bc55-0242ac130003',
             'imported_groups' => [
@@ -205,7 +205,6 @@ class ImportTest extends TestCase
     {
         $inputs = ['imported_item_pk' => '72774396-70df-11ea-bc55-0242ac130003', //imported_item 1 (1) -> import_1 -> is_opened = true ??? (không phải) t lấy lại cái imported_item 3.2
             'quality_state' => 'pending',
-            'comment' => 'bla',
             'user_pk' => '511f4482-6dd8-11ea-bc55-0242ac130003'];
         $this->call('POST', 'classify', $inputs);
         $classified_item_pk = app('db')->table('imported_items')->where('pk', '72774396-70df-11ea-bc55-0242ac130003')->value('classified_item_pk');
