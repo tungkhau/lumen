@@ -156,7 +156,7 @@ class DemandController extends Controller
 //        });
 //    }
 
-    public function confirm_issuing(Request $request)
+    public function confirm(Request $request)
     {
         /* Validate request, catch invalid errors(400) */
         $validation = $this->validator->confirm_issuing($request);
@@ -194,7 +194,8 @@ class DemandController extends Controller
         $entries = array();
 
         foreach ($issued_groups as $issued_group) {
-            $entries[] = ['kind' => $issued_group->kind,
+            $kind = app('db')->table('received_groups')->where('received_item_pk', $issued_group->received_item_pk)->first()->kind;
+            $entries[] = ['kind' => $kind,
                 'received_item_pk' => $issued_group->received_item_pk,
                 'entry_kind' => 'returning',
                 'quantity' => $issued_group->grouped_quantity,
@@ -203,6 +204,8 @@ class DemandController extends Controller
                 'accessory_pk' => ReceivedGroupController::accessory_pk($issued_group->received_item_pk)
             ];
         }
+        $request['entries'] = $entries;
+
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->return_issuing($request);
         if ($unexpected) return $this->unexpected_response();

@@ -227,11 +227,15 @@ class DemandTest extends TestCase
     public function testConfirmIssuing()
     {
         $inputs = ['consuming_session_pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
-            'case_pk' => 'a561a838-8227-11ea-bc55-0242ac130003',
+            'enabled_cases' => [
+                [
+                    'case_pk' => 'a561a838-8227-11ea-bc55-0242ac130003'
+                ],
+            ],
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',];
         $this->call('POST', 'confirm_issuing', $inputs);
-        $this->seeStatusCode(200);
         $this->seeJsonEquals(['success' => 'Nhận phụ liệu thành công']);
+        $this->seeStatusCode(200);
         $pk = app('db')->table('progressing_sessions')->orderBy('executed_date', 'desc')->first()->pk;
         $progression_session = ['pk' => $pk,
             'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003',
@@ -244,14 +248,11 @@ class DemandTest extends TestCase
             'case_pk' => null];
         $case_10 = ['pk' => 'a561a838-8227-11ea-bc55-0242ac130003',
             'is_active' => false];
-        $case_11 = ['pk' => '82770a98-8254-11ea-bc55-0242ac130003',
-            'is_active' => false];
         $this->seeInDatabase('progressing_sessions', $progression_session);
         $this->seeInDatabase('issuing_sessions', $issuing_session);
-        $this->seeInDatabase('issuing_groups', $issuing_group_1);
-        $this->seeInDatabase('issuing_groups', $issuing_group_2);
+        $this->seeInDatabase('issued_groups', $issuing_group_1);
+        $this->seeInDatabase('issued_groups', $issuing_group_2);
         $this->seeInDatabase('cases', $case_10);
-        $this->seeInDatabase('cases', $case_11);
     }
 
     public function testReturnIssuing()
@@ -301,7 +302,7 @@ class DemandTest extends TestCase
         $issued_group_2 = ['pk' => '82770cf0-8254-11ea-bc55-0242ac130003',
             'case_pk' => null];
         $issued_item = ['pk' => 'a561ab8a-8227-11ea-bc55-0242ac130003',
-            'is_return' => true];
+            'is_returned' => true];
         $issuing_session = ['pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
             'returning_session_pk' => $pk];
         $this->seeInDatabase('returning_sessions', $returning_session);

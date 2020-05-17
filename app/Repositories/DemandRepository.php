@@ -123,9 +123,11 @@ class DemandRepository
                 app('db')->table('issued_groups')->whereIn('pk', $params['issued_group_pks'])->update([
                     'case_pk' => Null
                 ]);
-                app('db')->table('issued_items')->whereIn('pk', $params['issued_item_pks'])->delete();
                 app('db')->table('issuing_sessions')->where('pk', $params['consuming_session_pk'])->update([
-                    'returning_sesison_pk' => $params['returning_session_pk']
+                    'returning_session_pk' => $params['returning_session_pk']
+                ]);
+                app('db')->table('issued_items')->whereIn('pk', $params['issued_item_pks'])->update([
+                    'is_returned' => true,
                 ]);
             });
         } catch (Exception $e) {

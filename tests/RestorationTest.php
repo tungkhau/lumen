@@ -22,7 +22,7 @@ class RestorationTest extends TestCase
                 ]
             ],
             'comment' => 'bla',
-            'user_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'
+            'mediator_pk' => 'cec3ac24-7194-11ea-bc55-0242ac130003'
         ];
         $this->call('POST', 'register_restoration', $inputs);
         $restoration_id = 'RN-' . (string)date('dmy') . '-A';

@@ -109,6 +109,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->post('replace', 'CaseController@replace');
 
         $router->post('receive_restoration', 'RestorationController@receive');
+        $router->post('return_issuing', 'DemandController@return_issuing');
 
 
     });
@@ -124,10 +125,11 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->post('delete_classification', 'ImportController@delete_classification');
         $router->post('sendback', 'ImportController@sendback');
     });
+
     $router->group(['middleware' => 'role:mediator'], function () use ($router) {
         $router->post('confirm_restoration', 'RestorationController@confirm');
         $router->post('cancel_restoration', 'RestorationController@cancel');
-        $router->post('confirm_issuing', 'RestorationController@cancel');
+        $router->post('confirm_issuing', 'DemandController@confirm');
     });
     $router->group(['middleware' => 'role:admin'], function () use ($router) {
         //Group 1

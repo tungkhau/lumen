@@ -94,6 +94,7 @@ class Issuing extends ViewModel
                 $destination_name = app('db')->table('workplaces')->where('pk', $demand->workplace_pk)->value('name');
                 $object[] = [
                     'pk' => $item['pk'],
+                    'id' => $issuing->id,
                     'kind' => $item['kind'],
                     'status' => $item['status'],
                     'rootIssuingId' => $demand->id,
