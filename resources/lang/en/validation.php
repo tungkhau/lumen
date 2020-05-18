@@ -44,6 +44,7 @@ return [
     ],
     'exists' => ':attribute vừa chọn không hợp lệ hoặc không tìm thấy.',
     'attributes' => [
+        'end_case_pk' => 'Đơn vị chứa nhận',
         'row' => 'Số tầng',
         'col' => 'Số cột',
         'ordered_items.*.ordered_quantity' => 'Số lượng đặt hàng',

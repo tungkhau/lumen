@@ -77,8 +77,8 @@ class EntryValidator
             $this->validate($params, [
                 'start_case_pk' => 'required|uuid|exists:entries,case_pk|stored_case',
                 'inCased_items.*.received_item_pk' => 'required|uuid|exists:entries,received_item_pk',
-                'inCased_items.*.quantity' => 'available_quantity:{$request["inCased_items.*.received_item_pk"]},{$request["start_cases_pk"]}',
-                'end_case_pk' => 'required|uuid|exists:entries, case_pk|stored_case|different:' . $params['start_case_pk'],
+                'inCased_items.*.quantity' => 'required|integer|between:1,99999999',
+                'end_case_pk' => 'required|uuid|exists:cases,pk|stored_case|different:start_case_pk',
                 'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
             ]);
         } catch (ValidationException $e) {

@@ -103,7 +103,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         //Entry
         $router->post('adjust', 'EntryController@ajdust');
         $router->post('discard', 'EntryController@discard');
-        $router->post('move', 'EntryController@move');
+
         //Case
         $router->post('store_case', 'CaseController@store');
         $router->post('replace', 'CaseController@replace');
@@ -218,7 +218,7 @@ $router->post('change_password', 'UserController@change_password');
 //$router->post('', '');
 //$router->post('', '');
 //$router->post('', '');
-
+$router->post('move', 'EntryController@move');
 
 
 

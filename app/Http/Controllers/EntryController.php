@@ -148,30 +148,38 @@ class EntryController extends Controller
         if ($validation) return $this->invalid_response($validation);
 
         /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->move($request);
+        if ($precondition) return $this->conflict_response();
 
         /* Map variables */
         $request['moving_session_pk'] = (string)Str::uuid();
-        $request['outEntries'] = array();
-        $request['inEntries'] = array();
+        $outEntries = array();
+        $inEntries = array();
+
         foreach ($request['inCased_items'] as $inCased_item) {
             $temp = $this::inCased_item($inCased_item['received_item_pk'], $request['start_case_pk']);
-
-            $request['outEntries'][]['kind'] = $temp['kind'];
-            $request['outEntries'][]['received_item_pk'] = $inCased_item['received_item_pk'];
-            $request['outEntries'][]['entry_kind'] = 'out';
-            $request['outEntries'][]['quantity'] = -$inCased_item['quantity'];
-            $request['outEntries'][]['session_pk'] = $request['moving_session_pk'];
-            $request['outEntries'][]['case_pk'] = $request['start_case_pk'];
-            $request['outEntries'][]['accessory_pk'] = $temp['accessory_pk'];
-
-            $request['inEntries'][]['kind'] = $temp['kind'];
-            $request['inEntries'][]['received_item_pk'] = $inCased_item['received_item_pk'];
-            $request['inEntries'][]['entry_kind'] = 'in';
-            $request['inEntries'][]['quantity'] = $inCased_item['quantity'];
-            $request['inEntries'][]['session_pk'] = $request['moving_session_pk'];
-            $request['inEntries'][]['case_pk'] = $request['end_case_pk'];
-            $request['inEntries'][]['accessory_pk'] = $temp['accessory_pk'];
+            $outEntries[] = [
+                'kind' => $temp->kind,
+                'received_item_pk' => $inCased_item['received_item_pk'],
+                'entry_kind' => 'out',
+                'quantity' => -$inCased_item['quantity'],
+                'session_pk' => $request['moving_session_pk'],
+                'case_pk' => $request['start_case_pk'],
+                'accessory_pk' => $temp->accessory_pk,
+            ];
+            $inEntries[] = [
+                'kind' => $temp->kind,
+                'received_item_pk' => $inCased_item['received_item_pk'],
+                'entry_kind' => 'in',
+                'quantity' => $inCased_item['quantity'],
+                'session_pk' => $request['moving_session_pk'],
+                'case_pk' => $request['end_case_pk'],
+                'accessory_pk' => $temp->accessory_pk,
+            ];
         }
+
+        $request['outEntries'] = $outEntries;
+        $request['inEntries'] = $inEntries;
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->move($request);
