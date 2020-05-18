@@ -65,7 +65,7 @@ class EntryController extends Controller
         return 0;
     }
 
-    private static function inCased_item($received_item_pk, $case_pk)
+    public static function inCased_item($received_item_pk, $case_pk)
     {
         $inCased_item = app('db')->table('entries')->where([['received_item_pk', '=', $received_item_pk], ['case_pk', '=', $case_pk]])->distinct('received_item_pk')->first();
         if ($inCased_item) return $inCased_item;

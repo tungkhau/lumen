@@ -87,6 +87,26 @@ class DemandValidator
         return False;
     }
 
+    public function issue($params)
+    {
+        try {
+            $this->validate($params, [
+                'demand_pk' => 'required|uuid|exists:demands,pk,is_opened,' . True,
+                'issued_groups.*.case_pk' => 'required|uuid|exists:cases,pk|empty_case',
+                'issued_groups.*.received_item_pk' => 'required|uuid|exists:entries,received_item_pk',
+                'issued_groups.*.grouped_quantity' => 'required|integer|between:1,99999999',
+                'inCased_items.*.case_pk' => 'required|uuid|exists:cases,pk|stored_case',
+                'inCased_items.*.received_item_pk' => 'required|uuid|exists:entries,received_item_pk',
+                'inCased_items.*.issued_quantity' => 'required|integer|between:1,99999999',
+                'user_pk' => 'required|uuid|exists:users,pk,is_active,' . True
+            ]);
+        } catch (ValidationException $e) {
+            $error_messages = $e->errors();
+            return (string)array_shift($error_messages)[0];
+        }
+        return False;
+    }
+
     public function confirm_issuing($params)
     {
         try {

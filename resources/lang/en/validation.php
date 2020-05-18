@@ -35,8 +35,9 @@ return [
     ],
     'confirmed' => 'Nhập lại :attribute không trùng khớp',
 
-
+    'empty_case' => 'Chỉ có thể chọn đơn vị chứa trống',
     'custom' => [
+
         'user_id' => [
             'regex' => 'Mã nhân viên chỉ có thể chứa kí tự số',
         ],
@@ -70,7 +71,7 @@ return [
         'supplier_id' => 'Mã nhà cung cấp',
         'case_pk' => 'Đơn vị chứa',
         'year' => 'Năm sản xuất',
-        'current_password'=>'Mật khẩu hiện tại',
+        'current_password' => 'Mật khẩu hiện tại',
         'new_password' => 'Mật khẩu mới',
         'mediator_pk' => 'Nhân viên nhận'
     ],

@@ -81,6 +81,30 @@ class DemandRepository
         return False;
     }
 
+    public function issue($params)
+    {
+        try {
+            app('db')->transaction(function () use ($params) {
+                app('db')->table('issuing_sessions')->insert([
+                    'pk' => $params['issuing_session_pk'],
+                    'id' => $params['issuing_session_id'],
+                    'kind' => 'consuming',
+                    'user_pk' => $params['user_pk'],
+                    'container_pk' => $params['demand_pk']
+                ]);
+                app('db')->table('issued_items')->insert($params['issued_items']);
+                app('db')->table('entries')->insert($params['entries']);
+                app('db')->table('issued_groups')->insert($params['issued_groups']);
+                app('db')->table('cases')->whereIn('pk', $params['cases'])->update([
+                    'shelf_pk' => Null
+                ]);
+            });
+        } catch (Exception $e) {
+            return $e;
+        }
+        return False;
+    }
+
     public function confirm_issuing($params)
     {
         try {

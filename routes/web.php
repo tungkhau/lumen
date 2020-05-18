@@ -112,6 +112,9 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->post('return_issuing', 'DemandController@return_issuing');
 
 
+        $router->post('issue', 'DemandController@issue');
+
+
     });
     $router->group(['middleware' => 'role:inspector'], function () use ($router) {
         //Group 5

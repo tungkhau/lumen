@@ -155,6 +155,7 @@ class DemandTest extends TestCase
         $issued_items_2_pk = app('db')->table('issued_items')->where('issued_quantity', 2)->value('pk');
         $issued_items_3_pk = app('db')->table('issued_items')->where('issued_quantity', 4)->value('pk');
         $issuing_session = ['pk' => $pk,
+            'id' => 'DN-000023-B#01',
             'kind' => 'consuming',
             'user_pk' => 'cec3acf6-7194-11ea-bc55-0242ac130003',
             'container_pk' => 'b7e6cfec-7a6b-11ea-bc55-0242ac130003'];
@@ -177,14 +178,14 @@ class DemandTest extends TestCase
         $issued_items_2 = [
             'pk' => $issued_items_2_pk,
             'issued_quantity' => 2,
-            'kind' => 'consuming',
+            'kind' => 'consumed',
             'end_item_pk' => '85e17a50-7a76-11ea-bc55-0242ac130003',
             'issuing_session_pk' => $pk
         ];
         $issued_items_3 = [
             'pk' => $issued_items_3_pk,
             'issued_quantity' => 4,
-            'kind' => 'consuming',
+            'kind' => 'consumed',
             'end_item_pk' => '85e17b18-7a76-11ea-bc55-0242ac130003',
             'issuing_session_pk' => $pk
         ];

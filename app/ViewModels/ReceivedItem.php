@@ -74,7 +74,11 @@ class ReceivedItem extends ViewModel
             $is_opened = app('db')->table('imports')->where('pk', $imported_item->import_pk)->value('is_opened');
             if ($is_opened == True) return 'receiving';
             if ($imported_item->classified_item_pk == Null) return 'inspecting';
-            if (app('db')->table('received_groups')->where('received_item_pk', $received_item_pk)->where('case_pk', Null)->exists()) return 'done';
+            $received_groups = app('db')->table('received_groups')->where('received_item_pk', $received_item_pk)->get();
+            if (count($received_groups) == 0) return 'done';
+            foreach ($received_groups as $received_group) {
+                if ($received_group->case_pk == null) return 'done';
+            }
             return 'classified';
         }
         if ($kind == 'restored') {
@@ -215,7 +219,28 @@ class ReceivedItem extends ViewModel
 
     public function get_failed_item()
     {
+        $failed_items = app('db')->table('classified_items')->where('quality_state', 'failed')->where('sendbacking_session_pk', Null)->get();
+        $object = array();
+        foreach ($failed_items as $failed_item) {
+            $received_item = app('db')->table('imported_items')->where('classified_item_pk', $failed_item->pk)->first();
+            $received_groups = app('db')->table('received_groups')->where('received_item_pk', $received_item->pk)->get();
+            $cases = array();
+            foreach ($received_groups as $received_group) {
+                $case_id = app('db')->table('cases')->where('pk', $received_group->case_pk)->value('id');
+                $actual_quantity = ReceivedGroup::actual_quantity($received_group->pk);
+                $cases[] = [
+                    'id' => $case_id,
+                    'pk' => $received_group->case_pk,
+                    'quantity' => $actual_quantity
+                ];
+            }
+            $object[] = [
+                'classifiedItemPk' => $failed_item->pk,
+                'receivedQuantity' => $received_item->imported_quantity,
+                'cases' => $cases,
+                'received_item_pk' => $received_item->pk,
+            ];
+        }
+        return $this::received_item_translation($object);
     }
-
-
 }

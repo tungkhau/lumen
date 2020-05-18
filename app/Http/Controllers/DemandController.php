@@ -34,7 +34,7 @@ class DemandController extends Controller
 
         /* Map variables */
         $request['demand_pk'] = (string)Str::uuid();
-        $request['id'] = $this->id($request['conception_pk']);
+        $request['id'] = $this->demand_id($request['conception_pk']);
         $temp = array();
         foreach ($request['demanded_items'] as $demanded_item) {
             $temp[] = [
@@ -52,7 +52,7 @@ class DemandController extends Controller
         return response()->json(['success' => 'Tạo đơn cấp phát thành công'], 200);
     }
 
-    private function id($conception_pk)
+    private function demand_id($conception_pk)
     {
         $conception_id = app('db')->table('conceptions')->where('pk', $conception_pk)->value('id');
         $tmp = '%' . $conception_id . '%';
@@ -136,25 +136,119 @@ class DemandController extends Controller
         return response()->json(['success' => 'Mở đơn cấp phát thành công'], 200);
     }
 
-//    public function issue(Request $request)
-//    {
-//        /* Validate request, catch invalid errors(400) */
-//        $validation = $this->validator->issue($request);
-//        if ($validation) return $this->invalid_response($validation);
-//
-//        /* Check preconditions, return conflict errors(409) */
-//
-//        //Transfer to collections
-//        $issued_groups = collect($request['issued_groups']);
-//        $inCased_items = collect($request['inCased_items']);
-//        //Mapping
-//        $issued_groups = $issued_groups->mapToGroups(function ($item, $key) {
-//            return [$item['received_item_pk'] => $item['grouped_quantity']];
-//        });
-//        $inCased_items =  $inCased_items->mapToGroups(function ($item, $key) {
-//            return [$item['received_item_pk'] => $item['issued_quantity']];
-//        });
-//    }
+    public function issue(Request $request)
+    {
+        /* Validate request, catch invalid errors(400) */
+        $validation = $this->validator->issue($request);
+        if ($validation) return $this->invalid_response($validation);
+
+        /* Check preconditions, return conflict errors(409) */
+        $precondition = $this->precondition->issue($request);
+        if ($precondition) return $this->conflict_response();
+
+        /* Map variables */
+        $request['issuing_session_pk'] = (string)Str::uuid();
+        $issued_groups = $request['issued_groups'];
+        $cases = array();
+        $tmp1 = array();
+        foreach ($issued_groups as $issued_group) {
+            $tmp1[] = [
+                'accessory_pk' => ReceivedGroupController::accessory_pk($issued_group['received_item_pk']),
+                'grouped_quantity' => $issued_group['grouped_quantity']
+            ];
+            array_push($cases, $issued_group['case_pk']);
+        }
+        $cases = array_unique($cases);
+        $tmp2 = collect($tmp1)->mapToGroups(function ($item, $key) {
+            return [$item['accessory_pk'] => $item['grouped_quantity']];
+        });
+        $tmp3 = array();
+        foreach ($tmp2 as $accessory_pk => $grouped_quantities) {
+            $tmp3[$accessory_pk] = $grouped_quantities->sum();
+        }
+
+        $demanded_items = app('db')->table('demanded_items')->where('demand_pk', $request['demand_pk'])->select('accessory_pk', 'pk')->get();
+        $tmp4 = array();
+        foreach ($demanded_items as $demanded_item) {
+            $tmp4[$demanded_item->accessory_pk] = $demanded_item->pk;
+        }
+        $tmp5 = array();
+        foreach ($issued_groups as $issued_group) {
+            $tmp5[] = [
+                'received_item_pk' => $issued_group['received_item_pk'],
+                'accessory_pk' => ReceivedGroupController::accessory_pk($issued_group['received_item_pk']),
+                'case_pk' => $issued_group['case_pk'],
+                'grouped_quantity' => $issued_group['grouped_quantity'],
+            ];
+        }
+        //tmp 3 [acc_pk => issued_quantity]
+        //tmp4 [acc_pk => demanded_item_pk]
+        $issued_items = array();
+        $issued_groups = array();
+        foreach ($tmp4 as $a => $c) {
+            foreach ($tmp3 as $b => $d) {
+                if ($a == $b) {
+                    $issued_item_pk = (string)Str::uuid();
+                    $issued_items[] = [
+                        'pk' => $issued_item_pk,
+                        'issued_quantity' => $d,
+                        'kind' => 'consumed',
+                        'end_item_pk' => $c,
+                        'issuing_session_pk' => $request['issuing_session_pk'],
+                    ];
+                    foreach ($tmp5 as $item) {
+                        if ($item['accessory_pk'] == $b) {
+                            $issued_groups[] = [
+                                'received_item_pk' => $item['received_item_pk'],
+                                'case_pk' => $item['case_pk'],
+                                'grouped_quantity' => $item['grouped_quantity'],
+                                'kind' => 'consumed',
+                                'issuing_session_pk' => $request['issuing_session_pk'],
+                                'issued_item_pk' => $issued_item_pk,
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        $inCase_items = $request['inCased_items'];
+        $entries = array();
+        foreach ($inCase_items as $item) {
+            $inCase_item = EntryController::inCased_item($item['received_item_pk'], $item['case_pk']);
+            $entries[] = [
+                'received_item_pk' => $item['received_item_pk'],
+                'kind' => $inCase_item->kind,
+                'entry_kind' => 'issuing',
+                'quantity' => $item['issued_quantity'],
+                'session_pk' => $request['issuing_session_pk'],
+                'case_pk' => $item['case_pk'],
+                'accessory_pk' => $inCase_item->accessory_pk,
+            ];
+        }
+        $request['entries'] = $entries;
+        $request['issued_groups'] = $issued_groups;
+        $request['issued_items'] = $issued_items;
+        $request['cases'] = $cases;
+        $request['issuing_session_id'] = $this->issuing_id($request['demand_pk']);
+
+
+        $unexpected = $this->repository->issue($request);
+        if ($unexpected) return $this->unexpected_response();
+        return response()->json(['success' => 'Xuất phụ liệu thành công'], 200);
+    }
+
+    private function issuing_id($demand_pk)
+    {
+        $latest_issuing = app('db')->table('issuing_sessions')->where('container_pk', $demand_pk)->orderBy('executed_date', 'desc')->first();
+        $demand_id = (string)app('db')->table('demands')->where('pk', $demand_pk)->value('id');
+        if ($latest_issuing) {
+            $num = (int)substr($latest_issuing->id, -1, 2);
+            $num++;
+            $num = substr("00{$num}", -2);
+        } else $num = "01";
+        return (string)$demand_id . "#" . $num;
+    }
 
     public function confirm(Request $request)
     {
@@ -211,7 +305,6 @@ class DemandController extends Controller
         if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Hủy xuất phụ liệu thành công'], 200);
     }
-
 
     private function accessory_pk($received_item_pk)
     {
