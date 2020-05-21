@@ -111,7 +111,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->post('receive_restoration', 'RestorationController@receive');
         $router->post('return_issuing', 'DemandController@return_issuing');
 
-
+        $router->post('move', 'EntryController@move');
         $router->post('issue', 'DemandController@issue');
 
 
@@ -197,6 +197,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('workplaces', 'AngularController@get_workplace');
     $router->post('linkable-accessories', 'AngularController@get_linkable_accessory');
     $router->post('scanner', 'AngularController@get_scanner');
+    $router->post('suitable-cases', 'AngularController@get_suitable_case');
+
 });
 
 $router->get('/', function () use ($router) {
@@ -218,7 +220,6 @@ $router->post('change_password', 'UserController@change_password');
 //$router->post('', '');
 //$router->post('', '');
 //$router->post('', '');
-$router->post('move', 'EntryController@move');
 
 
 

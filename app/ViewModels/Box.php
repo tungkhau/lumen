@@ -2,6 +2,8 @@
 
 namespace App\ViewModels;
 
+use Illuminate\Support\Facades\DB;
+
 class Box extends ViewModel
 {
     public function get($params)
@@ -93,5 +95,47 @@ class Box extends ViewModel
             ];
         }
         return $object;
+    }
+
+    public function get_suitable_case($params)
+    {
+        $externality = $params['externality'];
+        $demand_pk = $externality['demand_pk'];
+        $accessory_pks = app('db')->table('demanded_items')->where('demand_pk', $demand_pk)->pluck('accessory_pk');
+        $entries = app('db')->table('entries')
+            ->where('quantity', '!=', Null)
+            ->whereIn('accessory_pk', $accessory_pks)
+            ->select((array('received_item_pk', 'case_pk', DB::raw('SUM(quantity) as inCasedQuantity'))))
+            ->groupBy('case_pk', 'received_item_pk')->get();
+        $tmp = array();
+        foreach ($entries as $entry) {
+            $tmp[] = [
+                'received_item_pk' => $entry->received_item_pk,
+                'case_pk' => $entry->case_pk
+            ];
+        }
+
+        $filters = app('db')->table('entries')
+            ->where('quantity', Null)
+            ->select((array(DB::raw('CONCAT(received_item_pk,"",case_pk) as filter'))))->pluck('filter')->toArray();
+
+        $case_pks = array();
+        foreach ($tmp as $key => $item) {
+            $temp = $item['received_item_pk'] . $item['case_pk'];
+            if (!in_array($temp, $filters)) array_push($case_pks, $item['case_pk']);
+        }
+        $unique_case_pks = array_unique($case_pks);
+
+        $tmp = array();
+        foreach ($unique_case_pks as $unique_case_pk) {
+            $case = app('db')->table('cases')->where('pk',$unique_case_pk)->first();
+            $shelf_id = app('db')->table('shelves')->where('pk',$case->shelf_pk)->value('name');
+            $tmp[] = [
+                'pk' => $unique_case_pk,
+                'shelfId' => $shelf_id,
+                'id' => $case->id,
+            ];
+        }
+        return $tmp;
     }
 }

@@ -608,16 +608,24 @@ class Shared extends ViewModel
                 }
                 $api = $params->header('api_token');
                 $user_pk = Crypt::decrypt($api)['pk'];
-                $tmp = app('db')->table('users')->where('pk', $user_pk)->value('workplace_pk');
-                $workplace_pk = app('db')->table('demands')->where('pk', $issuing->container_pk)->value('workplace_pk');
-                if ($tmp != $workplace_pk) {
-                    return $object;
-                }
-                return $object[] = [
-                    'kind' => 'issuing',
-                    'pk' => $pk,
-                    'id' => $issuing->id
-                ];
+                $user = app('db')->table('users')->where('pk', $user_pk)->select('role', 'workplace_pk')->first();
+                if ($user->role == 'mediator') {
+                    $workplace_pk = app('db')->table('demands')->where('pk', $issuing->container_pk)->value('workplace_pk');
+                    if ($user->workplace_pk != $workplace_pk) {
+                        return $object;
+                    }
+                    return $object[] = [
+                        'kind' => 'issuing',
+                        'pk' => $pk,
+                        'id' => $issuing->id
+                    ];
+                } elseif ($user->role == 'staff') {
+                    return $object[] = [
+                        'kind' => 'issuing',
+                        'pk' => $pk,
+                        'id' => $issuing->id
+                    ];
+                } else  return $object;
             }
             default :
                 return $object;

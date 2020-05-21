@@ -145,6 +145,12 @@ class DemandPrecondition
         $consuming_session = app('db')->table('issuing_sessions')->where('pk', $params['consuming_session_pk'])->first();
         $returned = $consuming_session->returning_session_pk == Null ? False : True;
         $confirmed = $consuming_session->progressing_session_pk == Null ? False : True;
-        return $returned || $confirmed;
+        $tmp1 = array();
+        foreach ($params['pairs'] as $pair) {
+            array_push($tmp1, $pair['case_pk']);
+        }
+        $tmp2 = app('db')->table('issued_groups')->where('issuing_session_pk', $params['consuming_session_pk'])->distinct('case_pk')->pluck('case_pk')->toArray();
+        $all_cases = array_diff($tmp1, $tmp2) == null;
+        return $returned || $confirmed || !$all_cases;
     }
 }

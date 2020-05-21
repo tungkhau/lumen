@@ -90,6 +90,13 @@ class AngularController extends Controller
         $this->block = $block;
     }
 
+    public function get_partner(Request $request)
+    {
+        $response = $this->partner->get($request);
+        $response = array_values($this::add_no($response));
+        return response()->json(['partners' => $response], 201);
+    }
+
     private static function add_no($input_object)
     {
         $i = 1;
@@ -100,13 +107,6 @@ class AngularController extends Controller
             $i++;
         }
         return $input_object;
-    }
-
-    public function get_partner(Request $request)
-    {
-        $response = $this->partner->get($request);
-        $response = array_values($this::add_no($response));
-        return response()->json(['partners' => $response], 201);
     }
 
     public function get_receiving(Request $request)
@@ -373,6 +373,13 @@ class AngularController extends Controller
         $response = $this->shared->get_scanner($request);
         return response()->json(['scanner' => $response], 201);
     }
+
+    public function get_suitable_case(Request $request)
+    {
+        $response = $this->case->get_suitable_case($request);
+        return response()->json(['suitable-cases' => $response], 201);
+    }
+
 
 }
 
