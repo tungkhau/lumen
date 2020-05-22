@@ -9,7 +9,9 @@ use App\ViewModels\CheckingSession;
 use App\ViewModels\ClassifyingSession;
 use App\ViewModels\Conception;
 use App\ViewModels\CountingSession;
+use App\ViewModels\InBlockedItem;
 use App\ViewModels\InCasedItem;
+use App\ViewModels\InShelvedItem;
 use App\ViewModels\IssuedGroup;
 use App\ViewModels\IssuedItem;
 use App\ViewModels\Issuing;
@@ -58,9 +60,11 @@ class AngularController extends Controller
     private $shelf;
     private $modifying_session;
     private $block;
+    private $in_shelved_item;
+    private $in_blocked_item;
 
 
-    public function __construct(Block $block, ModifyingSession $modifying_session, Shelf $shelf, IssuedGroup $issued_group, IssuedItem $issued_item, Issuing $issuing, SendbackingSession $sendbacking_session, Box $case, InCasedItem $in_cased_item, ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_seesion, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
+    public function __construct(InBlockedItem $in_blocked_item, InShelvedItem $in_shelved_item, Block $block, ModifyingSession $modifying_session, Shelf $shelf, IssuedGroup $issued_group, IssuedItem $issued_item, Issuing $issuing, SendbackingSession $sendbacking_session, Box $case, InCasedItem $in_cased_item, ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_session, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
     {
         $this->receiving = $receiving;
         $this->accessory = $accessory;
@@ -75,7 +79,7 @@ class AngularController extends Controller
         $this->shared = $shared;
         $this->report = $report;
         $this->checking_session = $checking_session;
-        $this->counting_session = $counting_seesion;
+        $this->counting_session = $counting_session;
         $this->storing_session = $storing_session;
         $this->receiving_session = $receiving_session;
         $this->classifying_session = $classifying_session;
@@ -88,6 +92,8 @@ class AngularController extends Controller
         $this->shelf = $shelf;
         $this->modifying_session = $modifying_session;
         $this->block = $block;
+        $this->in_shelved_item = $in_shelved_item;
+        $this->in_blocked_item = $in_blocked_item;
     }
 
     public function get_partner(Request $request)
@@ -298,6 +304,21 @@ class AngularController extends Controller
         return response()->json(['in-cased-items' => $response], 201);
     }
 
+    public function get_in_shelved_item(Request $request)
+    {
+        $response = $this->in_shelved_item->get($request);
+        $response = array_values($this::add_no($response));
+        return response()->json(['in-shelved-items' => $response], 201);
+    }
+
+    public function get_in_blocked_item(Request $request)
+    {
+        $response = $this->in_blocked_item->get($request);
+        $response = array_values($this::add_no($response));
+        return response()->json(['in-blocked-items' => $response], 201);
+    }
+
+
     public function get_sendbacking_session(Request $request)
     {
         $response = $this->sendbacking_session->get($request);
@@ -379,7 +400,6 @@ class AngularController extends Controller
         $response = $this->case->get_suitable_case($request);
         return response()->json(['suitable-cases' => $response], 201);
     }
-
 
 }
 
