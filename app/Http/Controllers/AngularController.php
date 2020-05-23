@@ -227,6 +227,13 @@ class AngularController extends Controller
         return response()->json(['histories' => $response], 201);
     }
 
+    public function get_short_history(Request $request)
+    {
+        $response = $this->shared->get_short_history($request);
+        $response = array_values($this::add_no($response));
+        return response()->json(['short-histories' => $response], 201);
+    }
+
     public function get_cased_received_group(Request $request)
     {
         $response = $this->received_group->get_cased_received_group($request);
@@ -317,7 +324,6 @@ class AngularController extends Controller
         $response = array_values($this::add_no($response));
         return response()->json(['in-blocked-items' => $response], 201);
     }
-
 
     public function get_sendbacking_session(Request $request)
     {

@@ -198,6 +198,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('linkable-accessories', 'AngularController@get_linkable_accessory');
     $router->post('scanner', 'AngularController@get_scanner');
     $router->post('suitable-cases', 'AngularController@get_suitable_case');
+    $router->post('short-histories', 'AngularController@get_short_history');
+
 
 });
 

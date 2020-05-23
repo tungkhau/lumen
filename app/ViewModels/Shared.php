@@ -426,6 +426,149 @@ class Shared extends ViewModel
         return $this::user_translation($this::sort_response($history, 'executedDate'));
     }
 
+    public function get_short_history($params)
+    {
+        $api = $params->header('api_token');
+        $user_pk = Crypt::decrypt($api)['pk'];
+        $history = array();
+
+        $receiving_sessions = app('db')->table('receiving_sessions')->where('user_pk', $user_pk)->get();
+        foreach ($receiving_sessions as $receiving_session) {
+            if ($receiving_session->kind == 'importing') {
+                $history[] = [
+                    'pk' => $receiving_session->pk,
+                    'type' => 'Ghi nhận phiếu nhập',
+                    'executedDate' => $receiving_session->executed_date,
+                ];
+            } elseif ($receiving_session->kind == 'restoring') {
+                $history[] = [
+                    'pk' => $receiving_session->pk,
+                    'type' => 'Ghi nhận phiếu trả',
+                    'executedDate' => $receiving_session->executed_date,
+                ];
+            }
+        }
+
+        $counting_sessions = app('db')->table('counting_sessions')->where('user_pk', $user_pk)->get();
+        foreach ($counting_sessions as $counting_session) {
+            $history[] = [
+                'pk' => $counting_session->pk,
+                'type' => 'Kiểm tra số lượng',
+                'executedDate' => $counting_session->executed_date,
+            ];
+        }
+
+        $arranging_sessions = app('db')->table('arranging_sessions')->where('user_pk', $user_pk)->get();
+        foreach ($arranging_sessions as $arranging_session) {
+            $history[] = [
+                'pk' => $arranging_session->pk,
+                'type' => 'Sắp xếp cụm phụ liệu',
+                'executedDate' => $arranging_session->executed_date,
+            ];
+        }
+
+        $storing_sessions = app('db')->table('storing_sessions')->where('user_pk', $user_pk)->get();
+        foreach ($storing_sessions as $storing_session) {
+            $history[] = [
+                'pk' => $storing_session->pk,
+                'type' => 'Lưu kho cụm phụ liệu',
+                'executedDate' => $storing_session->executed_date,
+            ];
+        }
+
+        $adjusting_sessions = app('db')->table('adjusting_sessions')->where('user_pk', $user_pk)->get();
+        foreach ($adjusting_sessions as $adjusting_session) {
+            $history[] = [
+                'pk' => $adjusting_session->pk,
+                'type' => 'Hiệu chỉnh tồn kho',
+                'executedDate' => $adjusting_session->executed_date,
+            ];
+        }
+
+        $discarding_sessions = app('db')->table('discarding_sessions')->where('user_pk', $user_pk)->get();
+        foreach ($discarding_sessions as $discarding_session) {
+            $history[] = [
+                'pk' => $discarding_session->pk,
+                'type' => 'Hủy tồn kho',
+                'executedDate' => $discarding_session->executed_date,
+            ];
+        }
+
+        $issuing_sessions = app('db')->table('issuing_sessions')->where('user_pk', $user_pk)->get();
+        foreach ($issuing_sessions as $issuing_session) {
+            $history[] = [
+                'pk' => $issuing_session->pk,
+                'type' => 'Xuất kho',
+                'executedDate' => $issuing_session->executed_date,
+            ];
+        }
+
+        $returning_sessions = app('db')->table('returning_sessions')->where('user_pk', $user_pk)->get();
+        foreach ($returning_sessions as $returning_session) {
+            $history[] = [
+                'pk' => $returning_session->pk,
+                'type' => 'Hồi kho phụ liệu xuất',
+                'executedDate' => $returning_session->executed_date,
+            ];
+        }
+
+        $classifying_sessions = app('db')->table('classifying_sessions')->where('user_pk', $user_pk)->get();
+        foreach ($classifying_sessions as $classifying_session) {
+            $history[] = [
+                'pk' => $classifying_session->pk,
+                'type' => 'Đánh giá chất lượng',
+                'executedDate' => $classifying_session->executed_date,
+            ];
+        }
+
+        $sendbacking_sessions = app('db')->table('sendbacking_sessions')->where('user_pk', $user_pk)->get();
+        foreach ($sendbacking_sessions as $sendbacking_session) {
+            $history[] = [
+                'pk' => $sendbacking_session->pk,
+                'type' => 'Gửi trả phụ liệu',
+                'executedDate' => $sendbacking_session->executed_date,
+            ];
+        }
+
+        $confirming_sessions = app('db')->table('progressing_sessions')->where('kind', 'confirming')->where('user_pk', $user_pk)->get();
+        foreach ($confirming_sessions as $confirming_session) {
+            $history[] = [
+                'pk' => $confirming_session->pk,
+                'type' => 'Xác nhận nhận phụ liệu',
+                'executedDate' => $confirming_session->executed_date,
+            ];
+        }
+
+        $restorations = app('db')->table('restorations')->where('is_confirmed', True)->where('user_pk', $user_pk)->get();
+        foreach ($restorations as $restoration) {
+            $history[] = [
+                'pk' => $restoration->pk,
+                'type' => 'Trả phụ liệu',
+                'executedDate' => $restoration->created_date,
+            ];
+        }
+
+        $moving_sessions = app('db')->table('moving_sessions')->where('user_pk', $user_pk)->get();
+        foreach ($moving_sessions as $moving_session) {
+            $history[] = [
+                'pk' => $moving_session->pk,
+                'type' => 'Sắp xếp phụ liệu tồn',
+                'executedDate' => $moving_session->executed_date,
+            ];
+        }
+
+        $replacing_sessions = app('db')->table('replacing_sessions')->where('user_pk', $user_pk)->get();
+        foreach ($replacing_sessions as $replacing_session) {
+            $history[] = [
+                'pk' => $replacing_session->pk,
+                'type' => 'Chuyển đơn vị chứa',
+                'executedDate' => $replacing_session->executed_date,
+            ];
+        }
+
+        return $this::sort_response($history, 'executedDate');
+    }
+
     public function get_type()
     {
         $types = app('db')->table('types')->get();
