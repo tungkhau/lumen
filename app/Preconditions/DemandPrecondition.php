@@ -11,7 +11,7 @@ class DemandPrecondition
     public function create($params)
     {
         $workplace_name = app('db')->table('workplaces')->where('pk', $params['workplace_pk'])->value('name');
-        if ($workplace_name == 'office' || $workplace_name == 'warehouse') return True;
+        if ($workplace_name == 'Văn phòng' || $workplace_name == 'Kho phụ liệu') return True;
 
         $accessory_pks = array();
         foreach ($params['demanded_items'] as $demanded_item) {

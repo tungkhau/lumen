@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class WorkplacesTableSeeder extends Seeder
 {
@@ -13,15 +11,6 @@ class WorkplacesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('workplaces')->insert([
-            'pk' => (string)Str::uuid(),
-            'name' => 'warehouse'
-        ]);
-        DB::table('workplaces')->insert([
-            'pk' => (string)Str::uuid(),
-            'name' => 'office'
-        ]);
-
         app('db')->table('workplaces')->insert([
             'pk' => '38eced6a-6dd8-11ea-bc55-0242ac130003',
             'name' => 'Văn phòng',
