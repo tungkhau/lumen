@@ -101,7 +101,28 @@ class Box extends ViewModel
     {
         $externality = $params['externality'];
         $demand_pk = $externality['demand_pk'];
-        $accessory_pks = app('db')->table('demanded_items')->where('demand_pk', $demand_pk)->pluck('accessory_pk');
+        $tmp = app('db')->table('demanded_items')->where('demand_pk', $demand_pk)->select('demanded_quantity', 'accessory_pk', 'pk')->get();
+        $tmp1 = array(); //list demanded_item_pk
+        foreach ($tmp as $i) {
+            array_push($tmp1, $i->pk);
+        }
+        $tmp2 = app('db')->table('issued_items')->whereIn('end_item_pk', $tmp1)->where('is_returned', 0)
+            ->select((array('end_item_pk', DB::raw('SUM(issued_quantity) as issued_quantity'))))
+            ->groupBy('end_item_pk')->get()->toArray();
+        $eli = array(); //eliminated accessory_pk list
+        foreach ($tmp as $demanded_item) {
+            foreach ($tmp2 as $issued_item) {
+                if ($issued_item->end_item_pk == $demanded_item->pk && $issued_item->issued_quantity == $demanded_item->demanded_quantity) {
+                    array_push($eli, $demanded_item->accessory_pk);
+                }
+            }
+        }
+        $accessory_pks = array();
+        foreach ($tmp as $item) {
+            if (!in_array($item->accessory_pk, $eli)) array_push($accessory_pks, $item->accessory_pk);
+        }
+
+
         $entries = app('db')->table('entries')
             ->where('quantity', '!=', Null)
             ->whereIn('accessory_pk', $accessory_pks)
@@ -109,10 +130,11 @@ class Box extends ViewModel
             ->groupBy('case_pk', 'received_item_pk')->get();
         $tmp = array();
         foreach ($entries as $entry) {
-            $tmp[] = [
-                'received_item_pk' => $entry->received_item_pk,
-                'case_pk' => $entry->case_pk
-            ];
+            if ($entry->inCasedQuantity != 0)
+                $tmp[] = [
+                    'received_item_pk' => $entry->received_item_pk,
+                    'case_pk' => $entry->case_pk
+                ];
         }
 
         $filters = app('db')->table('entries')
@@ -128,8 +150,8 @@ class Box extends ViewModel
 
         $tmp = array();
         foreach ($unique_case_pks as $unique_case_pk) {
-            $case = app('db')->table('cases')->where('pk',$unique_case_pk)->first();
-            $shelf_id = app('db')->table('shelves')->where('pk',$case->shelf_pk)->value('name');
+            $case = app('db')->table('cases')->where('pk', $unique_case_pk)->first();
+            $shelf_id = app('db')->table('shelves')->where('pk', $case->shelf_pk)->value('name');
             $tmp[] = [
                 'pk' => $unique_case_pk,
                 'shelfId' => $shelf_id,

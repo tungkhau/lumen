@@ -28,6 +28,13 @@ class InCasedItem extends ViewModel
                 ->whereIn('case_pk', $externality['case_pks'])
                 ->select((array('received_item_pk', 'accessory_pk', 'case_pk', DB::raw('SUM(quantity) as inCasedQuantity'))))
                 ->groupBy('case_pk', 'received_item_pk')->get();
+        } elseif ($externality != Null && array_key_exists('moving_session_pks', $externality)) {
+            $entries = app('db')->table('entries')
+                ->where('quantity', '!=', Null)
+                ->where('entry_kind', 'in')
+                ->whereIn('session_pk', $externality['moving_session_pks'])
+                ->select((array('received_item_pk', 'accessory_pk', 'case_pk', DB::raw('SUM(quantity) as inCasedQuantity'))))
+                ->groupBy('case_pk', 'received_item_pk')->get();
         } else {
             $entries = app('db')->table('entries')
                 ->where('quantity', '!=', Null)

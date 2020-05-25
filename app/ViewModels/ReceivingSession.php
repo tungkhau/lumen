@@ -79,6 +79,7 @@ class ReceivingSession extends ViewModel
                 $source_name = app('db')->table('suppliers')->where('pk', $supplier_pk)->value('name');
                 $receiving_session = app('db')->table('receiving_sessions')->where('pk', $item['pk'])->first();
                 $input_object[$key] += [
+                    'isMutable' => $import->is_opened,
                     'executedDate' => $receiving_session->executed_date,
                     'user_pk' => $receiving_session->user_pk,
                     'receivingId' => $import->id,
@@ -92,6 +93,7 @@ class ReceivingSession extends ViewModel
                 $workplace_pk = app('db')->table('users')->where('pk', $restoration->user_pk)->value('workplace_pk');
                 $source_name = app('db')->table('workplaces')->where('pk', $workplace_pk)->value('name');
                 $input_object[$key] += [
+                    'isMutable' => False,
                     'executedDate' => $receiving_session->executed_date,
                     'user_pk' => $receiving_session->user_pk,
                     'receivingId' => $restoration->id,

@@ -170,7 +170,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('blocks', 'AngularController@get_block');
     $router->post('checking-sessions', 'AngularController@get_checking_session');
     $router->post('classifying-sessions', 'AngularController@get_classifying_session');
-    $router->post('confirming-sessions', 'AngularController@get_confirming_session');
+    $router->post('progressing-sessions', 'AngularController@get_progressing_session');
     $router->post('counting-sessions', 'AngularController@get_counting_session');
     $router->post('in-blocked-items', 'AngularController@get_in_blocked_item');
     $router->post('in-cased-items', 'AngularController@get_in_cased_item');
@@ -199,7 +199,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('scanner', 'AngularController@get_scanner');
     $router->post('suitable-cases', 'AngularController@get_suitable_case');
     $router->post('short-histories', 'AngularController@get_short_history');
-
+    $router->post('returning-sessions', 'AngularController@get_returning_session');
 
 });
 

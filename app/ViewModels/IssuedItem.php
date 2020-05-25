@@ -40,6 +40,17 @@ class IssuedItem extends ViewModel
         if ($externality != Null && array_key_exists('issuing_pks', $externality)) {
             $pks = array_intersect(app('db')->table('issued_items')->whereIn('issuing_session_pk', $externality['issuing_pks'])->pluck('pk')->toArray(), $pks);
         }
+
+        if ($externality != Null && array_key_exists('returning_session_pks', $externality)) {
+            $issuing_session_pks = app('db')->table('issuing_sessions')->whereIn('returning_session_pk', $externality['returning_session_pks'])->pluck('pk')->toArray();
+            $pks = array_intersect(app('db')->table('issued_items')->whereIn('issuing_session_pk', $issuing_session_pks)->pluck('pk')->toArray(), $pks);
+        }
+
+        if ($externality != Null && array_key_exists('progressing_session_pks', $externality)) {
+            $issuing_session_pks = app('db')->table('issuing_sessions')->whereIn('progressing_session_pk', $externality['progressing_session_pks'])->pluck('pk')->toArray();
+            $pks = array_intersect(app('db')->table('issued_items')->whereIn('issuing_session_pk', $issuing_session_pks)->pluck('pk')->toArray(), $pks);
+        }
+
         foreach ($input_object as $key => $item) {
             if (!in_array($item['pk'], $pks)) unset($input_object[$key]);
         }

@@ -106,6 +106,7 @@ class ReceivedGroup extends ViewModel
                     'actualQuantity' => $this::actual_quantity($restored_group->pk),
                     'isCounted' => $restored_group->counting_session_pk == Null ? False : True,
                     'isCountable' => $this::is_countable($restored_group->pk),
+                    'isCheckable' => False,
                     'isStorable' => $this::is_storable($restored_group->pk),
                     'received_item_pk' => $restored_group->received_item_pk,
                 ];

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\ViewModels\Accessory;
+use App\ViewModels\ArrangingSession;
 use App\ViewModels\Block;
 use App\ViewModels\Box;
 use App\ViewModels\CheckingSession;
 use App\ViewModels\ClassifyingSession;
 use App\ViewModels\Conception;
 use App\ViewModels\CountingSession;
+use App\ViewModels\History;
 use App\ViewModels\InBlockedItem;
 use App\ViewModels\InCasedItem;
 use App\ViewModels\InShelvedItem;
@@ -16,12 +18,16 @@ use App\ViewModels\IssuedGroup;
 use App\ViewModels\IssuedItem;
 use App\ViewModels\Issuing;
 use App\ViewModels\ModifyingSession;
+use App\ViewModels\MovingSession;
 use App\ViewModels\Partner;
+use App\ViewModels\ProgressingSession;
 use App\ViewModels\ReceivedGroup;
 use App\ViewModels\ReceivedItem;
 use App\ViewModels\Receiving;
 use App\ViewModels\ReceivingSession;
+use App\ViewModels\ReplacingSession;
 use App\ViewModels\Report;
+use App\ViewModels\ReturningSession;
 use App\ViewModels\RootIssuedItem;
 use App\ViewModels\RootIssuing;
 use App\ViewModels\RootReceivedItem;
@@ -62,9 +68,15 @@ class AngularController extends Controller
     private $block;
     private $in_shelved_item;
     private $in_blocked_item;
+    private $arranging_session;
+    private $moving_session;
+    private $replacing_session;
+    private $history;
+    private $progressing_session;
+    private $returning_session;
 
 
-    public function __construct(InBlockedItem $in_blocked_item, InShelvedItem $in_shelved_item, Block $block, ModifyingSession $modifying_session, Shelf $shelf, IssuedGroup $issued_group, IssuedItem $issued_item, Issuing $issuing, SendbackingSession $sendbacking_session, Box $case, InCasedItem $in_cased_item, ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_session, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
+    public function __construct(ReturningSession $returning_session, ProgressingSession $progressing_session, History $history, ReplacingSession $replacing_session, MovingSession $moving_session, ArrangingSession $arranging_session, InBlockedItem $in_blocked_item, InShelvedItem $in_shelved_item, Block $block, ModifyingSession $modifying_session, Shelf $shelf, IssuedGroup $issued_group, IssuedItem $issued_item, Issuing $issuing, SendbackingSession $sendbacking_session, Box $case, InCasedItem $in_cased_item, ReceivingSession $receiving_session, StoringSession $storing_session, ClassifyingSession $classifying_session, CountingSession $counting_session, CheckingSession $checking_session, Report $report, Shared $shared, RootIssuing $root_issuing, RootIssuedItem $root_issued_item, Partner $partner, Receiving $receiving, Accessory $accessory, ReceivedItem $received_item, ReceivedGroup $received_group, RootReceivedItem $root_received_item, RootReceiving $root_receiving, Conception $conception)
     {
         $this->receiving = $receiving;
         $this->accessory = $accessory;
@@ -94,6 +106,12 @@ class AngularController extends Controller
         $this->block = $block;
         $this->in_shelved_item = $in_shelved_item;
         $this->in_blocked_item = $in_blocked_item;
+        $this->arranging_session = $arranging_session;
+        $this->moving_session = $moving_session;
+        $this->replacing_session = $replacing_session;
+        $this->history = $history;
+        $this->progressing_session = $progressing_session;
+        $this->returning_session = $returning_session;
     }
 
     public function get_partner(Request $request)
@@ -148,6 +166,20 @@ class AngularController extends Controller
         $response = $this->root_received_item->get($request);
         $response = array_values($this::add_no($response));
         return response()->json(['root-received-items' => $response], 201);
+    }
+
+    public function get_progressing_session(Request $request)
+    {
+        $response = $this->progressing_session->get($request);
+        $response = array_values($this::add_no($response));
+        return response()->json(['progressing-sessions' => $response], 201);
+    }
+
+    public function get_returning_session(Request $request)
+    {
+        $response = $this->returning_session->get($request);
+        $response = array_values($this::add_no($response));
+        return response()->json(['returning-sessions' => $response], 201);
     }
 
     public function get_root_receiving(Request $request)
@@ -222,14 +254,14 @@ class AngularController extends Controller
 
     public function get_history()
     {
-        $response = $this->shared->get_history();
+        $response = $this->history->get_history();
         $response = array_values($this::add_no($response));
         return response()->json(['histories' => $response], 201);
     }
 
     public function get_short_history(Request $request)
     {
-        $response = $this->shared->get_short_history($request);
+        $response = $this->history->get_short_history($request);
         $response = array_values($this::add_no($response));
         return response()->json(['short-histories' => $response], 201);
     }
@@ -405,6 +437,24 @@ class AngularController extends Controller
     {
         $response = $this->case->get_suitable_case($request);
         return response()->json(['suitable-cases' => $response], 201);
+    }
+
+    public function get_arranging_session(Request $request)
+    {
+        $response = $this->arranging_session->get($request);
+        return response()->json(['arranging-sessions' => $response], 201);
+    }
+
+    public function get_moving_session(Request $request)
+    {
+        $response = $this->moving_session->get($request);
+        return response()->json(['moving-sessions' => $response], 201);
+    }
+
+    public function get_replacing_session(Request $request)
+    {
+        $response = $this->replacing_session->get($request);
+        return response()->json(['replacing-sessions' => $response], 201);
     }
 
 }

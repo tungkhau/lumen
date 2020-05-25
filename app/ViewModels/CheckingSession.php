@@ -22,7 +22,7 @@ class CheckingSession extends ViewModel
         }
 
         if ($externality != Null && array_key_exists('checking_session_pks', $externality)) {
-            $pks = array_intersect($externality['checking_sessions_pks'], $pks);
+            $pks = array_intersect($externality['checking_session_pks'], $pks);
         }
 
         if ($externality != Null && array_key_exists('received_group_pks', $externality)) {
