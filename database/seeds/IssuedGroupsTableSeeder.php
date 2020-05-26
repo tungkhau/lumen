@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 
 class IssuedGroupsTableSeeder extends Seeder
@@ -16,7 +15,7 @@ class IssuedGroupsTableSeeder extends Seeder
         app('db')->table('issued_groups')->insert([
             'pk' => 'a561af72-8227-11ea-bc55-0242ac130003',
             'kind' => 'consumed',
-            'grouped_quantity' => 40,
+            'grouped_quantity' => 10,
             'received_item_pk' => '55296414-79b2-11ea-bc55-0242ac130003',
             'issuing_session_pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
             'issued_item_pk' => 'a561ab8a-8227-11ea-bc55-0242ac130003',
@@ -25,7 +24,7 @@ class IssuedGroupsTableSeeder extends Seeder
         app('db')->table('issued_groups')->insert([
             'pk' => '82770cf0-8254-11ea-bc55-0242ac130003',
             'kind' => 'consumed',
-            'grouped_quantity' => 40,
+            'grouped_quantity' => 10,
             'received_item_pk' => '55296414-79b2-11ea-bc55-0242ac130003',
             'issuing_session_pk' => 'a561aa90-8227-11ea-bc55-0242ac130003',
             'issued_item_pk' => 'a561ab8a-8227-11ea-bc55-0242ac130003',

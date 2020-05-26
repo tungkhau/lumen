@@ -58,9 +58,10 @@ class DemandController extends Controller
         $tmp = '%' . $conception_id . '%';
         $latest_demand = app('db')->table('demands')->where('id', 'like', $tmp)->orderBy('created_date', 'desc')->first();
         if ($latest_demand) {
-            $key = substr($latest_demand->id, -1, 1);
+            $key = (int)substr($latest_demand->id, -2, 2);
             $key++;
-        } else $key = "A";
+            $key = substr("00{$key}", -2);
+        } else $key = "01";
         return (string)"DN" . "-" . $conception_id . "-" . $key;
     }
 
@@ -96,7 +97,7 @@ class DemandController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->delete($request);
-        if ($unexpected) return response($unexpected->getMessage());
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Xóa đơn cấp phát thành công'], 200);
     }
 
@@ -243,7 +244,7 @@ class DemandController extends Controller
         $latest_issuing = app('db')->table('issuing_sessions')->where('container_pk', $demand_pk)->orderBy('executed_date', 'desc')->first();
         $demand_id = (string)app('db')->table('demands')->where('pk', $demand_pk)->value('id');
         if ($latest_issuing) {
-            $num = (int)substr($latest_issuing->id, -1, 2);
+            $num = (int)substr($latest_issuing->id, -2, 2);
             $num++;
             $num = substr("00{$num}", -2);
         } else $num = "01";
@@ -304,30 +305,5 @@ class DemandController extends Controller
         $unexpected = $this->repository->return_issuing($request);
         if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Hủy xuất phụ liệu thành công'], 200);
-    }
-
-    private function accessory_pk($received_item_pk)
-    {
-        $kind = app('received_groups')->where('received_item_pk', $received_item_pk)->distinct('kind')->select('kind')->first()->kind;
-        switch ($kind) {
-            case 'imported' :
-            {
-                $accessory_pk = app('db')->table('imported_items')->where('pk', $received_item_pk)
-                    ->join('ordered_items', 'imported_items.ordered_item_pk', '=', 'ordered_items.pk')->value('accessory_pk');
-                break;
-            }
-            case 'restored' :
-            {
-                $accessory_pk = app('db')->table('restored_items')->where('pk', $received_item_pk)->value('accessory_pk');
-                break;
-            }
-            default :
-            {
-                $accessory_pk = app('db')->table('in_transferred_items')->where('pk', $received_item_pk)
-                    ->join('in_distributed_items', 'in_transferred_items.in_distributed_item_pk', '=', 'in_distributed_items.pk')->value('accessory_pk');
-                break;
-            }
-        }
-        return $accessory_pk;
     }
 }

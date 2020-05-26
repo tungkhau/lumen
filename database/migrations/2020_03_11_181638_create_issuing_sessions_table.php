@@ -16,7 +16,7 @@ class CreateIssuingSessionsTable extends Migration
     {
         Schema::create('issuing_sessions', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
-            $table->string('id', 20)->unique();
+            $table->string('id', 21)->unique();
             $table->enum('kind', ['consuming', 'transferring']);
             $table->dateTime('executed_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('container_pk'); // {consuming} demand >< {transferring} out_distribution
