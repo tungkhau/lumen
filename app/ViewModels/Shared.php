@@ -213,14 +213,16 @@ class Shared extends ViewModel
 
     public function get_workplace()
     {
-        $received_workplaces = app('db')->table('workplaces')->get();
+        $workplaces = app('db')->table('workplaces')->get();
         $object = array();
-        foreach ($received_workplaces as $received_workplace) {
-            $user = app('db')->table('users')->where('workplace_pk', $received_workplace->pk)->exists();
+        foreach ($workplaces as $workplace) {
+            $user = app('db')->table('users')->where('workplace_pk', $workplace->pk)->exists();
+            if ($workplace->name == 'Kho phụ liệu' || $workplace->name == 'Văn phòng') $is_mutable = False;
+            else $is_mutable = !$user;
             $object[] = [
-                'pk' => $received_workplace->pk,
-                'name' => $received_workplace->name,
-                'isMutable' => !$user
+                'pk' => $workplace->pk,
+                'name' => $workplace->name,
+                'isMutable' => $is_mutable
             ];
         }
         return $object;
@@ -358,5 +360,24 @@ class Shared extends ViewModel
             default :
                 return $object;
         }
+    }
+
+    public function get_user()
+    {
+        $users = app('db')->table('users')->where('role', '!=', 'admin')->get();
+        $object = array();
+        foreach ($users as $user) {
+            $wl = app('db')->table('workplaces')->where('pk', $user->workplace_pk)->value('name');
+            $object[] = [
+                'pk' => $user->pk,
+                'name' => $user->name,
+                'id' => $user->id,
+                'role' => $user->role,
+                'workplaceName' => $wl,
+                'isActive' => $user->is_active ? 'active' : 'inactive',
+                'createdDate' => $user->created_date,
+            ];
+        }
+        return $this::sort_response($object, 'createdDate');
     }
 }

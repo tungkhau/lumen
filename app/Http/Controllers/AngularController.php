@@ -457,5 +457,12 @@ class AngularController extends Controller
         return response()->json(['replacing-sessions' => $response], 201);
     }
 
+    public function get_user(Request $request)
+    {
+        $response = $this->shared->get_user();
+        $response = array_values($this::add_no($response));
+        return response()->json(['users' => $response], 201);
+    }
+
 }
 
