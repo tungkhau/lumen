@@ -19,7 +19,7 @@ class CasePrecondition
                 $inCased_quantity += $entry;
             }
         }
-        $contained = $inCased_quantity == 0 ? False : True;
+        $contained = $inCased_quantity != 0;
         return $issued_groups || $received_groups || $contained;
     }
 
