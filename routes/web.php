@@ -13,9 +13,6 @@
 
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
-    $router->get('/inside', function () use ($router) {
-        echo phpinfo();
-    });
     $router->group(['middleware' => 'role:merchandiser'], function () use ($router) {
         //Group 2
         //Customer
@@ -202,26 +199,11 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('returning-sessions', 'AngularController@get_returning_session');
 
 });
-
-$router->get('/', function () use ($router) {
-    echo phpinfo();
-});
-
-//Group 0
-//$router->get('/', function () use ($router) {
-//    echo phpinfo();
-////    return \Illuminate\Support\Str::random(32);
-//});
-
 ////Group 9
 $router->post('login_desktop', 'AuthController@login_desktop');
 $router->post('login_mobile', 'AuthController@login_mobile');
 $router->post('logout', 'AuthController@logout');
 $router->post('change_password', 'UserController@change_password');
-
-//$router->post('', '');
-//$router->post('', '');
-//$router->post('', '');
 
 
 

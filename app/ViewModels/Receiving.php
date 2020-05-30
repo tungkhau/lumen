@@ -189,9 +189,10 @@ class Receiving extends ViewModel
             }
 
             $imported_item_pks = app('db')->table('imported_items')->where('import_pk', $receiving_pk)->pluck('pk')->toArray();
-            $checked_or_counted = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->where([['counting_session_pk', '!=', Null], ['checking_session_pk', '!=', Null]])->exists();
+            $checked = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->where('checking_session_pk', '!=', Null)->exists();
+            $counted = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->where('counting_session_pk', '!=', Null)->exists();
             $classified = app('db')->table('imported_items')->where([['import_pk', $receiving_pk], ['classified_item_pk', '!=', Null]])->exists();
-            return !$checked_or_counted || $classified;
+            return !$checked && !$counted && !$classified;
         }
         return Null;
     }

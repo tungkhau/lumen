@@ -34,11 +34,12 @@ class ImportPrecondition
     public function turn_on($params)
     {
         $imported_item_pks = app('db')->table('imported_items')->where('import_pk', $params['import_pk'])->pluck('pk')->toArray();
-        $checked_or_counted = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->where([['counting_session_pk', '!=', Null], ['checking_session_pk', '!=', Null]])->exists();
+        $checked = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->where('checking_session_pk', '!=', Null)->exists();
+        $counted = app('db')->table('received_groups')->whereIn('received_item_pk', $imported_item_pks)->where('counting_session_pk', '!=', Null)->exists();
         $owner = app('db')->table('imports')->where('pk', $params['import_pk'])->value('user_pk') == $params['user_pk'];
         $classified = app('db')->table('imported_items')->where([['import_pk', $params['import_pk']], ['classified_item_pk', '!=', Null]])->exists();
 
-        return !$owner || $classified || $checked_or_counted;
+        return !$owner || $classified || $checked || $counted;
     }
 
     public function edit_receiving($params)

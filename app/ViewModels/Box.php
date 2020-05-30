@@ -55,9 +55,11 @@ class Box extends ViewModel
         $object = array();
         foreach ($input_object as $item) {
             $case = app('db')->table('cases')->where('pk', $item['pk'])->first();
+            $shelf_id = app('db')->table('shelves')->where('pk', $case->shelf_pk)->value('name');
             $object[] = [
                 'pk' => $item['pk'],
                 'id' => $case->id,
+                'shelfId' => $shelf_id,
                 'isEmpty' => $this::is_empty($case->pk),
                 'createdDate' => $case->created_at,
             ];

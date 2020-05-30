@@ -30,7 +30,7 @@ class CasePrecondition
         if (count($received_groups)) {
             foreach ($received_groups as $received_group) {
                 if ($received_group->kind == 'imported') {
-                    if (app('db')->table('imported_items')->join('classified_items', 'imported_items.classified_item_pk', '=', 'classified_items.pk')->where('imported_items.pk', $received_group->pk)->value('classified_items.quality_state') == 'passed' ? False : True) {
+                    if (app('db')->table('imported_items')->join('classified_items', 'imported_items.classified_item_pk', '=', 'classified_items.pk')->where('imported_items.pk', $received_group->received_item_pk)->value('classified_items.quality_state') == 'passed' ? False : True) {
                         $passed = False;
                         break;
                     }
