@@ -123,11 +123,15 @@ class ReceivedItem extends ViewModel
         foreach ($input_object as $key => $item) {
             if ($item['kind'] == 'imported') {
                 $imported_item = app('db')->table('imported_items')->where('pk', $item['pk'])->first();
+                $failed = False;
+                if ($imported_item->classified_item_pk != Null) {
+                    $failed = app('db')->table('classified_items')->where('pk', $imported_item->classified_item_pk)->value('quality_state') == 'failed';
+                }
                 $accessory_pk = app('db')->table('ordered_items')->where('pk', $imported_item->ordered_item_pk)->value('accessory_pk');
                 $input_object[$key] += [
                     'receivedQuantity' => $imported_item->imported_quantity,
                     'receivedComment' => $imported_item->comment,
-                    'sumActualQuantity' => $this::sum_actual_received_quantity($item['pk']),
+                    'sumActualQuantity' => $failed ? 0 : $this::sum_actual_received_quantity($item['pk']),
                     'sumAdjustedQuantity' => $this::sum_adjusted_quantity($item['pk']),
                     'sumDiscardedQuantity' => $this::sum_discarded_quantity($item['pk']),
                     'accessory_pk' => $accessory_pk,

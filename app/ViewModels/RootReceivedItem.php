@@ -93,7 +93,7 @@ class RootReceivedItem extends ViewModel
         $sum = 0;
         if ($kind == 'ordered') {
             $imported_item_pks = app('db')->table('imported_items')->where('ordered_item_pk', $root_received_item_pk)->pluck('pk');
-            $adjusted_entry_quantities = app('db')->table('entries')->whereIn('received_item_pk', $imported_item_pks)->pluck('quantity');
+            $adjusted_entry_quantities = app('db')->table('entries')->whereIn('received_item_pk', $imported_item_pks)->where('entry_kind', 'adjusting')->pluck('quantity');
             foreach ($adjusted_entry_quantities as $adjusted_entry_quantity) {
                 if ($adjusted_entry_quantity != Null) $sum += $adjusted_entry_quantity;
             }
@@ -106,7 +106,7 @@ class RootReceivedItem extends ViewModel
         $sum = 0;
         if ($kind == 'ordered') {
             $imported_item_pks = app('db')->table('imported_items')->where('ordered_item_pk', $root_received_item_pk)->pluck('pk');
-            $discarded_entry_quantities = app('db')->table('entries')->whereIn('received_item_pk', $imported_item_pks)->pluck('quantity');
+            $discarded_entry_quantities = app('db')->table('entries')->whereIn('received_item_pk', $imported_item_pks)->where('entry_kind', 'discarding')->pluck('quantity');
             foreach ($discarded_entry_quantities as $discarded_entry_quantity) {
                 if ($discarded_entry_quantity != Null) $sum += $discarded_entry_quantity;
             }
