@@ -57,7 +57,7 @@ class EntryController extends Controller
         $inCased_quantity = 0;
         if (count($entry_quantities)) {
             foreach ($entry_quantities as $entry_quantity) {
-                if ($entry_quantity == Null) return False;
+                if ($entry_quantity === Null) return False;
                 $inCased_quantity += $entry_quantity;
             }
             return $inCased_quantity;

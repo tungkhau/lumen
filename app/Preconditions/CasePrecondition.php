@@ -13,7 +13,7 @@ class CasePrecondition
         $inCased_quantity = 0;
         if (count($entries) > 0) {
             foreach ($entries as $entry) {
-                if ($entry == Null) {
+                if ($entry === Null) {
                     break;
                 }
                 $inCased_quantity += $entry;

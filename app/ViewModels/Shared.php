@@ -269,7 +269,7 @@ class Shared extends ViewModel
                 }
                 $inCased_quantity = 0;
                 foreach ($entries as $entry) {
-                    if ($entry == Null) {
+                    if ($entry === Null) {
                         return $object[] = [
                             'kind' => 'storedCase',
                             'pk' => $pk,
