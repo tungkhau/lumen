@@ -31,12 +31,12 @@ class BlockController extends Controller
         /* Map variables */
         $block_id = app('db')->table('blocks')->where('pk', $request['block_pk'])->value('id');
         $temp = array();
-        for ($col = 1; $col < $request['col']; $col++) {
-            for ($row = 1; $row < $request['row']; $row++) {
+        for ($col = 1; $col <= $request['col']; $col++) {
+            for ($row = 1; $row <= $request['row']; $row++) {
                 $row = substr("00{$row}", -2);
                 $col = substr("00{$col}", -2);
                 $temp[] = [
-                    'name' => $block_id . "-" . $row . "-" . $col,
+                    'name' => $block_id . "-" . $col . "-" . $row,
                     'block_pk' => $request['block_pk']
                 ];
             }
