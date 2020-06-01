@@ -18,12 +18,11 @@ class EntryPrecondition
 
     public function move($params)
     {
-        $tmp = true;
         $inCased_items = $params['inCased_items'];
         foreach ($inCased_items as $inCased_item) {
             $current_quantity = EntryController::inCased_quantity($inCased_item['received_item_pk'], $params['start_case_pk']);
-            if (!$current_quantity || $current_quantity < $inCased_item['quantity']) $tmp = false;
+            if (!$current_quantity || $current_quantity < $inCased_item['quantity']) return True;
         }
-        return !$tmp;
+        return False;
     }
 }

@@ -60,9 +60,8 @@ class EntryController extends Controller
                 if ($entry_quantity == Null) return False;
                 $inCased_quantity += $entry_quantity;
             }
-            return $inCased_quantity;
         }
-        return 0;
+        return $inCased_quantity;
     }
 
     public static function inCased_item($received_item_pk, $case_pk)
