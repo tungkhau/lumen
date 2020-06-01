@@ -74,7 +74,8 @@ class RestorationRepository
                     'shelf_pk' => Null
                 ]);
                 app('db')->table('restorations')->where('pk', $params['restoration_pk'])->update([
-                    'receiving_session_pk' => $params['receiving_session_pk']
+                    'receiving_session_pk' => $params['receiving_session_pk'],
+                    'is_confirmed' => True
                 ]);
             });
         } catch (Exception $e) {
