@@ -48,8 +48,7 @@ class BlockController extends Controller
         return response()->json(['success' => 'Mở dãy kho thành công'], 200);
     }
 
-    public
-    function close(Request $request)
+    public function close(Request $request)
     {
         /* Validate request, catch invalid errors(400) */
         $validation = $this->validator->close($request);
