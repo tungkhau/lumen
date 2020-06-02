@@ -31,6 +31,9 @@ class CaseController extends Controller
         /* Map variables */
         $request['case_id'] = $this->id();
 
+        /*Check limit */
+        if (!$request['case_id']) return $this->limited_response();
+
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->create($request);
         if ($unexpected) return $this->unexpected_response();
@@ -44,6 +47,7 @@ class CaseController extends Controller
         $latest_case = app('db')->table('cases')->where('id', 'like', $date_string)->latest()->first();
         if ($latest_case) {
             $key = substr($latest_case->id, -2, 2);
+            if ($key == 'ZZ') return False;
             $key++;
         } else $key = "AA";
         return (string)env('DEFAULT_SITE') . "-" . $date . "-" . $key;

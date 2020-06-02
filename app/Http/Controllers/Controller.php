@@ -32,4 +32,9 @@ class Controller extends BaseController
     {
         return response()->json(['unexpected' => 'Xảy ra lỗi bất ngờ, xin vui lòng thử lại'], 500);
     }
+
+    protected function limited_response()
+    {
+        return response()->json(['invalid' => 'Số lượng đối tương đã đạt mức giới hạn '], 400);
+    }
 }

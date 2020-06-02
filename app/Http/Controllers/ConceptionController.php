@@ -116,8 +116,8 @@ class ConceptionController extends Controller
 
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->link_accessory($request);
-//        if ($unexpected) return $this->unexpected_response();
-        if ($unexpected) return $unexpected->getMessage();
+        if ($unexpected) return $this->unexpected_response();
+
         return response()->json(['success' => 'Kết nối mã hàng và phụ liệu thành công'], 200);
     }
 

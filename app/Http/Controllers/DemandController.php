@@ -32,9 +32,13 @@ class DemandController extends Controller
         $precondition = $this->precondition->create($request);
         if ($precondition) return $this->conflict_response();
 
+        /*Check limit */
+        $request['id'] = $this->demand_id($request['conception_pk']);
+        if (!$request['id']) return $this->limited_response();
+
         /* Map variables */
         $request['demand_pk'] = (string)Str::uuid();
-        $request['id'] = $this->demand_id($request['conception_pk']);
+
         $temp = array();
         foreach ($request['demanded_items'] as $demanded_item) {
             $temp[] = [
@@ -59,6 +63,7 @@ class DemandController extends Controller
         $latest_demand = app('db')->table('demands')->where('id', 'like', $tmp)->orderBy('created_date', 'desc')->first();
         if ($latest_demand) {
             $key = (int)substr($latest_demand->id, -2, 2);
+            if ($key == 99) return False;
             $key++;
             $key = substr("00{$key}", -2);
         } else $key = "01";
@@ -147,6 +152,11 @@ class DemandController extends Controller
         $precondition = $this->precondition->issue($request);
         if ($precondition) return $this->conflict_response();
 
+
+        /*Check limit */
+        $request['issuing_session_id'] = $this->issuing_id($request['demand_pk']);
+        if (!$request['issuing_session_id']) return $this->limited_response();
+
         /* Map variables */
         $request['issuing_session_pk'] = (string)Str::uuid();
         $issued_groups = $request['issued_groups'];
@@ -221,7 +231,7 @@ class DemandController extends Controller
                 'received_item_pk' => $item['received_item_pk'],
                 'kind' => $inCase_item->kind,
                 'entry_kind' => 'issuing',
-                'quantity' => $item['issued_quantity'],
+                'quantity' => -$item['issued_quantity'],
                 'session_pk' => $request['issuing_session_pk'],
                 'case_pk' => $item['case_pk'],
                 'accessory_pk' => $inCase_item->accessory_pk,
@@ -231,7 +241,7 @@ class DemandController extends Controller
         $request['issued_groups'] = $issued_groups;
         $request['issued_items'] = $issued_items;
         $request['cases'] = $cases;
-        $request['issuing_session_id'] = $this->issuing_id($request['demand_pk']);
+
 
 
         $unexpected = $this->repository->issue($request);
@@ -245,6 +255,7 @@ class DemandController extends Controller
         $demand_id = (string)app('db')->table('demands')->where('pk', $demand_pk)->value('id');
         if ($latest_issuing) {
             $num = (int)substr($latest_issuing->id, -2, 2);
+            if ($num == 99) return False;
             $num++;
             $num = substr("00{$num}", -2);
         } else $num = "01";

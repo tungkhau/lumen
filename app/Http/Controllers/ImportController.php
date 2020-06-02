@@ -104,8 +104,11 @@ class ImportController extends Controller
 
         /* Check preconditions, return conflict errors(409) */
 
-        /* Map variables */
+        /*Check limit */
         $request['id'] = $this->id($request['order_pk']);
+        if (!$request['id']) return $this->limited_response();
+
+        /* Map variables */
         $request['import_pk'] = (string)Str::uuid();
         $temp = array();
         foreach ($request['imported_items'] as $imported_item) {
@@ -132,6 +135,7 @@ class ImportController extends Controller
         if ($latest_import) {
             $num = (int)substr($latest_import->id, -2, 2);
             $num++;
+            if ($num == 99) return False;
             $num = '0' . $num;
             return $order_id . '#' . substr($num, -2, 2);
         }

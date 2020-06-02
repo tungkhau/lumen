@@ -31,8 +31,11 @@ class RestorationController extends Controller
         $precondition = $this->precondition->register($request);
         if ($precondition) return $this->conflict_response();
 
-        /* Map variables */
+        /*Check limit */
         $request['id'] = $this->id();
+        if (!$request['id']) return $this->limited_response();
+
+        /* Map variables */
         $request['restoration_pk'] = (string)Str::uuid();
         $temp = array();
         foreach ($request['restored_items'] as $restored_item) {
@@ -58,6 +61,7 @@ class RestorationController extends Controller
         if ($latest_restoration) {
             $key = substr($latest_restoration->id, -1, 1);
             $key++;
+            if ($key == 'Z') return False;
         } else $key = "A";
         return (string)'RN' . '-' . $date . '-' . $key;
     }

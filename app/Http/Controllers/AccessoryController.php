@@ -53,9 +53,12 @@ class AccessoryController extends Controller
         /* Map variables */
         $request['accessory_id'] = $this->id($request['type_pk'], $request['customer_pk'], $request['item'], $request['supplier_pk']);
 
+        /*Check limit */
+        if (!$request['accessory_id']) return $this->limited_response();
+
         /* Execute method, return success message(200) or catch unexpected errors(500) */
         $unexpected = $this->repository->create($request);
-        if ($unexpected) return $unexpected->getMessage();
+        if ($unexpected) return $this->unexpected_response();
         return response()->json(['success' => 'Tạo phụ liệu thành công'], 200);
     }
 
@@ -71,6 +74,7 @@ class AccessoryController extends Controller
                 return $temp . $supplier_id;
             }
             $num = (int)substr($latest_accessory->id, 7, 5);
+            if ($num == 99999) return False;
             $num++;
             $num = substr("00000{$num}", -5);
             return $type_id . '-' . $customer_id . '-' . $num . '-' . $supplier_id;

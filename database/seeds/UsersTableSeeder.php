@@ -96,6 +96,15 @@ class UsersTableSeeder extends Seeder
             'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'
         ]);
         app('db')->table('users')->insert([
+            'pk' => 'cec3acf6-7194-11ea-bc55-0242ac130002',
+            'is_active' => True,
+            'id' => '9',
+            'password' => app('hash')->make('9'),
+            'name' => 'user staffs',
+            'role' => 'Staff',
+            'workplace_pk' => 'cdbe8122-70b9-11ea-bc55-0242ac130003'
+        ]);
+        app('db')->table('users')->insert([
             'pk' => 'cec3adbe-7194-11ea-bc55-0242ac130003',
             'is_active' => True,
             'id' => '6',
