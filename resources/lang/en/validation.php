@@ -26,6 +26,7 @@ return [
     'alpha' => ':attribute chỉ được chứa kí tự chữ',
     'in' => ':attribute không phù hợp.',
     'integer' => ':attribute phải là số nguyên.',
+    'different' => ':attribute và :other phải khác nhau.',
 
     'between' => [
         'numeric' => ':attribute phải có giá trị từ :min đến :max.',
@@ -130,7 +131,7 @@ return [
     'date' => 'The :attribute is not a valid date.',
     'date_equals' => 'The :attribute must be a date equal to :date.',
     'date_format' => 'The :attribute does not match the format :format.',
-    'different' => 'The :attribute and :other must be different.',
+
     'digits' => 'The :attribute must be :digits digits.',
     'digits_between' => 'The :attribute must be between :min and :max digits.',
     'dimensions' => 'The :attribute has invalid image dimensions.',
