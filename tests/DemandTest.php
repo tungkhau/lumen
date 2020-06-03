@@ -162,14 +162,14 @@ class DemandTest extends TestCase
         $entry_2_out = ['kind' => 'restored',
             'received_item_pk' => '55296522-79b2-11ea-bc55-0242ac130003',
             'entry_kind' => 'issuing',
-            'quantity' => 2,
+            'quantity' => -2,
             'session_pk' => $pk,
             'case_pk' => '3ce5ab38-79b2-11ea-bc55-0242ac130003',
             'accessory_pk' => '483ad6ca-79b2-11ea-bc55-0242ac130003'];
         $entry_3_out = ['kind' => 'restored',
             'received_item_pk' => '552965f4-79b2-11ea-bc55-0242ac130003',
             'entry_kind' => 'issuing',
-            'quantity' => 4,
+            'quantity' => -4,
             'session_pk' => $pk,
             'case_pk' => '3ce5ac0a-79b2-11ea-bc55-0242ac130003',
             'accessory_pk' => '483ad7ce-79b2-11ea-bc55-0242ac130003'];
