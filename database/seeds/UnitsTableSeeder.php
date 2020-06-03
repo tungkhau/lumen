@@ -20,9 +20,5 @@ class UnitsTableSeeder extends Seeder
         app('db')->table('units')->insert([
             'name' => 'mét'
         ]);
-        app('db')->table('units')->insert([
-            'pk' => '59a67ad0-6dd8-11ea-bc55-0242ac130003',
-            'name' => 'meter',
-        ]);
     }
 }
