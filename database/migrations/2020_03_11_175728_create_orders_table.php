@@ -16,7 +16,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->uuid('pk')->primary()->default(DB::raw('UUID()'));
-            $table->string('id', 25)->unique();
+            $table->string('id', 30)->unique();
             $table->boolean('is_opened')->default(true);
             $table->dateTime('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid('supplier_pk');
