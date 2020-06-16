@@ -49,6 +49,7 @@ return [
         'row' => 'Số tầng',
         'col' => 'Số cột',
         'ordered_items.*.ordered_quantity' => 'Số lượng đặt hàng',
+        'ordered_items.*.comment' => 'Ghi chú',
         'ordered_quantity' => 'Số lượng đặt hàng',
         'demanded_quantity' => 'Số lượng cấp phát',
         'imported_quantity' => 'Số lượng nhập',
